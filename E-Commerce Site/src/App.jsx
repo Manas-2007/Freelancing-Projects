@@ -30,6 +30,18 @@ export default function App() {
     });
   };
 
+  const updateQuantity = (index, delta) => {
+  setCart((prevCart) => {
+    const newCart = [...prevCart];
+    const item = newCart[index];
+    if (item) {
+      const newQty = (item.quantity || 1) + delta;
+      item.quantity = newQty > 0 ? newQty : 1;
+    }
+    return newCart;
+  });
+};
+
   const placeOrder = () => {
     if (cart.length === 0) return alert("Your cart is empty!");
     setOrders([...orders, ...cart]);
@@ -45,7 +57,7 @@ export default function App() {
         <Routes>
           <Route path="/" element={<Navigate to="/home" />} />
           <Route path="/home" element={<HomeTab onAddToCart={addToCart} cartItems={cart} onWishlist={toggleWishlist} wishlist={wishlist} />} />
-          <Route path="/my-cart" element={<CartTab cartItems={cart} onRemove={removeFromCart} onPlaceOrder={placeOrder} />} />
+          <Route path="/my-cart" element={<CartTab cartItems={cart} onRemove={removeFromCart} onUpdateQuantity={updateQuantity} onPlaceOrder={placeOrder} />} />
           <Route path="/orders" element={<OrderTab orderItems={orders} />} />
           <Route path="/wishlist" element={<WishlistTab wishlistItems={wishlist} onRemove={toggleWishlist} onAddToCart={addToCart} />} />
           <Route path="/profile" element={<ProfileTab />} />
