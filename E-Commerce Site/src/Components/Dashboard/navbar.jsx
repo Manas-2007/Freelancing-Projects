@@ -52,7 +52,7 @@ export function Navbar({ cartCount = 0, wishlistCount = 0 }) {
 
           {/* 2. Logo */}
           <NavLink className="navbar-brand fw-bold text-success d-flex align-items-center m-0 me-2" to="/home">
-            <img src="/src/Components/Graphics/logo.jpg" alt="logo" width="42" height="42" 
+            <img src="/Graphics/logo.jpg" alt="logo" width="42" height="42" 
                  className="rounded-circle shadow-sm border border-2 border-white" style={{ objectFit: "cover" }} />
             <span className="d-none d-xl-inline ms-2" style={{ fontSize: "1.2rem", letterSpacing: "-0.5px" }}>NewBorn Nest</span>
           </NavLink>
@@ -123,7 +123,7 @@ export function Navbar({ cartCount = 0, wishlistCount = 0 }) {
           </button>
           
           <div className="mb-3 p-1 rounded-circle shadow-lg position-relative">
-            <img src="/src/Components/Graphics/logo.jpg" alt="logo" width="75" height="75" className="rounded-circle border border-2 border-success border-opacity-50" />
+            <img src="/Graphics/logo.jpg" alt="logo" width="75" height="75" className="rounded-circle border border-2 border-success border-opacity-50" />
           </div>
           
           <h5 className="offcanvas-title fw-bold text-white mb-1" style={{ letterSpacing: '1.5px' }}>NEWBORN NEST</h5>

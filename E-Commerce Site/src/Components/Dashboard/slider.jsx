@@ -24,7 +24,7 @@ export function Slider() {
           <div className="carousel-inner">
             <div className="carousel-item active">
               <img
-                src="/src/Components/Graphics/slider1.jpg"
+                src="/Graphics/slider1.jpg"
                 className="d-block w-100 slider-img-responsive"
                 alt="img"
                 style={{ backgroundColor: "#c9dff5" }}
@@ -33,7 +33,7 @@ export function Slider() {
 
             <div className="carousel-item">
               <img
-                src="/src/Components/Graphics/slider2.jpg"
+                src="/Graphics/slider2.jpg"
                 className="d-block w-100 slider-img-responsive"
                 alt="img"
                 style={{ backgroundColor: "#394857" }}
@@ -42,7 +42,7 @@ export function Slider() {
 
             <div className="carousel-item">
               <img
-                src="/src/Components/Graphics/slider3.jpg"
+                src="/Graphics/slider3.jpg"
                 className="d-block w-100 slider-img-responsive"
                 alt="img"
                 style={{ backgroundColor: "#031d38" }}

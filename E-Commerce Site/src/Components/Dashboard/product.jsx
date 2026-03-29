@@ -3,16 +3,16 @@ import { Titles, Titles2, Titles3, Titles4 } from "./titles";
 
 export function Productlist({ onAddToCart, cartItems = [], onWishlist, wishlist = [] }) {
   const products = [
-    { image: 'src/Components/Graphics/product21.jpg', name: 'Sunny T-Shirt', brand: 'NewBorn Nest', price: 1500, discountPrice: 1200 },
-    { image: 'src/Components/Graphics/product22.jpg', name: 'Short Capri', brand: 'NewBorn Nest', price: 2000, discountPrice: 1800 },
-    { image: 'src/Components/Graphics/product23.jpg', name: 'Kids Dual T-Shirt', brand: 'NewBorn Nest', price: 1000, discountPrice: 850 },
-    { image: 'src/Components/Graphics/product24.jpg', name: 'T-Shirt', brand: 'NewBorn Nest', price: 2500, discountPrice: 2100 },
-    { image: 'src/Components/Graphics/product25.jpg', name: 'Long kid Wear', brand: 'NewBorn Nest', price: 3000, discountPrice: 2700 },
-    { image: 'src/Components/Graphics/product11.jpg', name: 'Baby Wear', brand: 'NewBorn Nest', price: 1500, discountPrice: 1200 },
-    { image: 'src/Components/Graphics/product12.jpg', name: 'Swimming Wear', brand: 'NewBorn Nest', price: 2000, discountPrice: 1800 },
-    { image: 'src/Components/Graphics/product13.jpg', name: 'Long Dress', brand: 'NewBorn Nest', price: 1000, discountPrice: 850 },
-    { image: 'src/Components/Graphics/product14.jpg', name: 'Trio Set Dress', brand: 'NewBorn Nest', price: 2500, discountPrice: 2100 },
-    { image: 'src/Components/Graphics/product15.jpg', name: 'Little kid jeans', brand: 'NewBorn Nest', price: 3000, discountPrice: 2700 },
+    { image: '/Graphics/product21.jpg', name: 'Sunny T-Shirt', brand: 'NewBorn Nest', price: 1500, discountPrice: 1200 },
+    { image: '/Graphics/product22.jpg', name: 'Short Capri', brand: 'NewBorn Nest', price: 2000, discountPrice: 1800 },
+    { image: '/Graphics/product23.jpg', name: 'Kids Dual T-Shirt', brand: 'NewBorn Nest', price: 1000, discountPrice: 850 },
+    { image: '/Graphics/product24.jpg', name: 'T-Shirt', brand: 'NewBorn Nest', price: 2500, discountPrice: 2100 },
+    { image: '/Graphics/product25.jpg', name: 'Long kid Wear', brand: 'NewBorn Nest', price: 3000, discountPrice: 2700 },
+    { image: '/Graphics/product11.jpg', name: 'Baby Wear', brand: 'NewBorn Nest', price: 1500, discountPrice: 1200 },
+    { image: '/Graphics/product12.jpg', name: 'Swimming Wear', brand: 'NewBorn Nest', price: 2000, discountPrice: 1800 },
+    { image: '/Graphics/product13.jpg', name: 'Long Dress', brand: 'NewBorn Nest', price: 1000, discountPrice: 850 },
+    { image: '/Graphics/product14.jpg', name: 'Trio Set Dress', brand: 'NewBorn Nest', price: 2500, discountPrice: 2100 },
+    { image: '/Graphics/product15.jpg', name: 'Little kid jeans', brand: 'NewBorn Nest', price: 3000, discountPrice: 2700 },
   ];
 
   return (
@@ -88,13 +88,13 @@ export function Productlist({ onAddToCart, cartItems = [], onWishlist, wishlist 
 
 export function Productlist2() {
   const products = [
-    "src/Components/Graphics/diaper1.jpg", 
-    "src/Components/Graphics/diaper2.jpg", 
-    "src/Components/Graphics/diaper3.jpg", 
-    "src/Components/Graphics/diaper4.jpg", 
-    "src/Components/Graphics/diaper5.jpg", 
-    "src/Components/Graphics/diaper6.jpg", 
-    "src/Components/Graphics/diaper7.jpg"
+    "/Graphics/diaper1.jpg", 
+    "/Graphics/diaper2.jpg", 
+    "/Graphics/diaper3.jpg", 
+    "/Graphics/diaper4.jpg", 
+    "/Graphics/diaper5.jpg", 
+    "/Graphics/diaper6.jpg", 
+    "/Graphics/diaper7.jpg"
   ];
 
   return (
@@ -133,13 +133,13 @@ export function Productlist2() {
 // Productlist3 (Skin Care Category)
 export function Productlist3() {
   const products = [
-    "src/Components/Graphics/skin1.jpg", 
-    "src/Components/Graphics/skin2.jpg", 
-    "src/Components/Graphics/skin3.jpg", 
-    "src/Components/Graphics/skin4.jpg", 
-    "src/Components/Graphics/skin5.jpg", 
-    "src/Components/Graphics/skin6.jpg", 
-    "src/Components/Graphics/skin7.jpg"
+    "/Graphics/skin1.jpg", 
+    "/Graphics/skin2.jpg", 
+    "/Graphics/skin3.jpg", 
+    "/Graphics/skin4.jpg", 
+    "/Graphics/skin5.jpg", 
+    "/Graphics/skin6.jpg", 
+    "/Graphics/skin7.jpg"
   ];
 
   return (
@@ -177,16 +177,16 @@ export function Productlist3() {
 
 export function ProductFinalList({ onAddToCart, cartItems = [], onWishlist, wishlist = [] }) {
   const products = [
-    { image: 'src/Components/Graphics/product16.jpg', name: 'Kid Capri', brand: 'NewBorn Nest', price: 1500, discountPrice: 1200 },
-    { image: 'src/Components/Graphics/product17.jpg', name: 'Pair Dress', brand: 'NewBorn Nest', price: 2000, discountPrice: 1800 },
-    { image: 'src/Components/Graphics/product18.jpg', name: 'Night Wear', brand: 'NewBorn Nest', price: 1000, discountPrice: 850 },
-    { image: 'src/Components/Graphics/product19.jpg', name: 'Shoes', brand: 'NewBorn Nest', price: 2500, discountPrice: 2100 },
-    { image: 'src/Components/Graphics/product20.jpg', name: 'Nighty Dress', brand: 'NewBorn Nest', price: 3000, discountPrice: 2700 },
-    { image: 'src/Components/Graphics/product26.jpg', name: 'Little Champ ', brand: 'NewBorn Nest', price: 1500, discountPrice: 1200 },
-    { image: 'src/Components/Graphics/product29.jpg', name: 'Mini Bag', brand: 'NewBorn Nest', price: 2000, discountPrice: 1800 },
-    { image: 'src/Components/Graphics/product27.jpg', name: 'Little Frock', brand: 'NewBorn Nest', price: 1000, discountPrice: 850 },
-    { image: 'src/Components/Graphics/product28.jpg', name: 'Kid Wear', brand: 'NewBorn Nest', price: 2500, discountPrice: 2100 },
-    { image: 'src/Components/Graphics/product30.jpg', name: 'Short Wear', brand: 'NewBorn Nest', price: 3000, discountPrice: 2700 },
+    { image: '/Graphics/product16.jpg', name: 'Kid Capri', brand: 'NewBorn Nest', price: 1500, discountPrice: 1200 },
+    { image: '/Graphics/product17.jpg', name: 'Pair Dress', brand: 'NewBorn Nest', price: 2000, discountPrice: 1800 },
+    { image: '/Graphics/product18.jpg', name: 'Night Wear', brand: 'NewBorn Nest', price: 1000, discountPrice: 850 },
+    { image: '/Graphics/product19.jpg', name: 'Shoes', brand: 'NewBorn Nest', price: 2500, discountPrice: 2100 },
+    { image: '/Graphics/product20.jpg', name: 'Nighty Dress', brand: 'NewBorn Nest', price: 3000, discountPrice: 2700 },
+    { image: '/Graphics/product26.jpg', name: 'Little Champ ', brand: 'NewBorn Nest', price: 1500, discountPrice: 1200 },
+    { image: '/Graphics/product29.jpg', name: 'Mini Bag', brand: 'NewBorn Nest', price: 2000, discountPrice: 1800 },
+    { image: '/Graphics/product27.jpg', name: 'Little Frock', brand: 'NewBorn Nest', price: 1000, discountPrice: 850 },
+    { image: '/Graphics/product28.jpg', name: 'Kid Wear', brand: 'NewBorn Nest', price: 2500, discountPrice: 2100 },
+    { image: '/Graphics/product30.jpg', name: 'Short Wear', brand: 'NewBorn Nest', price: 3000, discountPrice: 2700 },
   ];
 
   return (
@@ -278,22 +278,22 @@ export function SquadProduct() {
       <div className="row g-2 g-md-3">
         <div className="col-6 col-md-3">
           <div className="squad-img-wrapper">
-             <img src="src/Components/Graphics/side1.jpg" alt="side1" className="img-fluid rounded-4 shadow-sm squad-img" />
+             <img src="/Graphics/side1.jpg" alt="side1" className="img-fluid rounded-4 shadow-sm squad-img" />
           </div>
         </div>
         <div className="col-6 col-md-3">
           <div className="squad-img-wrapper">
-             <img src="src/Components/Graphics/side2.jpg" alt="side2" className="img-fluid rounded-4 shadow-sm squad-img" />
+             <img src="/Graphics/side2.jpg" alt="side2" className="img-fluid rounded-4 shadow-sm squad-img" />
           </div>
         </div>
         <div className="col-6 col-md-3">
           <div className="squad-img-wrapper">
-             <img src="src/Components/Graphics/side3.jpg" alt="side3" className="img-fluid rounded-4 shadow-sm squad-img" />
+             <img src="/Graphics/side3.jpg" alt="side3" className="img-fluid rounded-4 shadow-sm squad-img" />
           </div>
         </div>
         <div className="col-6 col-md-3">
           <div className="squad-img-wrapper">
-             <img src="src/Components/Graphics/side4.jpg" alt="side4" className="img-fluid rounded-4 shadow-sm squad-img" />
+             <img src="/Graphics/side4.jpg" alt="side4" className="img-fluid rounded-4 shadow-sm squad-img" />
           </div>
         </div>
       </div>
