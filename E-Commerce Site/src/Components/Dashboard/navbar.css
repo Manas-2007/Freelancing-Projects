@@ -1,0 +1,73 @@
+/* --- Master Layout Fix --- */
+.navbar {
+    z-index: 2000 !important; /* Sabse upar */
+    position: fixed !important;
+    top: 0;
+    width: 100%;
+    background-color: #e6f4ea;
+}
+
+.category-bar {
+    z-index: 1050 !important; /* Navbar ke niche par content ke upar */
+    position: sticky !important;
+    top: 70px;
+    background-color: #ffd91c;
+}
+
+/* --- NavLink Interactivity --- */
+.navbar .nav-link {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 5px 10px !important;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border-bottom: 3px solid transparent;
+    cursor: pointer !important;
+    position: relative;
+    z-index: 2100; /* Click priority */
+}
+
+.navbar .nav-link:hover {
+    color: #198754 !important;
+    transform: translateY(-3px);
+}
+
+.navbar .nav-link.active {
+    color: #198754 !important;
+    border-bottom: 3px solid #198754;
+    font-weight: bold;
+}
+
+/* --- Yellow Bar (Category) Styling --- */
+.category-item-hover {
+    color: #000 !important;
+    transition: 0.2s ease-in-out;
+    font-size: 11px !important;
+    font-weight: 700 !important;
+    cursor: pointer !important;
+}
+
+.category-item-hover:hover {
+    color: #198754 !important;
+    transform: scale(1.05);
+}
+
+.all-categories-pill {
+    background-color: #212529 !important;
+    border: none !important;
+    transition: 0.3s !important;
+    cursor: pointer !important;
+}
+
+/* Fix for Sidebar Backdrop blocking clicks */
+.offcanvas-backdrop {
+    z-index: 1040 !important;
+}
+
+.offcanvas {
+    z-index: 2500 !important;
+}
+
+.hide-scrollbar-mobile::-webkit-scrollbar {
+    display: none;
+}

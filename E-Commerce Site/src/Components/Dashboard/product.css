@@ -1,0 +1,516 @@
+.col-lg-2-5 {
+  flex: 0 0 20%;
+  max-width: 20%;
+}
+
+.pulse-animation {
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% { box-shadow: 0 0 0 0 rgba(13, 110, 253, 0.4); }
+  70% { box-shadow: 0 0 0 10px rgba(13, 110, 253, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(13, 110, 253, 0); }
+}
+
+.hover-translate-y:hover {
+  transform: translateY(-5px);
+  background-color: #ffffff !important;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.05) !important;
+  border-color: #198754 !important;
+}
+.transition-up {
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.transition-up:hover {
+  transform: translateY(-12px);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.1) !important;
+  border: 1px solid #198754 !important;
+}
+
+/* For that thin Master Card look */
+.extra-small {
+  font-size: 0.6rem;
+  letter-spacing: 1px;
+}
+
+html, body {
+  overflow-x: hidden; /* This prevents the right-side white space gap */
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.row {
+  margin-right: 0 !important;
+  margin-left: 0 !important;
+}
+
+/* Blue Theme Styling */
+.text-primary { color: #0284c7 !important; }
+.bg-primary { background-color: #0284c7 !important; }
+.border-primary { border-color: #0284c7 !important; }
+
+/* Shine & Hover Effects */
+.shine-effect {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.shine-effect:hover {
+    transform: rotate(5deg) scale(1.1);
+    box-shadow: 0 0 15px rgba(2, 132, 199, 0.4) !important;
+}
+
+.nav-hover-effect {
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+.nav-hover-effect:hover {
+    color: #0284c7 !important;
+    transform: translateY(-3px);
+}
+
+.shiny-btn {
+    background: linear-gradient(45deg, #0284c7, #38bdf8);
+    transition: 0.3s;
+}
+.shiny-btn:hover {
+    filter: brightness(1.1);
+    box-shadow: 0 4px 10px rgba(2, 132, 199, 0.3);
+}
+
+/* Sidebar Blue Hover */
+.blue-sidebar-link {
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+.blue-sidebar-link:hover, .blue-sidebar-link.active {
+    background-color: #f0f9ff !important;
+    color: #0284c7 !important;
+    padding-left: 2rem !important;
+    border-left: 4px solid #0284c7 !important;
+}
+
+/* Mobile Single-Row Integrity */
+@media (max-width: 768px) {
+    .container-fluid {
+        flex-wrap: nowrap !important;
+    }
+    .input-group {
+        height: 36px !important;
+    }
+    .profile-shine {
+        width: 32px !important;
+        height: 32px !important;
+    }
+}
+
+
+/* Deep Emerald Glass Item */
+.emerald-nav-item {
+    background-color: rgba(25, 135, 84, 0.05) !important;
+    color: #94a3b8 !important; /* Muted Slate */
+    border: 1px solid rgba(25, 135, 84, 0.1) !important;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Shiny Active State - Forest Green Gradient */
+.active-emerald-item {
+    background: linear-gradient(90deg, #198754 0%, #064e3b 100%) !important;
+    color: white !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.4), inset 0 0 15px rgba(255,255,255,0.1);
+    transform: scale(1.02);
+}
+
+.emerald-nav-item:hover:not(.active-emerald-item) {
+    background-color: rgba(25, 135, 84, 0.15) !important;
+    color: #ffffff !important;
+    transform: translateX(5px);
+}
+
+/* The Shiny Emerald Button */
+.shiny-emerald-btn {
+    background: linear-gradient(45deg, #d5fa02, #cdfa03);
+    border: 3px solid red;
+    color: black;
+    box-shadow: 0 4px 15px rgba(25, 135, 84, 0.3);
+    transition: 0.3s;
+}
+
+.shiny-emerald-btn:hover {
+    filter: brightness(1.1);
+    box-shadow: 0 6px 20px rgba(46, 204, 113, 0.4);
+    color: black;
+    transform: translateY(-2px);
+}
+
+/* Custom Scrollbar */
+.offcanvas-body::-webkit-scrollbar {
+    width: 2px;
+}
+.offcanvas-body::-webkit-scrollbar-thumb {
+    background: rgba(25, 135, 84, 0.2);
+}
+
+/* --- Hide Scrollbar for Category Bar on Mobile --- */
+@media (max-width: 991px) {
+    .hide-scrollbar-mobile {
+        /* Hide scrollbar for Chrome, Safari and Opera */
+        -ms-overflow-style: none;  /* IE and Edge */
+        scrollbar-width: none;  /* Firefox */
+    }
+
+    .hide-scrollbar-mobile::-webkit-scrollbar {
+        display: none; /* Chrome, Safari and Opera */
+    }
+    
+    /* Optional: Add a slight padding to the right so the last item isn't cut off */
+    .hide-scrollbar-mobile::after {
+        content: '';
+        padding-right: 20px;
+    }
+}
+
+/* Desktop Scrollbar (Optional: Keep it clean if it shows up) */
+.hide-scrollbar-mobile::-webkit-scrollbar {
+    height: 3px;
+}
+.hide-scrollbar-mobile::-webkit-scrollbar-thumb {
+    background: rgba(0,0,0,0.1);
+    border-radius: 10px;
+}
+
+/* Custom Responsive Tweaks */
+@media (min-width: 992px) {
+    .custom-summary-card {
+        position: sticky;
+        top: 120px;
+    }
+    .cart-items-container {
+        max-height: 70vh;
+        overflow-y: auto;
+        padding-right: 10px;
+    }
+}
+
+@media (max-width: 991px) {
+    .custom-summary-card {
+        margin-top: 20px;
+        position: relative;
+        top: 0;
+    }
+    /* Makes the circular buttons look uniform */
+    .btn-xs {
+        padding: 1px 5px;
+        font-size: 12px;
+        line-height: 1.5;
+    }
+}
+
+/* Order Tab Specifics */
+@media (max-width: 991px) {
+    /* Allow the summary to scroll with the page on mobile */
+    .custom-summary-box {
+        position: relative !important;
+        top: 0 !important;
+        margin-bottom: 20px;
+        max-height: none !important;
+    }
+    
+    /* Change order so tracking shows FIRST on mobile */
+    .order-1 { order: 1 !important; }
+    .order-2 { order: 2 !important; }
+}
+
+.extra-small {
+    font-size: 0.75rem;
+}
+
+/* Tracking Pulse Animation */
+.pulse-animation {
+    box-shadow: 0 0 0 rgba(13, 110, 253, 0.4);
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(13, 110, 253, 0.7); }
+    70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(13, 110, 253, 0); }
+    100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(13, 110, 253, 0); }
+}
+
+/* --- Wishlist Image Responsive Fix --- */
+
+/* Mobile View (stays 160px as per your current layout) */
+.wishlist-card-img {
+    height: 160px;
+    object-fit: cover;
+    width: 100%;
+}
+
+/* Tablet View (iPad/Small Laptops) */
+@media (min-width: 768px) {
+    .wishlist-card-img {
+        height: 220px;
+    }
+}
+
+/* Desktop/Laptop View (Makes images large and elite) */
+@media (min-width: 992px) {
+    .wishlist-card-img {
+        height: 240px; /* Bumps height to look perfect on big screens */
+    }
+}
+
+/* --- Banner Responsive Polish --- */
+
+/* Desktop Hover Effect (Optional but Premium) */
+@media (min-width: 992px) {
+    .banner-hover-effect {
+        transition: opacity 0.3s ease;
+        cursor: pointer;
+    }
+    .banner-hover-effect:hover {
+        opacity: 0.9;
+    }
+}
+
+/* Mobile Adjustments */
+@media (max-width: 768px) {
+    /* Reduce the large padding on the lower banner for mobile */
+    .p-4 {
+        padding: 1rem !important; /* Changes 24px to 16px for better screen use */
+    }
+
+    /* Reduce the margin between the double banner and the long one */
+    .mt-4 {
+        margin-top: 0.5rem !important;
+    }
+
+    /* Prevents the 'contain' images from leaving huge white gaps on sides */
+    img[style*="objectFit: contain"] {
+        background-color: #f8f9fa; /* Matches your site's light sections */
+    }
+}
+
+/* Fix for very small devices (iPhone SE etc) */
+@media (max-width: 380px) {
+    .LongBanner h3 {
+        font-size: 1rem;
+    }
+}
+/* Ensure the row allows wrapping so items don't squash horizontally */
+.row.flex-wrap {
+    flex-wrap: wrap !important;
+}
+
+/* Force 2 items per row on mobile by overriding any conflicting styles */
+@media (max-width: 767px) {
+    .col-6 {
+        flex: 0 0 50% !important;
+        max-width: 50% !important;
+    }
+    
+    /* Ensure product names don't push the card wider than the screen half */
+    .product-card {
+        max-width: 100%;
+    }
+
+    /* Tighter padding for mobile buttons */
+    .btn {
+        padding: 0.25rem 0.4rem !important;
+    }
+}
+
+/* Keep your custom Desktop Layout as it is */
+@media (min-width: 992px) {
+    .col-lg-2-5 {
+        flex: 0 0 20% !important;
+        max-width: 20% !important;
+    }
+}
+
+/* Smooth card transitions */
+.product-card {
+    transition: transform 0.2s ease-in-out;
+}
+.product-card:hover {
+    transform: translateY(-3px);
+}
+
+/* --- Horizontal Category Polish --- */
+
+.hide-scrollbar {
+    -ms-overflow-style: none;  /* IE/Edge */
+    scrollbar-width: none;  /* Firefox */
+    display: flex;
+    -webkit-overflow-scrolling: touch; /* Smooth bounce scroll on iPhone */
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+    display: none; /* Chrome/Safari */
+}
+
+.category-card-wrapper {
+    transition: transform 0.3s ease;
+}
+
+/* Desktop Hover Effect only */
+@media (min-width: 992px) {
+    .category-card-wrapper:hover {
+        transform: scale(1.05);
+        z-index: 10;
+    }
+}
+
+/* Mobile Image Height fix */
+@media (max-width: 767px) {
+    .category-img {
+        height: 180px !important; /* Slightly shorter for phone screens */
+    }
+}
+/* --- Elite Horizontal Ghost Scroll --- */
+
+.hide-scrollbar {
+    display: flex;
+    overflow-x: auto;
+    /* Smooth momentum scrolling for mobile */
+    -webkit-overflow-scrolling: touch; 
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none;  /* IE/Edge */
+}
+
+/* Hides scrollbar on Chrome, Safari and Opera */
+.hide-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+
+/* Ensures text doesn't break the horizontal line */
+.text-truncate {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.extra-small {
+    font-size: 0.7rem;
+}
+
+/* Card spacing for mobile */
+@media (max-width: 767px) {
+    .hide-scrollbar div {
+        padding-right: 5px;
+    }
+}
+
+/* --- Squad Section Polish --- */
+
+.squad-img-wrapper {
+    overflow: hidden;
+    border-radius: 16px;
+    transition: transform 0.3s ease;
+}
+
+.squad-img {
+    width: 100%;
+    /* Fixed height for mobile to keep the 2x2 grid perfectly aligned */
+    height: 180px; 
+    object-fit: cover;
+}
+
+@media (min-width: 768px) {
+    .squad-img {
+        height: 300px; /* Taller for desktop */
+    }
+    
+    .squad-img-wrapper:hover {
+        transform: scale(1.02);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    }
+}
+
+/* On very small phones, reduce height slightly to fit more on screen */
+@media (max-width: 800px) {
+    .squad-img {
+        height: 140px;
+    }
+}/* --- Long Banner: Mobile Scroll Fix --- */
+
+.long-banner-scroll {
+    /* Desktop: Normal 100% width */
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+@media (max-width: 767px) {
+    .long-banner-scroll {
+        /* 1. Force a height so the text/faces are big and visible */
+        height: 180px !important; 
+        
+        /* 2. Set width to 'auto' so it expands past the screen edge */
+        width: auto !important; 
+        
+        /* 3. Keep the aspect ratio perfect (no stretching) */
+        object-fit: contain; 
+        
+        /* 4. Center the most important part of the banner */
+        object-position: center;
+        
+        /* 5. Minimum width ensures it's at least as wide as the screen */
+        min-width: 100%;
+    }
+
+    /* This makes the horizontal swipe feel natural */
+    .overflow-auto.hide-scrollbar {
+        display: flex;
+        -webkit-overflow-scrolling: touch;
+    }
+}
+/* Removes any white space/gaps between images in a flex row */
+.banner-no-gap {
+    padding: 0 !important;
+    margin: 0 !important;
+    border: none !important;
+    /* Prevents tiny vertical gaps */
+    vertical-align: middle; 
+}
+
+/* Optional: Slight zoom on the whole banner for Elite feel */
+.banner-no-gap:hover {
+    filter: brightness(0.95);
+    transition: 0.3s ease;
+}
+/* --- Elite Slider Responsive Fix --- */
+
+/* Mobile View (Default) */
+.slider-img-responsive {
+    /* Height is shorter on mobile so it doesn't look like a huge empty box */
+    height: 180px !important; 
+    object-fit: cover !important; /* This makes the image fill the area */
+    object-position: center;
+    padding: 0 !important; /* Removed your 20px padding that caused gaps */
+}
+
+/* Tablet View */
+@media (min-width: 768px) {
+    .slider-img-responsive {
+        height: 300px !important;
+    }
+}
+
+/* Desktop View (Restores your 400px layout) */
+@media (min-width: 992px) {
+    .slider-img-responsive {
+        height: 400px !important;
+        object-fit: contain !important; /* Back to contain for wide screens */
+        padding: 20px 0 !important;
+    }
+}
+
+/* Make slider indicators round and pretty */
+.carousel-indicators button {
+    width: 10px !important;
+    height: 10px !important;
+    border-radius: 50%;
+    margin: 0 5px !important;
+}
