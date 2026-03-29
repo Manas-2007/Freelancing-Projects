@@ -30,18 +30,22 @@ export default function App() {
     });
   };
 
-  const updateQuantity = (index, delta) => {
+ const updateQuantity = (index, delta) => {
   setCart((prevCart) => {
-    const newCart = [...prevCart];
-    const item = newCart[index];
-    if (item) {
-      const newQty = (item.quantity || 1) + delta;
-      item.quantity = newQty > 0 ? newQty : 1;
-    }
+    // 1. Ek dum fresh copy banao
+    const newCart = prevCart.map((item, i) => {
+      if (i === index) {
+        // 2. Sirf us index wale item ko update karo
+        const currentQty = item.quantity || 1;
+        const newQty = currentQty + delta;
+        // 3. Ensure karo quantity 1 se kam na ho
+        return { ...item, quantity: newQty > 0 ? newQty : 1 };
+      }
+      return item;
+    });
     return newCart;
   });
 };
-
   const placeOrder = () => {
     if (cart.length === 0) return alert("Your cart is empty!");
     setOrders([...orders, ...cart]);
