@@ -1,7 +1,8 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
-const Hero = ({ onJoin }) => {
+// Added 'onStart' in the props here
+const Hero = ({ onJoin, onStart }) => { 
   const navigate = useNavigate();
 
   return (
@@ -12,62 +13,64 @@ const Hero = ({ onJoin }) => {
         <img 
           src="/bg.jpg" 
           alt="Background" 
-          className="w-full h-full object-cover opacity-[0.4]" 
+          className="w-full h-full object-cover opacity-[0.35]" 
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#000814]/80 to-white z-[1]"></div>
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#000814]/90 to-white z-[1]"></div>
       </div>
 
-      <div className="max-w-[1240px] mx-auto px-[40px] grid md:grid-cols-2 gap-[60px] items-center relative z-10 overflow-visible">
+      <div className="max-w-[1400px] mx-auto px-[60px] grid md:grid-cols-2 gap-[80px] items-center relative z-10 overflow-visible mt-[-110px]">
         
-        {/* LEFT SIDE: Typography with Specific Fonts */}
-        <div className="flex flex-col gap-[25px] text-left" style={{ fontFamily: '"Times New Roman", Times, serif' }}>
-          <div className="inline-block w-fit px-4 py-1.5 bg-blue-500/10 border border-blue-500/20 rounded-full">
-            <span className="text-blue-400 text-[12px] font-[800] uppercase tracking-[3px]">✨ Join the Future</span>
+        {/* LEFT SIDE Content */}
+        <div className="flex flex-col gap-[35px] text-left" style={{ fontFamily: '"Times New Roman", Times, serif' }}>
+          <div className="inline-block w-fit px-5 py-2 bg-blue-500/10 border border-blue-500/20 rounded-full">
+            <span className="text-blue-400 text-[13px] font-[700] uppercase tracking-[4px]">✨ Join the Future</span>
           </div>
 
-          <h1 className="text-[60px] font-[1000] leading-[1.1] text-white tracking-[-1px]">
+          <h1 className="text-[55px] font-[800] leading-[1.1] text-white tracking-[-2px]">
             Connect with Friends <br/>
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#3b82f6] via-[#a855f7] to-[#d946ef]">
               & Share Moments.
             </span>
           </h1>
 
-          <p className="text-[20px] text-slate-400 leading-[1.7] max-w-[480px] font-[500]">
+          <p className="text-[22px] text-slate-400 leading-[1.8] max-w-[600px] font-[500]">
             Experience the next generation of social networking. Build your sphere, 
-            explore global trends, and grow your perspective in a space built for you.
+            explore global trends, and grow your perspective in a space built for you. 
+            Connect, share, and evolve in the SocialSphere.
           </p>
 
-          {/* Buttons with Calibri font */}
-          <div className="flex items-center gap-[20px] pt-[15px]" style={{ fontFamily: 'Calibri, Candara, Segoe, "Segoe UI", Optima, Arial, sans-serif' }}>
+          {/* Buttons Section */}
+          <div className="flex items-center gap-[25px] " style={{ fontFamily: 'Calibri, Candara, Segoe, "Segoe UI", Optima, Arial, sans-serif' }}>
+            
+            {/* FIXED THIS BUTTON: Replaced navigate with onStart */}
             <button 
-              onClick={() => navigate('/dashboard')} 
-              className="bg-[#3b82f6] text-white px-[40px] py-[18px] rounded-[22px] text-[18px] font-[800] hover:-translate-y-1 hover:bg-blue-600 transition-all shadow-xl shadow-blue-500/25 active:scale-[0.98]"
+              type="button"
+              onClick={onStart} 
+              className="bg-[#3b82f6] text-white px-[40px] py-[10px] rounded-[24px] text-[20px] font-[800] hover:-translate-y-2 hover:bg-blue-600 transition-all shadow-xl shadow-blue-500/30 active:scale-[0.96]"
             >
               Get Started
             </button>
+
             <button 
+              type="button"
               onClick={onJoin} 
-              className="bg-white/5 backdrop-blur-md text-white px-[40px] py-[18px] rounded-[22px] text-[18px] font-[800] border border-white/10 hover:bg-white/10 hover:-translate-y-1 transition-all"
+              className="bg-white/5 backdrop-blur-md text-white px-[40px] py-[10px] rounded-[24px] text-[20px] font-[800] border border-white/10 hover:bg-white/10 hover:-translate-y-2 transition-all"
             >
               Sign In
             </button>
           </div>
         </div>
 
-        {/* RIGHT SIDE: Balanced Upward Float */}
+        {/* RIGHT SIDE Image */}
         <div className="relative flex justify-center items-center group overflow-visible">
-          {/* translate-y-8 provides a subtle, equal upward movement */}
-          <div className="w-full max-w-[600px] p-[10px] rounded-[45px] border border-white/10 bg-white/5 backdrop-blur-[12px] shadow-[0_50px_100px_-20px_rgba(0,0,0,0.5)] 
-            transition-all duration-500 ease-out cursor-pointer 
-            group-hover:-translate-y-5 group-hover:scale-[1.02] group-hover:shadow-[0_100px_150px_-30px_rgba(59,130,246,0.3)]">
+          <div className="w-full max-w-[600px] rounded-[50px] border border-white/10 bg-white/5 backdrop-blur-[15px] shadow-2xl transition-all duration-700 ease-out cursor-pointer">
             <img 
                 src="/rightpic.png" 
                 alt="SocialSphere UI" 
-                className="w-full h-auto object-contain rounded-[35px] border border-white/5" 
+                className="w-full h-auto min-h-[450px] object-cover rounded-[45px] border border-white/5" 
             />
           </div>
-          
-          <div className="absolute top-[50%] left-[50%] -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-[#3b82f6]/20 rounded-full blur-[100px] z-[-1] animate-pulse"></div>
+          <div className="absolute top-[50%] left-[50%] -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-[#3b82f6]/20 rounded-full blur-[150px] z-[-1]"></div>
         </div>
 
       </div>

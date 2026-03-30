@@ -1,86 +1,82 @@
 import React from 'react';
-import { Heart, MessageSquare, BarChart3, Play } from 'lucide-react';
+import { Heart, MessageSquare, BarChart3, Sparkles, ChevronRight } from 'lucide-react';
 
 const ExploreView = () => {
   const posts = [
-    { id: 1, user: 'Aman_Photog', img: 'https://images.unsplash.com/photo-1516035069371-29a1b244cc32?auto=format&fit=crop&q=80&w=500', likes: '2.3k', comments: '3k', impressions: '15k', isVideo: true },
-    { id: 2, user: 'Traveler_Ben', img: 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&q=80&w=500', likes: '2.3k', comments: '56', impressions: '15k', isVideo: false },
-    { id: 3, user: 'Traveler_Ben', img: 'https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&q=80&w=500', likes: '2.3k', comments: '56', impressions: '15k', isVideo: true },
-    { id: 4, user: 'Sarah_Travels', img: 'https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?auto=format&fit=crop&q=80&w=500', likes: '2.3k', comments: '5k', impressions: '15k', isVideo: true },
-    { id: 5, user: 'Traveler_Ben', img: 'https://images.unsplash.com/photo-1433086966358-54859d0ed716?auto=format&fit=crop&q=80&w=500', likes: '2.3k', comments: '3k', impressions: '15k', isVideo: false },
-    { id: 6, user: 'Aman_Photog', img: 'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&q=80&w=500', likes: '2.3k', comments: '56', impressions: '15k', isVideo: true },
-    { id: 7, user: 'Traveler_Ben', img: 'https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&q=80&w=500', likes: '2.3k', comments: '56', impressions: '15k', isVideo: false },
-    { id: 8, user: 'usernames', img: 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&q=80&w=500', likes: '2.3k', comments: '56', impressions: '15k', isVideo: true },
+    { id: 1, user: 'Aman_Photog', title: 'Cyber City', desc: 'Neon pulse of the modern world.', img: 'https://images.unsplash.com/photo-1516035069371-29a1b244cc32?auto=format&fit=crop&q=80&w=500', likes: '2.3k', comments: '3k', impressions: '15k' },
+    { id: 2, user: 'Traveler_Ben', title: 'Mountain Silence', desc: 'Where clouds touch the peaks.', img: 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&q=80&w=500', likes: '2.3k', comments: '56', impressions: '15k' },
+    { id: 3, user: 'Traveler_Ben', title: 'Deep Woods', desc: 'Exploring the hidden trails.', img: 'https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&q=80&w=500', likes: '2.3k', comments: '56', impressions: '15k' },
+    { id: 4, user: 'Sarah_Travels', title: 'Golden Hour', desc: 'Sunset over the Mediterranean.', img: 'https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?auto=format&fit=crop&q=80&w=500', likes: '2.3k', comments: '5k', impressions: '15k' },
+    { id: 5, user: 'Traveler_Ben', title: 'Crystal Falls', desc: 'A hidden oasis in the jungle.', img: 'https://images.unsplash.com/photo-1433086966358-54859d0ed716?auto=format&fit=crop&q=80&w=500', likes: '2.3k', comments: '3k', impressions: '15k' },
+    { id: 6, user: 'Aman_Photog', title: 'Urban Jungle', desc: 'Beauty in architectural chaos.', img: 'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&q=80&w=500', likes: '2.3k', comments: '56', impressions: '15k' },
   ];
 
   return (
-    <div 
-      className="h-[calc(100vh-140px)] overflow-y-auto pb-10 animate-in fade-in duration-700 
-      /* LIGHT SCROLLBAR LOGIC START */
-      [&::-webkit-scrollbar]:w-[4px] 
-      [&::-webkit-scrollbar-track]:bg-transparent 
-      [&::-webkit-scrollbar-thumb]:bg-slate-200 
-      [&::-webkit-scrollbar-thumb]:rounded-full 
-      hover:[&::-webkit-scrollbar-thumb]:bg-slate-300
-      /* LIGHT SCROLLBAR LOGIC END */"
-    >
+    <div className="h-[calc(100vh-140px)] overflow-y-auto no-scrollbar pb-10 animate-in fade-in duration-700 pr-2 font-sans mt-[-15px]">
       
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 p-2">
+      {/* 1. COMPACT HEADER */}
+      <div className="mb-6 flex items-center justify-between bg-blue-50/40 p-4 px-7 rounded-[28px] border border-blue-100/50">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 bg-blue-600 rounded-[15px] flex items-center justify-center text-white shadow-md">
+            <Sparkles size={20} />
+          </div>
+          <div>
+            <h2 className="text-[18px] font-bold text-slate-900 tracking-tight leading-none">Explore Trends</h2>
+            <p className="text-[10px] font-black text-blue-500/70 uppercase tracking-[1.5px] mt-1">Curated for you</p>
+          </div>
+        </div>
+      </div>
+
+      {/* 2. GRID SYSTEM: Strictly 3 columns on large screens */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-1">
         {posts.map((post) => (
           <div 
             key={post.id} 
-            className="group bg-white rounded-[32px] p-4 shadow-[0_8px_30px_rgba(0,0,0,0.04)] hover:shadow-[0_20px_50px_rgba(59,130,246,0.12)] transition-all duration-500 hover:-translate-y-1 border border-white"
+            className="group bg-white rounded-[32px] p-3.5 shadow-sm border border-slate-100 hover:border-blue-200 transition-all duration-500 hover:-translate-y-1.5 flex flex-col"
           >
-            {/* User Header */}
-            <div className="flex items-center gap-3 mb-4 px-1">
-              <img 
-                src={`https://i.pravatar.cc/150?u=${post.user}`} 
-                alt="" 
-                className="w-8 h-8 rounded-full object-cover border-2 border-blue-50" 
-              />
-              <span className="text-[14px] font-[800] text-slate-800 tracking-tight">{post.user}</span>
-            </div>
-
-            {/* Post Image Container */}
-            <div className="relative aspect-[4/3] rounded-[24px] overflow-hidden mb-4 shadow-inner bg-slate-100">
+            {/* Image: Fixed Aspect Ratio for clean rows */}
+            <div className="relative aspect-[16/10] rounded-[24px] overflow-hidden mb-4 bg-slate-100">
               <img 
                 src={post.img} 
-                alt="Post content" 
-                className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" 
+                alt={post.title} 
+                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000" 
               />
-              {post.isVideo && (
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="w-10 h-10 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center text-white border border-white/30 shadow-lg">
-                    <Play size={18} fill="currentColor" />
-                  </div>
-                </div>
-              )}
+              
+              {/* Profile Overlay: Very Compact */}
+              <div className="absolute bottom-3 left-3 flex items-center gap-2 bg-black/30 backdrop-blur-md p-1 pr-3 rounded-full border border-white/20">
+                <img src={`https://i.pravatar.cc/150?u=${post.user}`} className="w-5 h-5 rounded-full border border-white/50" alt="" />
+                <span className="text-white font-bold text-[9px] tracking-tight">{post.user}</span>
+              </div>
             </div>
 
-            {/* Interaction Stats */}
-            <div className="flex items-center justify-between px-1">
-              <div className="flex flex-col items-center">
-                 <div className="flex items-center gap-1.5 text-rose-500">
-                    <Heart size={15} fill="currentColor" />
-                    <span className="text-[13px] font-[1000]">{post.likes}</span>
-                 </div>
-                 <span className="text-[8px] font-[800] text-slate-400 uppercase tracking-widest mt-0.5">Likes</span>
+            {/* Content: Compact Typography */}
+            <div className="flex flex-col px-2 pb-1">
+              <div className="flex justify-between items-center mb-1">
+                <h3 className="text-[16px] font-bold text-slate-900 tracking-tight truncate pr-4">
+                  {post.title}
+                </h3>
+                <ChevronRight size={14} className="text-slate-300 group-hover:text-blue-500 transition-colors" />
               </div>
+              <p className="text-slate-400 font-medium text-[12px] leading-snug line-clamp-1 mb-4">
+                {post.desc}
+              </p>
 
-              <div className="flex flex-col items-center">
-                 <div className="flex items-center gap-1.5 text-slate-600">
-                    <MessageSquare size={15} />
-                    <span className="text-[13px] font-[1000]">{post.comments}</span>
-                 </div>
-                 <span className="text-[8px] font-[800] text-slate-400 uppercase tracking-widest mt-0.5">Comments</span>
-              </div>
-
-              <div className="flex flex-col items-center">
-                 <div className="flex items-center gap-1.5 text-blue-500">
-                    <BarChart3 size={15} />
-                    <span className="text-[13px] font-[1000]">{post.impressions}</span>
-                 </div>
-                 <span className="text-[8px] font-[800] text-slate-400 uppercase tracking-widest mt-0.5">Stats</span>
+              {/* Stats Footer: Professional Scale */}
+              <div className="mt-auto pt-3 border-t border-slate-50 flex items-center justify-between">
+                <div className="flex items-center gap-4">
+                  <div className="flex items-center gap-1.5 text-rose-500">
+                    <Heart size={14} fill="currentColor" />
+                    <span className="text-[11px] font-bold">{post.likes}</span>
+                  </div>
+                  <div className="flex items-center gap-1.5 text-slate-400">
+                    <MessageSquare size={14} />
+                    <span className="text-[11px] font-bold">{post.comments}</span>
+                  </div>
+                </div>
+                <div className="flex items-center gap-1 text-blue-500/80 bg-blue-50 px-2 py-0.5 rounded-lg">
+                  <BarChart3 size={12} />
+                  <span className="text-[9px] font-black">{post.impressions}</span>
+                </div>
               </div>
             </div>
           </div>
