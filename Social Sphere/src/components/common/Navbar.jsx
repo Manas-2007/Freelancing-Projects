@@ -23,14 +23,14 @@ const Navbar = ({ onLogin, onSignUp }) => {
       <div className="flex items-center gap-[50px]">
         
         {/* Menu Links */}
-        <div className="hidden lg:flex items-center gap-[35px] text-[17px] font-[700] text-white">
-          <a href="#" className="pb-[4px] border-b-[2px] border-transparent hover:border-white transition-all duration-[300ms]">
+        <div className="hidden lg:flex items-center gap-[35px] text-[22px] font-[400] text-white">
+          <a href="#" className="pb-[1px] border-b-[3px] border-transparent hover:border-white transition-all duration-[300ms]">
             Home
           </a>
-          <a href="#" className="pb-[4px] border-b-[2px] border-transparent hover:border-white transition-all duration-[300ms]">
+          <a href="#" className="pb-[1px] border-b-[3px] border-transparent hover:border-white transition-all duration-[300ms]">
             Features
           </a>
-          <a href="#" className="pb-[4px] border-b-[2px] border-transparent hover:border-white transition-all duration-[300ms]">
+          <a href="#" className="pb-[1px] border-b-[3px] border-transparent hover:border-white transition-all duration-[300ms]">
             About
           </a>
         </div>
@@ -39,14 +39,14 @@ const Navbar = ({ onLogin, onSignUp }) => {
         <div className="flex items-center gap-[15px]">
           <button 
             onClick={onLogin}
-            className="px-[28px] py-[12px] text-[#3b82f6] font-[700] border-[2px] border-[#3b82f6] bg-white rounded-[12px] text-[15px] hover:bg-transparent hover:text-white hover:border-white transition-all duration-[300ms] hover:scale-[1.03]"
+            className="px-[28px] py-[12px] text-[#3b82f6] font-[600] border-[2px] border-[#3b82f6] bg-white rounded-[12px] text-[16px] hover:bg-transparent hover:text-white hover:border-white transition-all duration-[300ms] hover:scale-[1.03]"
           >
             Login
           </button>
           
           <button 
             onClick={onSignUp}
-            className="px-[28px] py-[12px] bg-[#3b82f6] text-white font-[700] text-[15px] rounded-[12px] shadow-[0_10px_20px_-5px_rgba(59,130,246,0.3)] hover:bg-[#2563eb] hover:shadow-[0_15px_25px_-5px_rgba(59,130,246,0.4)] hover:scale-[1.03] transition-all duration-[300ms]"
+            className="px-[28px] py-[12px] bg-[#3b82f6] text-white font-[600] text-[16px] rounded-[12px] shadow-[0_10px_20px_-5px_rgba(59,130,246,0.3)] hover:bg-[#2563eb] hover:shadow-[0_15px_25px_-5px_rgba(59,130,246,0.4)] hover:scale-[1.03] transition-all duration-[300ms]"
           >
             Sign Up
           </button>
