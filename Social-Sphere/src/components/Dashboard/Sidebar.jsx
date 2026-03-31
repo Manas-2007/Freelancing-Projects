@@ -40,71 +40,72 @@ const Sidebar = () => {
         />
       )}
 
-      {/* SIDEBAR - Fixed Height and Flex Layout */}
+      {/* SIDEBAR - The logic is now "Space-Between" */}
       <aside className={`
-        fixed md:sticky top-0 left-0 z-[160] md:z-[100]
-        w-[260px] h-screen bg-[#0f172a] flex flex-col
+        fixed top-0 left-0 z-[160] 
+        w-[260px] h-screen bg-[#0f172a] flex flex-col justify-between
         border-r border-slate-800 font-sans select-none
         transition-transform duration-300 ease-in-out
         ${isOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0
       `}>
 
-        {/* CLOSE BUTTON — mobile only */}
-        <button
-          onClick={() => setIsOpen(false)}
-          className="md:hidden absolute top-4 right-4 p-2 text-slate-400 hover:text-white transition-colors"
-        >
-          <X size={20} />
-        </button>
+        {/* TOP WRAPPER: Logo + Nav */}
+        <div className="flex flex-col h-full overflow-hidden">
+          
+          {/* CLOSE BUTTON — mobile only */}
+          <button
+            onClick={() => setIsOpen(false)}
+            className="md:hidden absolute top-4 right-4 p-2 text-slate-400 hover:text-white transition-colors z-[170]"
+          >
+            <X size={20} />
+          </button>
 
-        {/* 1. BRAND LOGO - Fixed at Top */}
-        <div className="w-full px-6 py-8 flex justify-center items-center flex-shrink-0">
-          <div className="h-[50px] w-full flex items-center justify-center group cursor-pointer transition-all duration-500 hover:scale-[1.02]">
-            <img
-              src="/logonav.png"
-              alt="SocialSphere Logo"
-              className="h-full w-auto object-contain filter 
-                drop-shadow-[0_0_10px_rgba(59,130,246,0.2)] 
-                transition-all duration-500 
-                group-hover:drop-shadow-[0_0_20px_rgba(59,130,246,0.5)]"
-            />
+          {/* 1. BRAND LOGO */}
+          <div className="w-full px-6 py-8 flex justify-center items-center flex-shrink-0">
+            <div className="h-[50px] w-full flex items-center justify-center group cursor-pointer transition-all duration-500 hover:scale-[1.02]">
+              <img
+                src="/logonav.png"
+                alt="SocialSphere Logo"
+                className="h-full w-auto object-contain filter drop-shadow-[0_0_10px_rgba(59,130,246,0.2)]"
+              />
+            </div>
           </div>
+
+          {/* 2. NAVIGATION LINKS - Scrollable area */}
+          <nav className="flex-1 flex flex-col px-4 gap-1.5 overflow-y-auto no-scrollbar">
+            {menuItems.map((item) => (
+              <NavLink
+                key={item.name}
+                to={item.path}
+                onClick={() => setIsOpen(false)}
+                className={({ isActive }) =>
+                  `group relative flex items-center gap-4 px-6 py-[12px] w-full rounded-[18px] transition-all duration-300
+                  ${isActive
+                    ? 'bg-blue-600 text-white font-bold shadow-lg shadow-blue-900/20'
+                    : 'text-slate-400 font-semibold bg-transparent hover:bg-white/5 hover:text-white'
+                  }`
+                }
+              >
+                {({ isActive }) => (
+                  <>
+                    {isActive && (
+                      <div className="absolute left-0 top-1/2 -translate-y-1/2 w-[4px] h-[20px] bg-white rounded-r-full shadow-[2px_0_10px_rgba(255,255,255,0.4)]" />
+                    )}
+                    <div className={`transition-all duration-300 ${isActive ? 'scale-110' : 'group-hover:scale-110'}`}>
+                      {item.icon}
+                    </div>
+                    <span className={`text-[14px] tracking-tight ${isActive ? 'font-bold' : 'font-semibold'}`}>
+                      {item.name}
+                    </span>
+                  </>
+                )}
+              </NavLink>
+            ))}
+          </nav>
         </div>
 
-        {/* 2. NAVIGATION LINKS - Only this part will scroll if needed */}
-        <nav className="flex-1 flex flex-col px-4 gap-1.5 overflow-y-auto no-scrollbar pb-4">
-          {menuItems.map((item) => (
-            <NavLink
-              key={item.name}
-              to={item.path}
-              onClick={() => setIsOpen(false)}
-              className={({ isActive }) =>
-                `group relative flex items-center gap-4 px-6 py-[12px] w-full rounded-[18px] transition-all duration-300
-                ${isActive
-                  ? 'bg-blue-600 text-white font-bold shadow-lg shadow-blue-900/20'
-                  : 'text-slate-400 font-semibold bg-transparent hover:bg-white/5 hover:text-white'
-                }`
-              }
-            >
-              {({ isActive }) => (
-                <>
-                  {isActive && (
-                    <div className="absolute left-0 top-1/2 -translate-y-1/2 w-[4px] h-[20px] bg-white rounded-r-full shadow-[2px_0_10px_rgba(255,255,255,0.4)]" />
-                  )}
-                  <div className={`transition-all duration-300 ${isActive ? 'scale-110' : 'group-hover:scale-110'}`}>
-                    {item.icon}
-                  </div>
-                  <span className={`text-[14px] tracking-tight ${isActive ? 'font-bold' : 'font-semibold'}`}>
-                    {item.name}
-                  </span>
-                </>
-              )}
-            </NavLink>
-          ))}
-        </nav>
-
-        {/* 3. LOGOUT SECTION - Fixed at Bottom */}
-        <div className="px-4 py-6 border-t border-slate-800/50 bg-[#0f172a] flex-shrink-0">
+        {/* 3. LOGOUT SECTION - Strictly Locked at the Bottom */}
+        <div className="w-full px-4 py-6 border-t border-slate-800/50 bg-[#0f172a] flex-shrink-0">
           <button
             onClick={handleLogout}
             className="group flex items-center justify-between w-full bg-red-500/5 text-red-500 p-3.5 rounded-[20px] border border-red-500/10 hover:bg-red-500 hover:text-white transition-all duration-500 shadow-sm active:scale-95"
