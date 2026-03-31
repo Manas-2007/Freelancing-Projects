@@ -67,31 +67,30 @@ const LoginForm = ({ isOpen, onClose, type }) => {
   };
 
   return (
-    <div className="fixed inset-0 z-[1000] flex items-center justify-center p-4">
+    <div className="fixed inset-0 z-[1000] flex items-center justify-center p-3 sm:p-4">
       <div className="absolute inset-0 bg-slate-950/85 backdrop-blur-md animate-in fade-in duration-300" onClick={onClose}></div>
 
-      {/* FIX 1: Dynamic Max-Height based on modalType to remove empty space */}
       <div 
-        className={`relative w-full max-w-[440px] transition-all duration-500 rounded-[40px] shadow-2xl flex flex-col overflow-hidden animate-in zoom-in-95 font-sans border border-blue-500/50 bg-black/40 backdrop-blur-xl
-        ${modalType === 'login' ? 'h-auto max-h-[500px]' : 'h-[90vh] max-h-[650px]'}`}
+        className={`relative w-full max-w-[440px] transition-all duration-500 rounded-[28px] md:rounded-[40px] shadow-2xl flex flex-col overflow-hidden animate-in zoom-in-95 font-sans border border-blue-500/50 bg-black/40 backdrop-blur-xl
+        ${modalType === 'login' ? 'h-auto max-h-[95vh] md:max-h-[500px]' : 'h-[95vh] md:h-[90vh] max-h-[650px]'}`}
       >
         
         {/* Header Section */}
-        <div className="flex-shrink-0 px-10 pt-10 pb-2">
-          <button onClick={onClose} className="absolute top-8 right-8 text-white/30 hover:text-white transition-all">
+        <div className="flex-shrink-0 px-6 pt-7 pb-2 md:px-10 md:pt-10">
+          <button onClick={onClose} className="absolute top-5 right-5 md:top-8 md:right-8 text-white/30 hover:text-white transition-all">
             <X size={20} />
           </button>
-          <div className="inline-flex p-2.5 rounded-xl bg-blue-500/10 text-blue-400 mb-4 border border-blue-500/20">
+          <div className="inline-flex p-2.5 rounded-xl bg-blue-500/10 text-blue-400 mb-3 md:mb-4 border border-blue-500/20">
             <Fingerprint size={22} />
           </div>
-          <h2 className="text-[24px] font-[600] text-white tracking-tight">
+          <h2 className="text-[20px] md:text-[24px] font-[600] text-white tracking-tight">
             {modalType === 'login' ? 'System Access' : 'Create Identity'}
           </h2>
           <p className="text-[11px] text-white/50 font-medium mt-1 uppercase tracking-[1.5px]">Secure Authentication Portal</p>
         </div>
 
-        {/* FIX 2: Custom Blue Transparent Scroller Logic */}
-        <div className="flex-1 overflow-y-auto px-10 py-4 custom-blue-scroll">
+        {/* Scrollable Content */}
+        <div className="flex-1 overflow-y-auto px-6 py-4 md:px-10 custom-blue-scroll">
           <style>{`
             .custom-blue-scroll::-webkit-scrollbar {
               width: 5px;
@@ -116,7 +115,7 @@ const LoginForm = ({ isOpen, onClose, type }) => {
               <p className="text-white/60 text-sm mt-1">Switching to login mode...</p>
             </div>
           ) : (
-            <form id="auth-form" className="space-y-5" onSubmit={handleAuth}>
+            <form id="auth-form" className="space-y-4 md:space-y-5" onSubmit={handleAuth}>
               {/* ID FIELD */}
               <div className="space-y-1.5">
                 <label className="text-[12px] font-bold text-white/80 uppercase tracking-wider ml-1">Identity ID</label>
@@ -152,19 +151,19 @@ const LoginForm = ({ isOpen, onClose, type }) => {
           )}
         </div>
 
-        {/* Footer with Small Action Button */}
-        <div className="flex-shrink-0 px-10 pb-10 pt-4 bg-white/5 border-t border-white/5">
+        {/* Footer */}
+        <div className="flex-shrink-0 px-6 pb-7 pt-4 md:px-10 md:pb-10 bg-white/5 border-t border-white/5">
           {!isSuccess && (
-            <div className="flex flex-col items-center gap-5">
+            <div className="flex flex-col items-center gap-4 md:gap-5">
               <button 
                 form="auth-form" type="submit" disabled={isProcessing}
-                className="w-[180px] bg-blue-600 text-white py-3 rounded-2xl font-bold text-[12px] uppercase tracking-[1.5px] shadow-lg shadow-blue-600/20 hover:bg-blue-500 transition-all flex items-center justify-center gap-2 active:scale-95 disabled:opacity-50"
+                className="w-full sm:w-[180px] bg-blue-600 text-white py-3 rounded-2xl font-bold text-[12px] uppercase tracking-[1.5px] shadow-lg shadow-blue-600/20 hover:bg-blue-500 transition-all flex items-center justify-center gap-2 active:scale-95 disabled:opacity-50"
               >
                 {isProcessing ? 'Validating...' : modalType === 'login' ? 'Access' : 'Register'}
                 {!isProcessing && <ArrowRight size={16} />}
               </button>
               
-              <p className="text-[14px] text-white/70">
+              <p className="text-[13px] md:text-[14px] text-white/70">
                 {modalType === 'login' ? "Need account?" : "Have account?"}
                 <button onClick={() => setModalType(modalType === 'login' ? 'signup' : 'login')} className="text-blue-400 ml-1.5 font-bold hover:underline">
                   {modalType === 'login' ? 'Sign Up' : 'Log In'}
