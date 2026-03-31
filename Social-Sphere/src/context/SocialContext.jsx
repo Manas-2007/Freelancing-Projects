@@ -27,6 +27,22 @@ export const SocialProvider = ({ children }) => {
     return parsed.filter(post => post.title !== "The Gwalior Heritage");
   });
 
+  // 5. THEME STATE
+const [darkMode, setDarkMode] = useState(() => {
+  return localStorage.getItem('theme') === 'dark';
+});
+
+// Theme side-effect
+useEffect(() => {
+  if (darkMode) {
+    document.documentElement.classList.add('dark');
+    localStorage.setItem('theme', 'dark');
+  } else {
+    document.documentElement.classList.remove('dark');
+    localStorage.setItem('theme', 'light');
+  }
+}, [darkMode]);
+
   // FUNCTIONS
   const login = () => setIsAuthenticated(true);
   
@@ -57,7 +73,9 @@ export const SocialProvider = ({ children }) => {
       addPost, 
       deletePost, 
       login, 
-      logout 
+      logout,
+      darkMode,
+      setDarkMode 
     }}>
       {children}
     </SocialContext.Provider>

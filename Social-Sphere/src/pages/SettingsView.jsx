@@ -5,10 +5,11 @@ import { useSocial } from '../context/SocialContext';
 import { useNavigate } from 'react-router-dom';
 
 const SettingsView = () => {
-  const { logout } = useSocial();
+  // Global state context se nikaali
+  const { logout, darkMode, setDarkMode } = useSocial();
   const navigate = useNavigate();
 
-  const [darkMode, setDarkMode] = useState(false);
+  // Baki local states ko touch nahi kiya
   const [twoFactor, setTwoFactor] = useState(true);
   const [pushNotifs, setPushNotifs] = useState(false);
   const [submitted, setSubmitted] = useState(false);
@@ -29,14 +30,14 @@ const SettingsView = () => {
   const rowHover = "flex items-center justify-between p-4 rounded-[18px] transition-all duration-300 hover:bg-blue-600/5 cursor-pointer group border border-transparent hover:border-blue-100";
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 mt-[-15px] sm:mt-[-20px] p-3 sm:p-6 bg-slate-50/50 rounded-[20px] sm:rounded-[35px] font-sans">
+    <div className={`grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 mt-[-15px] sm:mt-[-20px] p-3 sm:p-6 rounded-[20px] sm:rounded-[35px] font-sans transition-all duration-500 ${darkMode ? 'bg-slate-900/40' : 'bg-slate-50/50'}`}>
       
-      {/* 1. APP THEME SECTION */}
+      {/* 1. APP THEME SECTION - UPDATED FOR GLOBAL DARK MODE */}
       <SettingsCard title="App Appearance">
         <div className="space-y-4 sm:space-y-5">
           <div 
             onClick={() => setDarkMode(!darkMode)}
-            className={`flex items-center justify-between p-3 sm:p-4 rounded-[18px] sm:rounded-[22px] border-2 transition-all cursor-pointer group ${darkMode ? 'bg-slate-900 border-slate-700 shadow-xl' : 'bg-white border-blue-100 shadow-sm'}`}
+            className={`flex items-center justify-between p-3 sm:p-4 rounded-[18px] sm:rounded-[22px] border-2 transition-all cursor-pointer group ${darkMode ? 'bg-slate-900 border-blue-500 shadow-xl' : 'bg-white border-blue-100 shadow-sm'}`}
           >
             <div className="flex items-center gap-3">
               <div className={`w-10 h-5 rounded-full relative flex items-center px-1 transition-all ${darkMode ? 'bg-blue-600' : 'bg-slate-200'}`}>
@@ -56,9 +57,9 @@ const SettingsView = () => {
 
           <div className="flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-3 sm:gap-4 w-full">
             <div className="flex flex-col gap-2 flex-1">
-              <label className="text-[11px] font-bold text-slate-900 uppercase tracking-[1.5px] ml-1">Font Size</label>
+              <label className={`text-[11px] font-bold uppercase tracking-[1.5px] ml-1 ${darkMode ? 'text-slate-300' : 'text-slate-900'}`}>Font Size</label>
               <div className="relative group/select">
-                <select className="w-full p-3 bg-white border-2 border-slate-100 rounded-[18px] font-bold text-slate-700 text-[13px] outline-none shadow-sm hover:border-blue-400 transition-all cursor-pointer appearance-none pr-10">
+                <select className={`w-full p-3 border-2 rounded-[18px] font-bold text-[13px] outline-none shadow-sm transition-all cursor-pointer appearance-none pr-10 ${darkMode ? 'bg-slate-800 border-slate-700 text-white' : 'bg-white border-slate-100 text-slate-700'}`}>
                   <option>Medium (Default)</option>
                   <option>Large</option>
                   <option>Extra Large</option>
@@ -70,9 +71,9 @@ const SettingsView = () => {
             </div>
 
             <div className="flex flex-col gap-2 flex-1">
-              <label className="text-[11px] font-bold text-slate-900 uppercase tracking-[1.5px] ml-1">Interface</label>
+              <label className={`text-[11px] font-bold uppercase tracking-[1.5px] ml-1 ${darkMode ? 'text-slate-300' : 'text-slate-900'}`}>Interface</label>
               <div className="relative group/select">
-                <select className="w-full p-3 bg-white border-2 border-slate-100 rounded-[18px] font-bold text-slate-700 text-[13px] outline-none shadow-sm hover:border-blue-400 transition-all cursor-pointer appearance-none pr-10">
+                <select className={`w-full p-3 border-2 rounded-[18px] font-bold text-[13px] outline-none shadow-sm transition-all cursor-pointer appearance-none pr-10 ${darkMode ? 'bg-slate-800 border-slate-700 text-white' : 'bg-white border-slate-100 text-slate-700'}`}>
                   <option>Spacious</option>
                   <option>Compact</option>
                 </select>
@@ -85,12 +86,12 @@ const SettingsView = () => {
         </div>
       </SettingsCard>
 
-      {/* 2. SECURITY SECTION */}
+      {/* 2. SECURITY SECTION - NO CHANGES TO CONTENT */}
       <SettingsCard title="Security & Privacy">
         <div className="space-y-1">
           <div className={rowHover}>
             <div className="flex flex-col">
-              <span className="text-[14px] sm:text-[15px] font-bold text-slate-800 group-hover:text-blue-600 transition-colors">Change Password</span>
+              <span className={`text-[14px] sm:text-[15px] font-bold transition-colors ${darkMode ? 'text-slate-200 group-hover:text-blue-400' : 'text-slate-800 group-hover:text-blue-600'}`}>Change Password</span>
               <span className="text-[12px] text-slate-400">Security: Strong</span>
             </div>
             <button className="px-3 sm:px-4 py-1.5 bg-slate-100 rounded-lg text-[11px] font-black text-slate-600 hover:bg-blue-600 hover:text-white transition-all shadow-sm">MANAGE</button>
@@ -98,7 +99,7 @@ const SettingsView = () => {
           
           <div onClick={() => setTwoFactor(!twoFactor)} className={rowHover}>
             <div className="flex flex-col">
-              <span className="text-[14px] sm:text-[15px] font-bold text-slate-800 group-hover:text-blue-600 transition-colors">Two-Factor Auth</span>
+              <span className={`text-[14px] sm:text-[15px] font-bold transition-colors ${darkMode ? 'text-slate-200 group-hover:text-blue-400' : 'text-slate-800 group-hover:text-blue-600'}`}>Two-Factor Auth</span>
               <span className={`text-[12px] font-bold tracking-tight transition-colors ${twoFactor ? 'text-emerald-500' : 'text-rose-500'}`}>
                 {twoFactor ? 'Active' : 'Disabled'}
               </span>
@@ -110,14 +111,14 @@ const SettingsView = () => {
         </div>
       </SettingsCard>
 
-      {/* 3. SUPPORT SECTION */}
+      {/* 3. SUPPORT SECTION - NO CHANGES TO CONTENT */}
       <SettingsCard title="Social Sphere Support">
         <form onSubmit={handleSubmitTicket} className="flex flex-col gap-3">
           <input 
             required
             type="text" 
             placeholder="How can we help?" 
-            className="w-full p-3 sm:p-4 bg-slate-200/60 rounded-[18px] font-semibold text-[14px] outline-none border-2 border-transparent focus:border-blue-500 focus:bg-white transition-all placeholder:text-slate-400" 
+            className={`w-full p-3 sm:p-4 rounded-[18px] font-semibold text-[14px] outline-none border-2 transition-all placeholder:text-slate-400 ${darkMode ? 'bg-slate-800 border-transparent focus:border-blue-500 text-white' : 'bg-slate-200/60 border-transparent focus:border-blue-500 focus:bg-white'}`} 
           />
           <button 
             type="submit"
@@ -129,22 +130,22 @@ const SettingsView = () => {
         </form>
       </SettingsCard>
 
-      {/* 4. NOTIFICATION SETTINGS */}
+      {/* 4. NOTIFICATION SETTINGS - NO CHANGES TO CONTENT */}
       <SettingsCard title="Alerts & Notifications">
         <div className="space-y-3">
            <div 
             onClick={() => setPushNotifs(!pushNotifs)}
-            className={`flex items-center justify-between p-3 sm:p-3.5 rounded-xl border cursor-pointer transition-all ${pushNotifs ? 'bg-blue-50 border-blue-200' : 'bg-slate-50 border-slate-100'}`}
+            className={`flex items-center justify-between p-3 sm:p-3.5 rounded-xl border cursor-pointer transition-all ${pushNotifs ? (darkMode ? 'bg-blue-900/20 border-blue-500/30' : 'bg-blue-50 border-blue-200') : (darkMode ? 'bg-slate-800 border-slate-700' : 'bg-slate-50 border-slate-100')}`}
            >
-              <div className="flex items-center gap-3">
-                <div className={`p-2 rounded-lg shadow-sm transition-colors ${pushNotifs ? 'bg-blue-600 text-white' : 'bg-white text-slate-400'}`}>
-                  <BellRing size={18}/>
-                </div>
-                <span className={`font-bold text-[13px] sm:text-[14px] transition-colors ${pushNotifs ? 'text-blue-700' : 'text-slate-500'}`}>Push Notifications</span>
-              </div>
-              <div className={`w-9 h-5 rounded-full relative px-1 flex items-center transition-all ${pushNotifs ? 'bg-blue-600' : 'bg-slate-200'}`}>
-                <div className={`w-3 h-3 bg-white rounded-full shadow-sm transition-all duration-300 ${pushNotifs ? 'translate-x-4' : 'translate-x-0'}`}></div>
-              </div>
+             <div className="flex items-center gap-3">
+               <div className={`p-2 rounded-lg shadow-sm transition-colors ${pushNotifs ? 'bg-blue-600 text-white' : 'bg-white text-slate-400'}`}>
+                 <BellRing size={18}/>
+               </div>
+               <span className={`font-bold text-[13px] sm:text-[14px] transition-colors ${pushNotifs ? (darkMode ? 'text-blue-400' : 'text-blue-700') : 'text-slate-500'}`}>Push Notifications</span>
+             </div>
+             <div className={`w-9 h-5 rounded-full relative px-1 flex items-center transition-all ${pushNotifs ? 'bg-blue-600' : 'bg-slate-200'}`}>
+               <div className={`w-3 h-3 bg-white rounded-full shadow-sm transition-all duration-300 ${pushNotifs ? 'translate-x-4' : 'translate-x-0'}`}></div>
+             </div>
            </div>
            <p className="text-[12px] text-slate-400 font-medium px-2 leading-relaxed text-center italic">
              "We only send essential updates."

@@ -2,10 +2,12 @@ import React from 'react';
 import { Outlet } from 'react-router-dom';
 import Sidebar from '../components/Dashboard/Sidebar';
 import DashboardHeader from '../components/Dashboard/DashboardHeader';
+import { useSocial } from '../context/SocialContext';
 
 const DashBoard = () => {
+  const { darkMode } = useSocial();
   return (
-    <div className="flex w-full h-screen bg-[#f8fbff] overflow-hidden font-['Plus_Jakarta_Sans']">
+    <div className={`flex min-h-screen transition-colors duration-500 ${darkMode ? 'bg-[#0a0f1c]' : 'bg-slate-50'}`}>
       
       {/* SIDEBAR: hidden off-canvas on mobile, visible on md+ */}
       <div className="hidden md:block flex-shrink-0">
