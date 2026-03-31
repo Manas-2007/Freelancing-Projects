@@ -24,7 +24,7 @@ const ProfileView = () => {
   const glassCard = "bg-white/90 backdrop-blur-xl border border-slate-100 rounded-[24px] sm:rounded-[35px] p-4 sm:p-7 shadow-[0_10px_40px_-15px_rgba(0,0,0,0.04)] transition-all duration-500 hover:shadow-[0_25px_60px_-20px_rgba(59,130,246,0.12)] hover:-translate-y-1";
 
   return (
-    <div className="h-[calc(100vh-110px)] md:h-[calc(100vh-140px)] flex flex-col gap-4 sm:gap-6 animate-in fade-in duration-700 overflow-y-auto md:overflow-hidden pb-6 font-sans select-none mt-[-20px] no-scrollbar">
+    <div className="h-[calc(100vh-110px)] md:h-[calc(100vh-140px)] flex flex-col gap-4 sm:gap-6 animate-in fade-in duration-700 overflow-y-auto md:overflow-hidden pb-6 font-sans select-none sm:mt-[-20px] no-scrollbar">
       
       <div className="flex-1 grid grid-cols-1 md:grid-cols-12 gap-4 sm:gap-6 min-h-0">
         

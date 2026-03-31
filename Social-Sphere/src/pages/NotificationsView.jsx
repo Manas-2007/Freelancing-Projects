@@ -35,7 +35,7 @@ const NotificationsView = () => {
   };
 
   return (
-    <div className="flex flex-col gap-4 sm:gap-6 animate-in fade-in slide-in-from-bottom-4 duration-700 h-[calc(100vh-110px)] md:h-[calc(100vh-140px)] font-sans select-none overflow-hidden pr-1 sm:pr-2 mt-[-20px]">
+    <div className="flex flex-col gap-4 sm:gap-6 animate-in fade-in slide-in-from-bottom-4 duration-700 h-[calc(100vh-110px)] md:h-[calc(100vh-140px)] font-sans select-none overflow-hidden pr-1 sm:pr-2 sm:mt-[-20px]">
       
       {/* HEADER ACTIONS */}
       <div className="flex flex-wrap items-center justify-between gap-2 px-1">

@@ -47,7 +47,7 @@ const HomeView = () => {
   };
 
   return (
-    <div className="flex-1 w-full flex flex-col gap-5 sm:gap-8 animate-in fade-in duration-1000 font-sans pb-10 overflow-y-auto no-scrollbar select-none mt-[-25px]">
+    <div className="flex-1 w-full flex flex-col gap-5 sm:gap-8 animate-in fade-in duration-1000 font-sans pb-10 overflow-y-auto no-scrollbar select-none sm:mt-[-25px]">
       
       {/* 1. STAT CARDS */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-5 pt-2">
