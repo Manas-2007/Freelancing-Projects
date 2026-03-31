@@ -20,16 +20,16 @@ const HomePage = () => {
   };
 
   // --- GET STARTED GATEKEEPER LOGIC ---
-  const handleGetStarted = (e) => {
-  if (e) e.preventDefault(); // Event bubbling roko
-  
-  if (isAuthenticated) {
-    navigate('/dashboard/home');
-  } else {
-    // Mobile par alert kabhi-kabhi delay karta hai, isliye seedha modal trigger
-    openModal('signup');
-  }
-};
+  const handleGetStarted = () => {
+    if (isAuthenticated) {
+      // If user is already logged in, bypass landing and go to Dashboard
+      navigate('/dashboard/home');
+    } else {
+      // If new user, show alert and force registration
+      alert("🔒 Security Protocol: Please Register an Identity to access the SocialSphere Dashboard.");
+      openModal('signup');
+    }
+  };
 
   const featureData = [
     { title: "Vibe Profile", desc: "Express yourself with a customized profile grid.", icon: "📸", color: "bg-rose-50 text-rose-500", hoverBg: "bg-gradient-to-br from-rose-500 to-pink-600" },

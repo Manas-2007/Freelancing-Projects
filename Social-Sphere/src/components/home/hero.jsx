@@ -40,15 +40,12 @@ const Hero = ({ onJoin, onStart }) => {
 
           <div className="flex flex-wrap items-center justify-center md:justify-start gap-4 md:gap-[25px]" style={{ fontFamily: 'Calibri, Candara, Segoe, "Segoe UI", Optima, Arial, sans-serif' }}>
             <button 
-            type="button"
-            onClick={(e) => {
-              e.stopPropagation(); // Parent tak click na jaye
-              onStart(); 
-            }} 
-            className="bg-[#3b82f6] text-white px-7 py-2 md:px-[40px] md:py-[10px] rounded-[24px] text-base md:text-[20px] font-[800] hover:-translate-y-2 hover:bg-blue-600 transition-all shadow-xl shadow-blue-500/30 active:scale-[0.96] z-50"
-          >
-            Get Started
-          </button>
+              type="button"
+              onClick={onStart} 
+              className="bg-[#3b82f6] text-white px-7 py-2 md:px-[40px] md:py-[10px] rounded-[24px] text-base md:text-[20px] font-[800] hover:-translate-y-2 hover:bg-blue-600 transition-all shadow-xl shadow-blue-500/30 active:scale-[0.96]"
+            >
+              Get Started
+            </button>
 
             <button 
               type="button"
