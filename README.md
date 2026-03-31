@@ -35,7 +35,7 @@ Welcome to my project hub! I am a **1st-year B.Tech student in AI & Robotics** a
 ### 🛒 E-Commerce Interface
 *A user-focused shopping platform built with React.*
 
-1. **Live Demo:** [Visit E-Commerce Site](https://freelancing-projects-rose.vercel.app/home)
+1. **Live Demo:** [Visit E-Commerce Site](https://freelancing-projects-rose.vercel.app/)
 2. **Status:** ✅ Fully Completed
 3. **Key Features:**
    * **Shopping Cart:** Add and manage products seamlessly.
