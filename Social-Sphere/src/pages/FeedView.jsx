@@ -103,12 +103,19 @@ const FeedView = () => {
               posts.map((post) => (
                 <div key={post.id} className="group relative bg-white rounded-[28px] sm:rounded-[40px] p-3 sm:p-5 shadow-lg border border-slate-50 transition-all hover:border-blue-100 hover:shadow-xl">
                   {post.user === user.username && (
-                    <button 
-                      onClick={() => window.confirm("System: Delete story?") && deletePost(post.id)}
-                      className="absolute top-4 right-4 sm:top-6 sm:right-6 z-30 p-2 sm:p-2.5 bg-red-50 text-red-500 rounded-full opacity-0 group-hover:opacity-100 transition-all hover:bg-red-500 hover:text-white"
-                    >
-                      <Trash2 size={13} />
-                    </button>
+                   <button 
+                    onClick={(e) => {
+                      e.stopPropagation(); // Card click event ko rokne ke liye
+                      window.confirm("System: Delete story?") && deletePost(post.id);
+                    }} 
+                    className="absolute top-4 right-4 sm:top-6 sm:right-6 z-30 p-2 sm:p-2.5 
+                              bg-red-50 text-red-500 rounded-full transition-all 
+                              hover:bg-red-500 hover:text-white active:scale-90
+                              /* 🔥 MOBILE FIX: Hamesha dikhega, Desktop par sirf Hover par */
+                              opacity-100 sm:opacity-0 sm:group-hover:opacity-100"
+                  >
+                    <Trash2 size={13} />
+                  </button>
                   )}
                   <div className="relative aspect-video rounded-[18px] sm:rounded-[30px] overflow-hidden mb-3 sm:mb-4 bg-slate-100 shadow-inner">
                     <img src={post.image || post.img} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" alt="" />

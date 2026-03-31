@@ -40,11 +40,11 @@ const Sidebar = () => {
         />
       )}
 
-      {/* SIDEBAR */}
+      {/* SIDEBAR - Fixed Height and Flex Layout */}
       <aside className={`
         fixed md:sticky top-0 left-0 z-[160] md:z-[100]
-        w-[260px] h-screen bg-[#0f172a] flex flex-col py-6
-        border-r border-slate-800 font-sans overflow-hidden select-none
+        w-[260px] h-screen bg-[#0f172a] flex flex-col
+        border-r border-slate-800 font-sans select-none
         transition-transform duration-300 ease-in-out
         ${isOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0
       `}>
@@ -57,8 +57,8 @@ const Sidebar = () => {
           <X size={20} />
         </button>
 
-        {/* 1. BRAND LOGO */}
-        <div className="w-full px-6 mb-10 flex justify-center items-center">
+        {/* 1. BRAND LOGO - Fixed at Top */}
+        <div className="w-full px-6 py-8 flex justify-center items-center flex-shrink-0">
           <div className="h-[50px] w-full flex items-center justify-center group cursor-pointer transition-all duration-500 hover:scale-[1.02]">
             <img
               src="/logonav.png"
@@ -71,8 +71,8 @@ const Sidebar = () => {
           </div>
         </div>
 
-        {/* 2. NAVIGATION LINKS */}
-        <nav className="flex-1 flex flex-col px-4 gap-1.5 overflow-y-auto no-scrollbar">
+        {/* 2. NAVIGATION LINKS - Only this part will scroll if needed */}
+        <nav className="flex-1 flex flex-col px-4 gap-1.5 overflow-y-auto no-scrollbar pb-4">
           {menuItems.map((item) => (
             <NavLink
               key={item.name}
@@ -103,8 +103,8 @@ const Sidebar = () => {
           ))}
         </nav>
 
-        {/* 3. LOGOUT SECTION */}
-        <div className="px-4 mt-4 border-t border-slate-800/50 pt-6">
+        {/* 3. LOGOUT SECTION - Fixed at Bottom */}
+        <div className="px-4 py-6 border-t border-slate-800/50 bg-[#0f172a] flex-shrink-0">
           <button
             onClick={handleLogout}
             className="group flex items-center justify-between w-full bg-red-500/5 text-red-500 p-3.5 rounded-[20px] border border-red-500/10 hover:bg-red-500 hover:text-white transition-all duration-500 shadow-sm active:scale-95"
