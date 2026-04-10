@@ -5,7 +5,7 @@ export function Hero() {
       {/* Left Content */}
       <div className="flex flex-col gap-6 max-w-[50%]">
 
-        <h1 className="text-[60px] font-bold text-white leading-[1.1]">
+        <h1 className="text-[60px] font-[600] text-white leading-[1.1]">
           AI Recipe Generator
         </h1>
 
@@ -15,11 +15,10 @@ export function Hero() {
 
        <button
   className="mt-8 w-fit px-10 py-4
-  text-white text-[18px] font-semibold tracking-wide
+  text-white text-[20px] font-[500] tracking-wide
   rounded-xl
   bg-gradient-to-r from-blue-500/90 to-blue-600/90
   backdrop-blur-md
-
   shadow-[0_0_15px_rgba(59,130,246,0.5)]
   hover:shadow-[0_0_30px_rgba(59,130,246,0.8)]
 
@@ -52,67 +51,87 @@ export function Hero() {
 // How It Works section
 export function Bottom() {
   return (
-    <>
-      <div className="py-16 px-16 mb-[30px]">
+    <section className="max-w-7xl mx-auto px-10 py-20">
 
-        {/* Section Title */}
-        <h1 className="text-center text-white text-[36px] font-[700] mb-12 tracking-wide">
+      {/* 🔹 Title with Lines */}
+      <div className="flex items-center justify-center gap-6 mb-14">
+        <div className="flex-1 h-[1px] bg-white"></div>
+        <h1 className="text-white text-[34px] font-semibold tracking-wide">
           How It Works
         </h1>
-
-        {/* Cards Container */}
-        <div className="flex justify-evenly gap-8">
-
-          {/* Card 1 - Blue Theme */}
-          <div className="flex flex-col items-center text-center border-[3px] border-blue-700 rounded-2xl w-[30%] bg-blue-900/20 hover:scale-105 transition-all duration-300 overflow-hidden">
-            <div className="w-full h-[220px] overflow-hidden">
-              <img src="/htu1.jpg" alt="Step 1" className="w-full h-full object-cover" />
-            </div>
-            <div className="flex flex-col gap-3 p-6 w-full">
-              <p className="text-white text-[18px] font-[700]">
-                1. Enter Your Ingredients
-              </p>
-              <hr className="w-full border-blue-500" />
-              <p className="text-gray-300 text-[15px] leading-relaxed">
-                Tell us what's in your kitchen
-              </p>
-            </div>
-          </div>
-
-          {/* Card 2 - Purple Theme */}
-          <div className="flex flex-col items-center text-center border-[3px] border-purple-600 rounded-2xl w-[30%] bg-purple-900/20 hover:scale-105 transition-all duration-300 overflow-hidden">
-            <div className="w-full h-[220px] overflow-hidden">
-              <img src="/htu3.jpg" alt="Step 2" className="w-full h-full object-cover" />
-            </div>
-            <div className="flex flex-col gap-3 p-6 w-full">
-              <p className="text-white text-[18px] font-[700]">
-                2. Get AI Recipe Ideas
-              </p>
-              <hr className="w-full border-purple-500" />
-              <p className="text-gray-300 text-[15px] leading-relaxed">
-                Instant recipes just for you
-              </p>
-            </div>
-          </div>
-
-          {/* Card 3 - Orange Theme */}
-          <div className="flex flex-col items-center text-center border-[3px] border-orange-600 rounded-2xl w-[30%] bg-orange-900/20 hover:scale-105 transition-all duration-300 overflow-hidden">
-            <div className="w-full h-[220px] overflow-hidden">
-              <img src="/htu2.jpg" alt="Step 3" className="w-full h-full object-cover" />
-            </div>
-            <div className="flex flex-col gap-3 p-6 w-full">
-              <p className="text-white text-[18px] font-[700]">
-                3. Cook & Enjoy
-              </p>
-              <hr className="w-full border-orange-500" />
-              <p className="text-gray-300 text-[15px] leading-relaxed">
-                Follow the steps & savor!
-              </p>
-            </div>
-          </div>
-
-        </div>
+        <div className="flex-1 h-[1px] bg-white"></div>
       </div>
-    </>
+
+      {/* 🔹 Cards */}
+      <div className="flex justify-between gap-8">
+
+        {/* Card 1 - Blue */}
+        <div className="w-[32%] rounded-2xl overflow-hidden 
+        border border-blue-400/30 hover:scale-105 transition duration-300">
+
+          <div className="w-full h-[220px]">
+            <img src="/htu1.jpg" className="w-full h-full object-cover" />
+          </div>
+
+          <div className="flex flex-col gap-3 p-6 
+          bg-blue-500/10 backdrop-blur-md">
+            <p className="text-white text-[18px] font-semibold">
+              1. Enter Your Ingredients
+            </p>
+
+            <hr className="border-blue-400/40" />
+
+            <p className="text-white/70 text-[15px]">
+              Tell us what's in your kitchen
+            </p>
+          </div>
+        </div>
+
+        {/* Card 2 - Purple */}
+        <div className="w-[32%] rounded-2xl overflow-hidden 
+        border border-purple-400/30 hover:scale-105 transition duration-300">
+
+          <div className="w-full h-[220px]">
+            <img src="/htu3.jpg" className="w-full h-full object-cover" />
+          </div>
+
+          <div className="flex flex-col gap-3 p-6 
+          bg-purple-500/10 backdrop-blur-md">
+            <p className="text-white text-[18px] font-semibold">
+              2. Get AI Recipe Ideas
+            </p>
+
+            <hr className="border-purple-400/40" />
+
+            <p className="text-white/70 text-[15px]">
+              Instant recipes just for you
+            </p>
+          </div>
+        </div>
+
+        {/* Card 3 - Orange */}
+        <div className="w-[32%] rounded-2xl overflow-hidden 
+        border border-orange-400/30 hover:scale-105 transition duration-300">
+
+          <div className="w-full h-[220px]">
+            <img src="/htu2.jpg" className="w-full h-full object-cover" />
+          </div>
+
+          <div className="flex flex-col gap-3 p-6 
+          bg-orange-500/10 backdrop-blur-md">
+            <p className="text-white text-[18px] font-semibold">
+              3. Cook & Enjoy
+            </p>
+
+            <hr className="border-orange-400/40" />
+
+            <p className="text-white/70 text-[15px]">
+              Follow the steps & savor!
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </section>
   );
 }
