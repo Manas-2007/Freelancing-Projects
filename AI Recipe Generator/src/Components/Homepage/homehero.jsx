@@ -1,4 +1,8 @@
+import { useNavigate } from "react-router-dom";
+
 export function Hero() {
+
+  const navigate=useNavigate();
   return (
     <section className="max-w-7xl mx-auto px-10 py-16 flex items-center justify-between">
 
@@ -13,7 +17,7 @@ export function Hero() {
           Create delicious recipes with the power of AI.
         </p>
 
-       <button
+       <button onClickCapture={()=>navigate("/Dashboard")}
   className="mt-8 w-fit px-10 py-4
   text-white text-[20px] font-[500] tracking-wide
   rounded-xl
@@ -47,6 +51,7 @@ export function Hero() {
   );
 }
 
+ 
 
 // How It Works section
 export function Bottom() {
