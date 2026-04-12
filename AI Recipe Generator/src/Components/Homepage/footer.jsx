@@ -1,3 +1,5 @@
+import { InfoModal } from "./InfoModal";
+
 export function Footer() {
   return (
     <footer className="mt-20 border-t-2 border-white bg-white/5 backdrop-blur-md">

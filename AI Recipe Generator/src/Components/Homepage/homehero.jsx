@@ -1,42 +1,53 @@
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { Security } from "./Security";
 
 export function Hero() {
 
   const navigate = useNavigate();
+  const [authOpen, setAuthOpen] = useState(false);
+
   return (
     <>
+      {/* 🔐 AUTH MODAL */}
+      {authOpen && (
+        <Security
+          onSuccess={() => {
+            setAuthOpen(false);
+            navigate("/dashboard");
+          }}
+           onClose={() => setAuthOpen(false)} 
+        />
+      )}
+
       {/* ── MOBILE layout ── */}
       <section className="sm:hidden px-5 py-10 flex flex-col items-center gap-6 text-center">
 
-        {/* Title */}
         <h1 className="text-[36px] font-bold text-white leading-[1.15]">
           AI Recipe Generator
         </h1>
 
-        {/* Image */}
         <img
           src="/right.jpg"
           alt="AI Chef Robot"
           className="w-full max-h-[280px] object-contain drop-shadow-[0_10px_30px_rgba(0,0,0,0.5)]"
         />
 
-        {/* Description */}
         <p className="text-base text-white/75 leading-relaxed max-w-sm">
-          Discover thousands of AI-crafted dishes tailored to your taste. From quick weeknight dinners to gourmet feasts — just tell us your ingredients and let the magic happen.
+          Discover thousands of AI-crafted dishes tailored to your taste.
         </p>
 
-        {/* Button */}
+        {/* ✅ FIXED BUTTON */}
         <button
-          onClickCapture={() => navigate("/Dashboard")}
+          onClick={() => setAuthOpen(true)}
           className="w-fit px-9 py-3.5
-          text-white text-[16px] font-[500] tracking-wide
+          text-white text-[16px] font-[500]
           rounded-xl
           bg-gradient-to-r from-blue-500/90 to-blue-600/90
           shadow-[0_0_15px_rgba(59,130,246,0.5)]
           hover:shadow-[0_0_30px_rgba(59,130,246,0.8)]
           hover:scale-105 active:scale-95
-          transition-all duration-300 ease-out
-          border border-white/10"
+          transition-all duration-300"
         >
           Get Started
         </button>
@@ -47,34 +58,31 @@ export function Hero() {
       <section className="hidden sm:flex max-w-7xl mx-auto px-6 md:px-10 py-12 md:py-16 
       items-center justify-between gap-6">
 
-        {/* Left Content */}
         <div className="flex flex-col gap-6 max-w-[50%]">
           <h1 className="text-5xl md:text-[60px] font-[600] text-white leading-[1.1]">
             AI Recipe Generator
           </h1>
 
-          <p className="text-lg md:text-[18px] text-white/70 font-normal max-w-[90%] leading-relaxed">
-            Discover thousands of AI-crafted dishes tailored to your taste. From quick weeknight dinners to gourmet feasts — just tell us your ingredients and let the magic happen.
+          <p className="text-lg md:text-[18px] text-white/70 leading-relaxed">
+            Discover thousands of AI-crafted dishes tailored to your taste.
           </p>
 
+          {/* ✅ FIXED BUTTON */}
           <button
-            onClickCapture={() => navigate("/Dashboard")}
+            onClick={() => setAuthOpen(true)}
             className="mt-8 w-fit px-10 py-4
-            text-white text-lg md:text-[20px] font-[500] tracking-wide
+            text-white text-lg md:text-[20px]
             rounded-xl
             bg-gradient-to-r from-blue-500/90 to-blue-600/90
-            backdrop-blur-md
             shadow-[0_0_15px_rgba(59,130,246,0.5)]
             hover:shadow-[0_0_30px_rgba(59,130,246,0.8)]
             hover:scale-105 active:scale-95
-            transition-all duration-300 ease-out
-            border border-white/10"
+            transition-all duration-300"
           >
             Get Started
           </button>
         </div>
 
-        {/* Right Image */}
         <div className="flex justify-center items-center w-[50%]">
           <img
             src="/right.jpg"
@@ -88,7 +96,6 @@ export function Hero() {
     </>
   );
 }
- 
 
 export function Bottom() {
   return (
