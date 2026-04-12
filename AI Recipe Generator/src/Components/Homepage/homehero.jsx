@@ -90,86 +90,107 @@ export function Hero() {
 }
  
 
-// How It Works section
 export function Bottom() {
   return (
     <section className="max-w-7xl mx-auto px-4 sm:px-6 md:px-10 py-12 sm:py-16 md:py-20">
 
-      {/* 🔹 Title with Lines */}
+      <style>{`
+        @keyframes borderGlow {
+          0%   { background-position: 0% 50%; }
+          100% { background-position: 200% 50%; }
+        }
+      `}</style>
+
+      {/* Title with Lines */}
       <div className="flex items-center justify-center gap-3 sm:gap-5 md:gap-6 mb-10 sm:mb-12 md:mb-14">
-        <div className="flex-1 h-[1px] bg-white"></div>
-        <h1 className="text-white text-2xl sm:text-3xl md:text-[34px] font-semibold tracking-wide whitespace-nowrap">
+        <div className="flex-1 h-[1px] bg-gradient-to-r from-transparent to-white/40"></div>
+        <h1 className="text-white text-2xl sm:text-3xl md:text-[34px] font-medium tracking-wide whitespace-nowrap">
           How It Works
         </h1>
-        <div className="flex-1 h-[1px] bg-white"></div>
+        <div className="flex-1 h-[1px] bg-gradient-to-l from-transparent to-white/40"></div>
       </div>
 
-      {/* 🔹 Cards */}
+      {/* Cards */}
       <div className="flex flex-col sm:flex-row justify-between gap-6 sm:gap-5 md:gap-8">
 
         {/* Card 1 - Blue */}
-        <div className="w-full sm:w-[32%] rounded-2xl overflow-hidden 
-        border border-blue-400/30 hover:scale-105 transition duration-300 flex flex-col">
-
-          <div className="w-full h-[260px] sm:h-[200px] md:h-[240px]">
-            <img src="/htu1.jpg" className="w-full h-full object-cover" />
-          </div>
-
-          <div className="flex flex-col gap-3 p-6 sm:p-5 md:p-6 
-          bg-blue-500/10 backdrop-blur-md flex-1">
-            <p className="text-white text-xl sm:text-base md:text-[18px] font-semibold">
-              1. Enter Your Ingredients
-            </p>
-
-            <hr className="border-blue-400/40" />
-
-            <p className="text-white/70 text-base sm:text-sm md:text-[15px]">
-              Tell us what's in your kitchen
-            </p>
+        <div
+          className="w-full sm:w-[32%] p-[3px] rounded-2xl hover:scale-105 transition-transform duration-300"
+          style={{
+            background: "linear-gradient(90deg, #3b82f6, #a78bfa, #40e0d0, #3b82f6)",
+            backgroundSize: "200% 100%",
+            animation: "borderGlow 3s linear infinite",
+            boxShadow: "0 0 20px rgba(59,130,246,0.25), 0 0 40px rgba(59,130,246,0.1)",
+          }}
+        >
+          <div className="flex flex-col rounded-[14px] overflow-hidden h-full
+            bg-gradient-to-b from-[#0a0f1f]/95 to-[#0e0e1f]/95 backdrop-blur-md">
+            <div className="w-full h-[260px] sm:h-[200px] md:h-[240px]">
+              <img src="/htu1.jpg" className="w-full h-full object-cover" />
+            </div>
+            <div className="flex flex-col gap-3 p-6 sm:p-5 md:p-6 flex-1">
+              <p className="text-white text-xl sm:text-base md:text-[18px] font-medium">
+                1. Enter Your Ingredients
+              </p>
+              <hr className="border-blue-400/30" />
+              <p className="text-white/65 text-base sm:text-sm md:text-[15px] font-normal">
+                Tell us what's in your kitchen
+              </p>
+            </div>
           </div>
         </div>
 
         {/* Card 2 - Purple */}
-        <div className="w-full sm:w-[32%] rounded-2xl overflow-hidden 
-        border border-purple-400/30 hover:scale-105 transition duration-300 flex flex-col">
-
-          <div className="w-full h-[260px] sm:h-[200px] md:h-[240px]">
-            <img src="/htu3.jpg" className="w-full h-full object-cover" />
-          </div>
-
-          <div className="flex flex-col gap-3 p-6 sm:p-5 md:p-6 
-          bg-purple-500/10 backdrop-blur-md flex-1">
-            <p className="text-white text-xl sm:text-base md:text-[18px] font-semibold">
-              2. Get AI Recipe Ideas
-            </p>
-
-            <hr className="border-purple-400/40" />
-
-            <p className="text-white/70 text-base sm:text-sm md:text-[15px]">
-              Instant recipes just for you
-            </p>
+        <div
+          className="w-full sm:w-[32%] p-[2px] rounded-2xl hover:scale-105 transition-transform duration-300"
+          style={{
+            background: "linear-gradient(90deg, #a855f7, #ff0080, #7b2ff7, #a855f7)",
+            backgroundSize: "200% 100%",
+            animation: "borderGlow 3s linear infinite",
+            boxShadow: "0 0 20px rgba(168,85,247,0.25), 0 0 40px rgba(168,85,247,0.1)",
+          }}
+        >
+          <div className="flex flex-col rounded-[14px] overflow-hidden h-full
+            bg-gradient-to-b from-[#150f20]/95 to-[#0e0e1f]/95 backdrop-blur-md">
+            <div className="w-full h-[260px] sm:h-[200px] md:h-[240px]">
+              <img src="/htu3.jpg" className="w-full h-full object-cover" />
+            </div>
+            <div className="flex flex-col gap-3 p-6 sm:p-5 md:p-6 flex-1">
+              <p className="text-white text-xl sm:text-base md:text-[18px] font-medium">
+                2. Get AI Recipe Ideas
+              </p>
+              <hr className="border-purple-400/30" />
+              <p className="text-white/65 text-base sm:text-sm md:text-[15px] font-normal">
+                Instant recipes just for you
+              </p>
+            </div>
           </div>
         </div>
 
         {/* Card 3 - Orange */}
-        <div className="w-full sm:w-[32%] rounded-2xl overflow-hidden 
-        border border-orange-400/30 hover:scale-105 transition duration-300 flex flex-col">
-
-          <div className="w-full h-[260px] sm:h-[200px] md:h-[240px]">
-            <img src="/htu2.jpg" className="w-full h-full object-cover" />
-          </div>
-
-          <div className="flex flex-col gap-3 p-6 sm:p-5 md:p-6 
-          bg-orange-500/10 backdrop-blur-md flex-1">
-            <p className="text-white text-xl sm:text-base md:text-[18px] font-semibold">
-              3. Cook & Enjoy
-            </p>
-
-            <hr className="border-orange-400/40" />
-
-            <p className="text-white/70 text-base sm:text-sm md:text-[15px]">
-              Follow the steps & savor!
-            </p>
+        <div
+          className="w-full sm:w-[32%] p-[2px] rounded-2xl hover:scale-105 transition-transform duration-300"
+          style={{
+            background: "linear-gradient(90deg, #f97316, #ff0080, #ff8c00, #f97316)",
+            backgroundSize: "200% 100%",
+            animation: "borderGlow 3s linear infinite",
+            boxShadow: "0 0 20px rgba(249,115,22,0.25), 0 0 40px rgba(249,115,22,0.1)",
+          }}
+        >
+          <div className="flex flex-col rounded-[14px] overflow-hidden h-full
+            bg-gradient-to-b from-[#1f0e00]/95 to-[#0e0e1f]/95 backdrop-blur-md">
+            <div className="w-full h-[260px] sm:h-[200px] md:h-[240px]">
+              <img src="/htu2.jpg" className="w-full h-full object-cover" />
+            </div>
+            <div className="flex flex-col gap-3 p-6 sm:p-5 md:p-6 flex-1">
+              <p className="text-white text-xl sm:text-base md:text-[18px] font-medium">
+                3. Cook & Enjoy
+              </p>
+              <hr className="border-orange-400/30" />
+              <p className="text-white/65 text-base sm:text-sm md:text-[15px] font-normal">
+                Follow the steps & savor!
+              </p>
+            </div>
           </div>
         </div>
 

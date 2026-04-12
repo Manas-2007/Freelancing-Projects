@@ -28,7 +28,7 @@ export function MobileSearchBar() {
         <div
           className="p-[1.5px] rounded-2xl transition-all duration-500"
           style={
-            focused || value
+            true
               ? {
                   background: "linear-gradient(90deg, #ff0080, #7b2ff7, #40e0d0, #ff8c00, #ff0080)",
                   backgroundSize: "200% 100%",
@@ -140,12 +140,13 @@ export function Dashnav() {
             <span className="text-[9px] text-white/35 uppercase tracking-[0.22em] font-normal mt-1">Generator</span>
           </div>
         </div>
+
         {/* CENTER: Search */}
         <div className="flex items-stretch w-[30%] h-9">
           <div
             className="flex items-stretch flex-1 p-[1.5px] rounded-l-2xl transition-all duration-500"
             style={
-              focused || value
+              true
                 ? {
                     background: "linear-gradient(90deg, #ff0080, #7b2ff7, #40e0d0, #ff8c00, #ff0080)",
                     backgroundSize: "200% 100%",
@@ -278,6 +279,8 @@ export function Dashnav() {
         >
           <HiX size={16} />
         </button>
+
+
         {/* Logo + Title */}
         <div className="flex flex-col items-center gap-3 pt-12 pb-7 px-6
           border-b border-white/10
@@ -292,6 +295,8 @@ export function Dashnav() {
             <p className="text-purple-400/50 text-[9px] uppercase tracking-[0.25em] font-normal mt-1">Smart Kitchen AI</p>
           </div>
         </div>
+
+
         {/* Categories */}
         <div className="flex flex-col px-3 py-5 gap-0.5 flex-1 overflow-y-auto">
           <p className="text-white/20 text-[9px] font-normal uppercase tracking-[0.3em] px-3 mb-2">Food Variety</p>
@@ -317,6 +322,8 @@ export function Dashnav() {
             );
           })}
         </div>
+
+
         {/* Library */}
         <div className="px-3 pb-8 border-t border-white/10 pt-4">
           <button className="flex items-center gap-3 px-4 py-3 rounded-xl w-full
@@ -336,67 +343,102 @@ export function Dashnav() {
 export function Status({ total = 240, favCuisine = "Italian", saved = 30, onFilterClick }) {
   return (
     <div className="w-full mt-6 mb-8">
+      <style>{`
+        @keyframes borderGlow {
+          0%   { background-position: 0% 50%; }
+          100% { background-position: 200% 50%; }
+        }
+      `}</style>
 
       <div className="grid grid-cols-2 sm:flex sm:items-center gap-3 sm:gap-6">
 
         {/* Total Generated */}
-        <div className="relative flex items-center gap-3 sm:gap-4 px-4 sm:px-6 py-4 sm:py-3.5 
-          bg-gradient-to-br from-[#0f1f12]/90 to-[#0e0e1f]/85
-          backdrop-blur-xl border border-green-500/35
-          rounded-2xl shadow-[0_4px_20px_rgba(0,0,0,0.4),0_0_15px_rgba(34,197,94,0.08)]
-          hover:border-green-500/60 hover:shadow-[0_4px_24px_rgba(0,0,0,0.5),0_0_20px_rgba(34,197,94,0.15)]
-          transition-all duration-300 group overflow-hidden">
-          <div className="w-1.5 h-8 sm:h-6 bg-green-500 rounded-full shadow-[0_0_14px_rgba(34,197,94,0.7)] flex-shrink-0" />
-          <div className="flex flex-col">
-            <span className="text-[9px] text-green-400 uppercase font-black tracking-[0.18em]">Generated</span>
-            <span className="text-white text-2xl sm:text-xl font-black leading-tight">{total}</span>
+        <div
+          className="p-[1.5px] rounded-2xl flex-1"
+          style={{
+            background: "linear-gradient(90deg, #22c55e, #a78bfa, #22c55e)",
+            backgroundSize: "200% 100%",
+            animation: "borderGlow 3s linear infinite",
+            boxShadow: "0 0 16px rgba(34,197,94,0.2), 0 0 32px rgba(34,197,94,0.08)",
+          }}
+        >
+          <div className="flex items-center gap-3 sm:gap-4 px-4 sm:px-6 py-4 sm:py-3.5
+            bg-gradient-to-br from-[#0f1f12]/95 to-[#0e0e1f]/95
+            backdrop-blur-xl rounded-[14px] h-full">
+            <div className="w-1.5 h-8 sm:h-6 bg-green-500 rounded-full shadow-[0_0_14px_rgba(34,197,94,0.7)] flex-shrink-0" />
+            <div className="flex flex-col">
+              <span className="text-[9px] text-green-400 uppercase font-normal tracking-[0.18em]">Generated</span>
+              <span className="text-white text-2xl sm:text-xl font-medium leading-tight">{total}</span>
+            </div>
           </div>
         </div>
 
         {/* Favorite Cuisine */}
-        <div className="relative flex items-center gap-3 sm:gap-4 px-4 sm:px-6 py-4 sm:py-3.5 
-          bg-gradient-to-br from-[#1f0e0e]/90 to-[#0e0e1f]/85
-          backdrop-blur-xl border border-red-500/35
-          rounded-2xl shadow-[0_4px_20px_rgba(0,0,0,0.4),0_0_15px_rgba(239,68,68,0.08)]
-          hover:border-red-500/60 hover:shadow-[0_4px_24px_rgba(0,0,0,0.5),0_0_20px_rgba(239,68,68,0.15)]
-          transition-all duration-300 group overflow-hidden">
-          <div className="w-1.5 h-8 sm:h-6 bg-red-500 rounded-full shadow-[0_0_14px_rgba(239,68,68,0.7)] flex-shrink-0" />
-          <div className="flex flex-col min-w-0">
-            <span className="text-[9px] text-red-400 uppercase font-black tracking-[0.18em]">Favorite</span>
-            <span className="text-white text-xl font-black leading-tight truncate">{favCuisine}</span>
+        <div
+          className="p-[1.5px] rounded-2xl flex-1"
+          style={{
+            background: "linear-gradient(90deg, #ef4444, #a78bfa, #ef4444)",
+            backgroundSize: "200% 100%",
+            animation: "borderGlow 3s linear infinite",
+            boxShadow: "0 0 16px rgba(239,68,68,0.2), 0 0 32px rgba(239,68,68,0.08)",
+          }}
+        >
+          <div className="flex items-center gap-3 sm:gap-4 px-4 sm:px-6 py-4 sm:py-3.5
+            bg-gradient-to-br from-[#1f0e0e]/95 to-[#0e0e1f]/95
+            backdrop-blur-xl rounded-[14px] h-full min-w-0">
+            <div className="w-1.5 h-8 sm:h-6 bg-red-500 rounded-full shadow-[0_0_14px_rgba(239,68,68,0.7)] flex-shrink-0" />
+            <div className="flex flex-col min-w-0">
+              <span className="text-[9px] text-red-400 uppercase font-normal tracking-[0.18em]">Favorite</span>
+              <span className="text-white text-xl font-medium leading-tight truncate">{favCuisine}</span>
+            </div>
           </div>
         </div>
 
         {/* Saved Recipes */}
-        <div className="relative flex items-center gap-3 sm:gap-4 px-4 sm:px-6 py-4 sm:py-3.5 
-          bg-gradient-to-br from-[#150f20]/90 to-[#0e0e1f]/85
-          backdrop-blur-xl border border-purple-500/35
-          rounded-2xl shadow-[0_4px_20px_rgba(0,0,0,0.4),0_0_15px_rgba(168,85,247,0.08)]
-          hover:border-purple-500/60 hover:shadow-[0_4px_24px_rgba(0,0,0,0.5),0_0_20px_rgba(168,85,247,0.15)]
-          transition-all duration-300 group overflow-hidden">
-          <div className="w-1.5 h-8 sm:h-6 bg-purple-500 rounded-full shadow-[0_0_14px_rgba(168,85,247,0.7)] flex-shrink-0" />
-          <div className="flex flex-col">
-            <span className="text-[9px] text-purple-400 uppercase font-black tracking-[0.18em]">Saved</span>
-            <span className="text-white text-2xl sm:text-xl font-black leading-tight">{saved}</span>
+        <div
+          className="p-[1.5px] rounded-2xl flex-1"
+          style={{
+            background: "linear-gradient(90deg, #a855f7, #60a5fa, #a855f7)",
+            backgroundSize: "200% 100%",
+            animation: "borderGlow 3s linear infinite",
+            boxShadow: "0 0 16px rgba(168,85,247,0.2), 0 0 32px rgba(168,85,247,0.08)",
+          }}
+        >
+          <div className="flex items-center gap-3 sm:gap-4 px-4 sm:px-6 py-4 sm:py-3.5
+            bg-gradient-to-br from-[#150f20]/95 to-[#0e0e1f]/95
+            backdrop-blur-xl rounded-[14px] h-full">
+            <div className="w-1.5 h-8 sm:h-6 bg-purple-500 rounded-full shadow-[0_0_14px_rgba(168,85,247,0.7)] flex-shrink-0" />
+            <div className="flex flex-col">
+              <span className="text-[9px] text-purple-400 uppercase font-normal tracking-[0.18em]">Saved</span>
+              <span className="text-white text-2xl sm:text-xl font-medium leading-tight">{saved}</span>
+            </div>
           </div>
         </div>
 
         {/* Filter Button */}
-        <button
-          onClick={onFilterClick}
-          className="relative flex items-center justify-center gap-2 sm:gap-3 sm:ml-auto 
-          px-4 sm:px-6 py-4 sm:py-3.5 
-          bg-gradient-to-br from-[#0a0f1f]/90 to-[#0e0e1f]/85
-          backdrop-blur-xl border border-blue-400/35
-          rounded-2xl text-white text-[11px] font-black uppercase tracking-[0.2em] 
-          shadow-[0_4px_20px_rgba(0,0,0,0.4),0_0_15px_rgba(59,130,246,0.1)]
-          hover:border-blue-400/60 hover:shadow-[0_4px_24px_rgba(0,0,0,0.5),0_0_25px_rgba(59,130,246,0.2)]
-          hover:bg-white hover:text-black
-          transition-all duration-300 active:scale-95 group overflow-hidden"
+        <div
+         className="p-[1.5px] rounded-2xl w-full h-full sm:w-auto sm:h-auto sm:ml-auto"
+          style={{
+            background: "linear-gradient(90deg, #ff0080, #7b2ff7, #40e0d0, #ff8c00, #ff0080)",
+            backgroundSize: "200% 100%",
+            animation: "borderGlow 3s linear infinite",
+            boxShadow: "0 0 16px rgba(123,47,247,0.25), 0 0 32px rgba(255,0,128,0.1)",
+          }}
         >
-          <span className="text-blue-400 group-hover:text-black transition-colors text-base">⚡</span>
-          <span className="relative z-10">Filters</span>
-        </button>
+          <button
+            onClick={onFilterClick}
+           className="flex items-center justify-center gap-2 sm:gap-3
+              px-4 sm:px-6 py-4 sm:py-3.5
+              bg-gradient-to-br from-[#0a0f1f]/95 to-[#0e0e1f]/95
+              backdrop-blur-xl rounded-[14px]
+              text-white text-[11px] font-normal uppercase tracking-[0.2em]
+              hover:bg-white/10
+              transition-all duration-300 active:scale-95 w-full h-full"
+          >
+            <span className="text-blue-400 text-base">⚡</span>
+            <span>Filters</span>
+          </button>
+        </div>
 
       </div>
     </div>

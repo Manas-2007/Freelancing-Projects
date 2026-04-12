@@ -8,7 +8,7 @@ import { MobileSearchBar } from "./navbar";
 export function DashBoard() {
 
   const [showFilter, setShowFilter] = useState(false);
-  const dishes = Array.from({ length: 25 });
+  const dishes = Array.from({ length: 24 });
 
   return (
     <div
