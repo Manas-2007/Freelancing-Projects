@@ -10,49 +10,79 @@ export function Security({ onSuccess, onClose }) {
 
   // --- REGISTER LOGIC ---
   const handleRegister = () => {
-    const id = Number(registerData.id);
-    if (id < 1 || id > 999) { setError("⚠️ ID must be between 1 and 999"); return; }
-    if (!registerData.username || !registerData.password) { setError("⚠️ All fields are required"); return; }
-    
-    // Save to local storage
-    localStorage.setItem("user", JSON.stringify(registerData));
-    setError("");
-    
-    // 🔥 Show Green Tick Screen
-    setIsRegistered(true);
-    
-    // 2 second baad automatic login mode par le jayega
-    setTimeout(() => {
-      setIsRegistered(false);
-      setMode("login");
-    }, 2000);
-  };
+  const id = Number(registerData.id);
+
+  if (id < 1 || id > 999) {
+    setError("⚠️ ID must be between 1 and 999");
+    return;
+  }
+
+  if (!registerData.username || !registerData.password) {
+    setError("⚠️ All fields are required");
+    return;
+  }
+
+  const existingUser = localStorage.getItem(`user_${id}`);
+
+  // ❌ If already exists
+  if (existingUser) {
+    setError("⚠️ This ID is already registered. Try another ID.");
+    return;
+  }
+
+  // ✅ Save unique user
+  localStorage.setItem(`user_${id}`, JSON.stringify(registerData));
+
+  setError("");
+  setIsRegistered(true);
+
+  setTimeout(() => {
+    setIsRegistered(false);
+    setMode("login");
+    resetForm();
+  }, 2000);
+};
 
   // --- LOGIN LOGIC ---
-  const handleLogin = () => {
-    const savedUserRaw = localStorage.getItem("user");
-    
-    // ⚠️ Check if user exists
-    if (!savedUserRaw) { 
-      setError("⚠️ Account not found. Please register first."); 
-      setTimeout(() => setMode("register"), 1500); // Thodi der baad register par bhej do
-      return; 
-    }
+const handleLogin = () => {
+  const userKey = `user_${loginData.id}`;
+  const savedUserRaw = localStorage.getItem(userKey);
 
-    const savedUser = JSON.parse(savedUserRaw);
+  if (!savedUserRaw) {
+    setError("⚠️ Account not found.");
+    return;
+  }
+
+  const savedUser = JSON.parse(savedUserRaw);
+
+  if (loginData.password === savedUser.password) {
+    // ✅ ADD THIS LINE: Save the current session ID
+    localStorage.setItem("currentUserId", loginData.id); 
     
-    // String vs Number issue na ho isliye String() use kiya hai
-    if (String(loginData.id) === String(savedUser.id) && loginData.password === savedUser.password) {
-      setError("");
-      onSuccess();
-    } else { 
-      setError("❌ Invalid ID or Password"); 
-    }
-  };
+    setError("");
+    onSuccess({
+      id: savedUser.id,
+      name: savedUser.username,
+      avatar: `https://i.pravatar.cc/150?u=${savedUser.id}`,
+      isVerified: true
+    });
+  } else {
+    setError("❌ Invalid Password");
+  }
+};
+
+  const resetForm = () => {
+  setLoginData({ id: "", password: "" });
+  setRegisterData({ id: "", username: "", password: "" });
+  setError("");
+};
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center px-4">
-      <div onClick={onClose} className="absolute inset-0 bg-black/70 backdrop-blur-sm" />
+      <div onClick={() => {
+      resetForm();
+      onClose();
+        }} className="absolute inset-0 bg-black/70 backdrop-blur-sm" />
 
       <div className="relative w-full max-w-md bg-gradient-to-br from-blue-900/40 to-black/70 border border-blue-400/30 rounded-2xl shadow-[0_0_40px_rgba(59,130,246,0.3)] backdrop-blur-xl p-6 sm:p-7 text-white min-h-[400px] flex flex-col justify-center">
         
@@ -102,7 +132,10 @@ export function Security({ onSuccess, onClose }) {
                   Register Identity
                 </button>
                 <p className="text-sm text-center text-white/70">
-                  Have account? <span onClick={() => setMode("login")} className="text-blue-400 cursor-pointer hover:underline">Log In</span>
+                  Have account? <span onClick={() => {
+                        setMode("login");
+                        resetForm();
+                      }} className="text-blue-400 cursor-pointer hover:underline">Log In</span>
                 </p>
               </div>
             )}
@@ -122,7 +155,10 @@ export function Security({ onSuccess, onClose }) {
                   Access Portal
                 </button>
                 <p className="text-sm text-center text-white/70">
-                  New user? <span onClick={() => setMode("register")} className="text-blue-400 cursor-pointer hover:underline">Register</span>
+                  New user? <span onClick={() => {
+            setMode("register");
+            resetForm();
+                    }} className="text-blue-400 cursor-pointer hover:underline">Register</span>
                 </p>
               </div>
             )}

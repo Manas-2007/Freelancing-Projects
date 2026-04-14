@@ -10,21 +10,32 @@ import { RecipeModal } from "./RecipeModal";
 
 export function DashBoard() {
   // --- 👤 1. USER PROFILE ---
-  const [userData, setUserData] = useState(() => {
-    const savedUser = localStorage.getItem("user");
-    if (savedUser) {
+const [userData, setUserData] = useState(() => {
+  // 1. Find out WHO is logged in
+  const currentId = localStorage.getItem("currentUserId");
+
+  if (currentId) {
+    // 2. Get that specific user's data
+    const savedUserRaw = localStorage.getItem(`user_${currentId}`);
+    
+    if (savedUserRaw) {
       try {
-        const parsed = JSON.parse(savedUser);
+        const parsed = JSON.parse(savedUserRaw);
         return {
           name: parsed.username || "Manas Patidar",
-          id: parsed.id || "AI-ROB-2026",
+          id: parsed.id || currentId,
           isVerified: true,
           avatar: `https://ui-avatars.com/api/?name=${parsed.username || "Manas"}&background=7b2ff7&color=fff`
         };
-      } catch (e) { console.error(e); }
+      } catch (e) {
+        console.error("Error parsing user data:", e);
+      }
     }
-    return { name: "Guest User", id: "000", isVerified: false };
-  });
+  }
+
+  // 3. Fallback if no one is logged in
+  return { name: "Guest User", id: "000", isVerified: false, avatar: "https://ui-avatars.com/api/?name=Guest&background=ccc" };
+});
 
   // --- 📚 2. LIBRARY ---
   const [savedRecipes, setSavedRecipes] = useState(() => {
@@ -136,6 +147,7 @@ export function DashBoard() {
   };
 
   useEffect(() => { fetchAdvancedRecipes("Indian"); }, []);
+  const [user, setUser] = useState(null);
 
   return (
     <div className="min-h-screen max-w-full overflow-x-hidden px-2 md:px-1 relative " 
