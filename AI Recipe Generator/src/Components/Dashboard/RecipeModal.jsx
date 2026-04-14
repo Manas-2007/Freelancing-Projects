@@ -33,25 +33,42 @@ export function RecipeModal({ recipe, isOpen, onClose }) {
   };
 
   //Download Logic
-  const handleDownloadPDF = () => {
-    const element = document.getElementById("printable-area");
-    
-    // PDF Options
-    const opt = {
-      margin: 0,
-      filename: `${recipe.strMeal}_Recipe.pdf`,
-      image: { type: 'jpeg', quality: 0.98 },
-      html2canvas: { 
-        scale: 2, 
-        useCORS: true, 
-        letterRendering: true,
-        backgroundColor: "#0c0c1e" // Same as your theme
-      },
-      jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-    };
+ const handleDownloadPDF = async () => {
+  const element = document.getElementById("pdf-content");
 
-    html2pdf().set(opt).from(element).save();
+  if (!element) {
+    console.error("PDF element not found");
+    return;
+  }
+
+  // 👇 Force visible (CRITICAL FIX)
+  element.style.display = "block";
+
+  // 👇 Wait for DOM + images to render properly
+  await new Promise(resolve => setTimeout(resolve, 500));
+
+  const opt = {
+    margin: 10,
+    filename: `${recipe.strMeal}_Recipe.pdf`,
+    image: { type: "jpeg", quality: 1 },
+    html2canvas: {
+      scale: 2,
+      useCORS: true,
+      logging: true,
+      backgroundColor: "#ffffff"
+    },
+    jsPDF: {
+      unit: "mm",
+      format: "a4",
+      orientation: "portrait"
+    }
   };
+
+  await html2pdf().set(opt).from(element).save();
+
+  // 👇 Hide again after download
+  element.style.display = "none";
+};
 
   const ingredients = getIngredients();
   const steps = getCleanInstructions();
@@ -87,10 +104,7 @@ export function RecipeModal({ recipe, isOpen, onClose }) {
             className="absolute top-3 right-3 md:top-6 md:right-6 z-[80] w-8 h-8 md:w-9 md:h-9 rounded-full bg-white/5 hover:bg-red-500/80 flex items-center justify-center text-white border border-white/80 transition-all active:scale-90"
           >✕</button>
 
-          {/* ============================================================ */}
-          {/* 🖥️ DESKTOP LAYOUT — completely unchanged from original       */}
-          {/* ============================================================ */}
-
+        
           {/* 🖼️ Left: Visual Content — desktop only */}
           <div className="hidden md:flex relative w-full md:w-[35%] flex-col items-center p-10 z-10 border-r border-white/5 shrink-0">
             <div className="mb-8 text-center px-4">
@@ -118,29 +132,55 @@ export function RecipeModal({ recipe, isOpen, onClose }) {
           </div>
 
           {/* 📝 Right: Detailed Content — desktop only */}
-          <div className="hidden md:flex relative w-full md:w-[65%] p-10 z-10 flex-col flex-1 min-h-0">
-            {/* 🍲 Ingredients Section */}
-            <section className="flex-1 flex flex-col min-h-0 mb-2">
-              <h3 className="text-[12px] font-black text-green-500 tracking-[0.3em] mb-4 uppercase flex items-center gap-3 shrink-0">
-                <span className="w-8 h-px bg-green-500/40"></span> Execution
-              </h3>
-              <div className="flex-1 overflow-y-auto pr-2 space-y-4 custom-scroll bg-black/40 rounded-[32px] p-8 border border-white/10 shadow-inner">
-                {steps.map((step, i) => (
-                  <div 
-                    key={i} 
-                    className="flex gap-5 p-5 bg-transparent hover:bg-white/[0.05] rounded-2xl transition-all border-b border-white/5 last:border-0 items-start group"
-                  >
-                    <span className="text-xl font-black text-blue-500/40 group-hover:text-blue-500 transition-colors shrink-0 mt-1">
-                      {String(i + 1).padStart(2, '0')}
-                    </span>
-                    <p className="text-[14px] text-white/60 leading-relaxed font-light group-hover:text-white transition-colors">
-                      {step}
-                    </p>
-                  </div>
-                ))}
-              </div>
-            </section>
+          {/* 📝 Right: Ingredients + Steps — desktop */}
+<div className="hidden md:flex relative w-full md:w-[65%] p-6 gap-6 z-10 flex-1 min-h-0">
+
+  {/* 🧂 Ingredients Panel */}
+  <div className="w-[40%] flex flex-col min-h-0">
+    <h3 className="text-[12px] font-black text-green-500 tracking-[0.3em] mb-4 uppercase flex items-center gap-3 shrink-0">
+      <span className="w-8 h-px bg-green-500/40"></span> Ingredients
+    </h3>
+
+    <div className="flex-1 overflow-y-auto custom-scroll bg-black/40 rounded-[24px] p-5 border border-white/10 space-y-3">
+      {ingredients.length === 0 ? (
+        <p className="text-white/40 text-sm text-center py-8">No ingredients found.</p>
+      ) : (
+        ingredients.map((ing, i) => (
+          <div key={i} className="flex items-start gap-3 py-2 border-b border-white/5 last:border-0">
+            <span className="w-6 h-6 rounded-full bg-green-500/20 border border-green-500/40 flex items-center justify-center text-green-400 text-[10px] font-black shrink-0 mt-0.5">
+              {i + 1}
+            </span>
+            <p className="text-[13px] text-white/80 leading-relaxed">{ing}</p>
           </div>
+        ))
+      )}
+    </div>
+  </div>
+
+  {/* 📋 Steps Panel */}
+  <div className="w-[60%] flex flex-col min-h-0">
+    <h3 className="text-[12px] font-black text-blue-500 tracking-[0.3em] mb-4 uppercase flex items-center gap-3 shrink-0">
+      <span className="w-8 h-px bg-blue-500/40"></span> Steps
+    </h3>
+
+    <div className="flex-1 overflow-y-auto custom-scroll bg-black/40 rounded-[24px] p-5 border border-white/10 space-y-4">
+      {steps.map((step, i) => (
+        <div 
+          key={i} 
+          className="flex gap-4 py-3 border-b border-white/5 last:border-0 items-start group"
+        >
+          <span className="text-lg font-black text-blue-500/40 group-hover:text-blue-500 transition-colors shrink-0 mt-1">
+            {String(i + 1).padStart(2, '0')}
+          </span>
+          <p className="text-[13px] text-white/70 leading-relaxed group-hover:text-white transition-colors">
+            {step}
+          </p>
+        </div>
+      ))}
+    </div>
+  </div>
+
+</div>
 
           {/* ============================================================ */}
           {/* 📱 MOBILE LAYOUT — full redesign with tabs                   */}
@@ -252,6 +292,66 @@ export function RecipeModal({ recipe, isOpen, onClose }) {
           }
         `}</style>
       </div>
+
+      {/* 📄 Hidden PDF Layout */}
+
+<div id="pdf-content" style={{ fontFamily: "Arial, sans-serif", color: "#222" }}>
+
+  {/* 🖼️ Hero Section */}
+  <div style={{ position: "relative", marginBottom: "20px" }}>
+    <img 
+      src={recipe.strMealThumb}
+      crossOrigin="anonymous"
+      alt={recipe.strMeal}
+      style={{ width: "100%", height: "250px", objectFit: "cover", borderRadius: "12px" }}
+    />
+    <h1 style={{
+      position: "absolute",
+      bottom: "10px",
+      left: "15px",
+      color: "white",
+      background: "rgba(0,0,0,0.6)",
+      padding: "6px 12px",
+      borderRadius: "8px",
+      fontSize: "20px"
+    }}>
+      {recipe.strMeal}
+    </h1>
+  </div>
+
+  {/* 🧂 Ingredients Card */}
+  <div style={{
+    background: "#f8f9fa",
+    padding: "15px",
+    borderRadius: "12px",
+    marginBottom: "20px"
+  }}>
+    <h2 style={{ marginBottom: "10px", color: "#16a34a" }}>Ingredients</h2>
+    <ul style={{ paddingLeft: "20px", listStyleType: "disc" }}>
+      {ingredients.map((ing, i) => (
+        <li key={i} style={{ marginBottom: "6px" }}>{ing}</li>
+      ))}
+    </ul>
+  </div>
+
+  {/* 📋 Steps Card */}
+  <div style={{
+    background: "#eef2ff",
+    padding: "15px",
+    borderRadius: "12px"
+  }}>
+    <h2 style={{ marginBottom: "10px", color: "#2563eb" }}>Steps</h2>
+    <ol style={{ paddingLeft: "20px", listStyleType: "decimal" }}>
+      {steps.map((step, i) => (
+        <li key={i} style={{ marginBottom: "10px", lineHeight: "1.6" }}>
+          {step}
+        </li>
+      ))}
+    </ol>
+  </div>
+
+</div>
+
     </AnimatePresence>
   );
 }
