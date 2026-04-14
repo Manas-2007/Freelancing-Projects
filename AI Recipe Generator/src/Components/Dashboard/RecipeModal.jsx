@@ -1,5 +1,6 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useState } from "react";
+import html2pdf from "html2pdf.js";
 
 export function RecipeModal({ recipe, isOpen, onClose }) {
   // 🛡️ Safety Check
@@ -31,10 +32,25 @@ export function RecipeModal({ recipe, isOpen, onClose }) {
       .map(step => step.replace(/^\d+\.\s*/, "").trim());
   };
 
-  const handlePrint = () => {
-    setTimeout(() => {
-      window.print();
-    }, 100);
+  //Download Logic
+  const handleDownloadPDF = () => {
+    const element = document.getElementById("printable-area");
+    
+    // PDF Options
+    const opt = {
+      margin: 0,
+      filename: `${recipe.strMeal}_Recipe.pdf`,
+      image: { type: 'jpeg', quality: 0.98 },
+      html2canvas: { 
+        scale: 2, 
+        useCORS: true, 
+        letterRendering: true,
+        backgroundColor: "#0c0c1e" // Same as your theme
+      },
+      jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+    };
+
+    html2pdf().set(opt).from(element).save();
   };
 
   const ingredients = getIngredients();
@@ -87,13 +103,14 @@ export function RecipeModal({ recipe, isOpen, onClose }) {
             <div className="w-full aspect-square rounded-[48px] overflow-hidden border border-white shadow-2xl">
               <img 
                 src={recipe.strMealThumb} 
+                crossOrigin="anonymous"
                 alt={recipe.strMeal} 
                 className="w-full h-full object-cover"
                 onError={(e) => { e.target.src = "https://via.placeholder.com/300?text=No+Image"; }}
               />
             </div>
             <button 
-              onClick={handlePrint}
+              onClick={handleDownloadPDF}
               className="mt-10 px-8 py-4 bg-green-600 hover:bg-green-500 text-white font-[500] text-[13px] tracking-[0.2em] rounded-xl transition-all shadow-lg active:scale-95 no-print"
             >
               Download Recipe
@@ -211,7 +228,7 @@ export function RecipeModal({ recipe, isOpen, onClose }) {
             {/* Bottom: Download button */}
             <div className="shrink-0 px-5 pb-5 no-print">
               <button
-                onClick={handlePrint}
+                onClick={handleDownloadPDF}
                 className="w-full py-3 bg-green-600 hover:bg-green-500 text-white font-semibold text-[13px] tracking-[0.15em] rounded-xl transition-all shadow-lg active:scale-95"
               >
                 Download Recipe
