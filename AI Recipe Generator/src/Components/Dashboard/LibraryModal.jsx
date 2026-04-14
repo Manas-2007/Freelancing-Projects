@@ -8,7 +8,7 @@ export function LibraryModal({ recipes, onClose, onRemove, onCookClick }) {
       {/* 🌌 Backdrop */}
       <motion.div 
         initial={{ opacity: 0 }} animate={{ opacity: 1 }} 
-        className="absolute inset-0 bg-black/90 backdrop-blur-sm" 
+        className="absolute inset-0 bg-black/30 backdrop-blur-sm" 
         onClick={onClose} 
       />
       
@@ -28,16 +28,16 @@ export function LibraryModal({ recipes, onClose, onRemove, onCookClick }) {
                 <FaArchive className="text-blue-500 text-sm" />
             </div>
             <div className="flex flex-col">
-              <h2 className="text-white text-lg font-black tracking-tighter uppercase italic leading-none">
+              <h2 className="text-white text-lg font-[700] tracking-tighter uppercase  leading-none">
                 Recipe <span className="text-blue-500">Vault</span>
               </h2>
-              <span className="text-white/30 text-[9px] tracking-[0.3em] font-bold uppercase mt-1">
+              <span className="text-white text-[9px] tracking-[0.3em] font-bold uppercase mt-1">
                 {recipes.length} SECURED ASSETS
               </span>
             </div>
           </div>
           
-          <button onClick={onClose} className="w-9 h-9 flex items-center justify-center rounded-full bg-white/5 text-white/40 hover:bg-red-500/80 hover:text-white transition-all active:scale-90">
+          <button onClick={onClose} className="w-9 h-9 flex items-center justify-center rounded-full bg-white/5 text-white hover:bg-red-500/80 hover:text-white transition-all active:scale-90">
             <FaTimes size={16} />
           </button>
         </div>
@@ -52,7 +52,7 @@ export function LibraryModal({ recipes, onClose, onRemove, onCookClick }) {
                   animate={{ x: 0, opacity: 1 }}
                   transition={{ delay: index * 0.03 }}
                   key={recipe.idMeal} 
-                  className="group flex flex-row items-center gap-4 p-3 bg-white/[0.03] border border-white/5 hover:border-white/10 rounded-2xl transition-all duration-300"
+                  className="group flex flex-row items-center gap-4 p-3 bg-white/[0.03] border border-white/30 hover:border-white/10 rounded-2xl transition-all duration-300"
                 >
                   {/* 1. Thumbnail - Smaller */}
                   <div className="relative w-24 h-18 md:w-28 md:h-20 rounded-xl overflow-hidden flex-shrink-0 border border-white/10">
@@ -61,18 +61,18 @@ export function LibraryModal({ recipes, onClose, onRemove, onCookClick }) {
 
                   {/* 2. Content - Tight Font */}
                   <div className="flex-1 min-w-0">
-                    <h3 className="text-white text-[15px] font-bold tracking-tight truncate">
+                    <h3 className="text-white text-[17px] font-[400] tracking-tight truncate">
                       {recipe.strMeal}
                     </h3>
                     
                     <div className="flex items-center gap-4 mt-1.5">
-                      <div className="flex items-center gap-1.5 text-white/30 text-[9px] font-black uppercase">
-                        <FaClock className="text-blue-500/50" /> 30M
+                      <div className="flex items-center gap-1.5 text-white/30 text-[12px] font-[400] uppercase">
+                        <FaClock className="text-blue-500" /> 30M
                       </div>
-                      <div className="flex items-center gap-1.5 text-yellow-500/50 text-[9px] font-black uppercase">
+                      <div className="flex items-center gap-1.5 text-yellow-500/50 text-[12px] font-[400] uppercase">
                         <FaStar /> 4.9
                       </div>
-                      <span className="hidden md:block text-[9px] text-blue-400/60 font-black uppercase tracking-widest border-l border-white/10 pl-4">
+                      <span className="hidden md:block text-[11px] text-blue-400/60 font-[400] uppercase tracking-widest border-l border-white/10 pl-4">
                         {recipe.strCategory || "Main"}
                       </span>
                     </div>
@@ -82,14 +82,14 @@ export function LibraryModal({ recipes, onClose, onRemove, onCookClick }) {
                   <div className="flex items-center gap-2">
                     <button 
                       onClick={() => { onCookClick(recipe.idMeal); onClose(); }}
-                      className="h-9 px-4 bg-green-600 hover:bg-green-500 text-white text-[10px] font-black uppercase tracking-widest rounded-xl transition-all flex items-center gap-2 shadow-lg shadow-green-900/20 active:scale-95"
+                      className="h-9 px-4 bg-green-600 hover:bg-green-600 text-white text-[12px] font-[400] uppercase tracking-widest rounded-xl transition-all flex items-center gap-2 shadow-lg shadow-green-900/20 active:scale-95"
                     >
                       <FaPlay size={7} /> <span className="hidden sm:inline">Initiate</span>
                     </button>
                     
                     <button 
                       onClick={() => onRemove(recipe.idMeal)}
-                      className="w-9 h-9 md:w-auto md:px-4 bg-red-600/90 hover:bg-red-500 text-white text-[10px] font-black uppercase rounded-xl transition-all flex items-center justify-center gap-2 active:scale-95"
+                      className="w-9 h-9 md:w-auto md:px-4 bg-red-600/90 hover:bg-red-500 text-white text-[12px] font-[400] uppercase rounded-xl transition-all flex items-center justify-center gap-2 active:scale-95"
                     >
                       <FaTrashAlt size={11} /> <span className="hidden md:inline">Delete</span>
                     </button>
@@ -105,7 +105,7 @@ export function LibraryModal({ recipes, onClose, onRemove, onCookClick }) {
         </div>
 
         {/* Status Line - Very Small */}
-        <div className="relative z-10 px-8 py-3 bg-black/40 border-t border-white/5 flex justify-between text-[8px] text-white/20 font-mono tracking-widest">
+        <div className="relative z-10 px-8 py-3 bg-black/40 border-t border-white/20 flex justify-between text-[8px] text-white font-mono tracking-widest">
            <span>SYSTEM_READY</span>
            <span>SECURE_DATA_NODE</span>
         </div>
