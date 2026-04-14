@@ -41,7 +41,7 @@ export function DashBoard() {
   const [savedCount, setSavedCount] = useState(savedRecipes.length);
   const [currentCuisine, setCurrentCuisine] = useState("Indian");
 
-  // --- 🔥 4. MODAL STATES (Now at Top Level) ---
+  // ---  4. MODAL STATES (Now at Top Level) ---
   const [selectedRecipe, setSelectedRecipe] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -138,8 +138,13 @@ export function DashBoard() {
   useEffect(() => { fetchAdvancedRecipes("Indian"); }, []);
 
   return (
-    <div className="min-h-screen px-4 md:px-6 relative pb-10" 
-         style={{ backgroundImage: "url('/banner.jpg')", backgroundSize: "cover", backgroundPosition: "center", backgroundAttachment: "fixed" }}>
+    <div className="min-h-screen max-w-full overflow-x-hidden px-2 md:px-1 relative " 
+       style={{ 
+         backgroundImage: "url('/banner.jpg')", 
+         backgroundSize: "cover", 
+         backgroundPosition: "center", 
+         backgroundAttachment: "fixed" 
+       }}>
       
       <Dashnav 
         userData={userData} 

@@ -22,6 +22,7 @@ export function MobileSearchBar({ onSearch }) {
         @keyframes borderGlow { 0% { background-position: 0% 50%; } 100% { background-position: 200% 50%; } }
       `}</style>
 
+      {/* Mobile Search: Fixed under Navbar on Mobile */}
       <div className="md:hidden w-full mt-3 mb-1 px-1">
         <div className="p-[1.5px] rounded-2xl transition-all duration-500"
           style={{
@@ -66,9 +67,37 @@ export function Dashnav({ onSurpriseMe, onSearch, onCategoryClick, onLibraryClic
 
   return (
     <>
+      {/* 📱 MOBILE NAVBAR: Always Sticky on Mobile */}
+      <nav className="flex md:hidden w-full items-center justify-between py-4 px-4 sticky top-0 z-[100] bg-[#0c0c1a]/90 backdrop-blur-2xl border-b border-white/10 shadow-lg">
+        {/* Left: Logo & Name */}
+        <div className="flex items-center gap-2.5">
+          <div className="w-9 h-9 rounded-xl border border-white/20 overflow-hidden shadow-lg shadow-blue-500/20">
+            <img src="/logo.jpg" alt="logo" className="h-full w-full object-cover" />
+          </div>
+          <div className="flex flex-col">
+            <h1 className="text-white text-base font-bold tracking-tighter uppercase leading-none italic">
+              AI <span className="text-blue-500">Chef</span>
+            </h1>
+            <span className="text-[7px] text-white/30 tracking-[0.2em] font-bold">SYSTEM_v1.0</span>
+          </div>
+        </div>
+
+        {/* Right: The 3 Icons */}
+        <div className="flex items-center gap-5">
+          <button onClick={onSurpriseMe} className="text-white/50 hover:text-orange-400 active:scale-90 transition-all">
+            <FiGift size={20} />
+          </button>
+          <button onClick={onLibraryClick} className="text-white/50 hover:text-blue-400 active:scale-90 transition-all">
+            <FaRegFolderClosed size={20} />
+          </button>
+          <button onClick={onProfileClick} className="w-8 h-8 rounded-full border border-white/20 overflow-hidden shadow-lg active:scale-90 transition-all">
+            <img src={userData?.avatar || "/logo.jpg"} alt="profile" className="h-full w-full object-cover" />
+          </button>
+        </div>
+      </nav>
+
+      {/* 💻 DESKTOP NAVBAR: No changes made here */}
       <nav className="hidden md:flex w-[calc(100%+2rem)] md:w-[calc(100%+3rem)] px-8 py-4 -mx-4 md:-mx-6 bg-[#0c0c1a]/90 backdrop-blur-2xl border-b border-white/15 items-center justify-between sticky top-0 z-50">
-        
-        {/* Logo */}
         <div className="flex items-center gap-3 group cursor-pointer">
           <div className="w-11 h-11 rounded-full border border-white/25 overflow-hidden transition-all group-hover:border-white/45">
             <img src="/logo.jpg" alt="logo" className="h-full w-full object-cover transition-transform group-hover:scale-110" />
@@ -79,7 +108,6 @@ export function Dashnav({ onSurpriseMe, onSearch, onCategoryClick, onLibraryClic
           </div>
         </div>
 
-        {/* Search Bar */}
         <div className="flex items-stretch w-[35%] h-10">
           <div className="flex items-stretch flex-1 p-[1.5px] rounded-l-2xl transition-all duration-500"
             style={focused || value ? { background: "linear-gradient(90deg, #ff0080, #7b2ff7, #40e0d0, #ff8c00, #ff0080)", backgroundSize: "200% 100%", animation: "borderGlow 3s linear infinite" } : { background: "rgba(255,255,255,0.18)" }}>
@@ -103,7 +131,6 @@ export function Dashnav({ onSurpriseMe, onSearch, onCategoryClick, onLibraryClic
           </button>
         </div>
 
-        {/* 🔥 CATEGORIES WITH ACTIVE STATE */}
         <div className="hidden lg:flex items-center gap-8 h-full">
           {categories.map((item) => {
             const isActive = activeCategory === item;
@@ -120,7 +147,6 @@ export function Dashnav({ onSurpriseMe, onSearch, onCategoryClick, onLibraryClic
           })}
         </div>
 
-        {/* Actions */}
         <div className="flex items-center gap-8">
           <button onClick={onSurpriseMe} className="flex flex-col items-center gap-1 text-white/50 hover:text-white transition-all group">
             <FiGift size={22} className="group-hover:scale-110 group-hover:text-orange-400 transition-all" />
@@ -176,7 +202,7 @@ export function Status({ total, favCuisine, saved, onFilterClick }) {
         </div>
 
         <button onClick={onFilterClick} className="p-[1.5px] rounded-2xl flex-1 bg-gradient-to-r from-blue-500 to-pink-500 animate-[borderGlow_3s_linear_infinite] bg-[length:200%_100%]">
-          <div className="flex items-center justify-center gap-2 px-4 py-3.5 bg-[#0a0f1f]/95 hover:bg-white/10 transition-all rounded-[14px] h-full">
+          <div className="flex items-center justify-start gap-2 px-4 py-3.5 bg-[#0a0f1f]/95 hover:bg-white/10 transition-all rounded-[14px] h-full">
             <span className="text-blue-400 text-base">⚡</span>
             <span className="text-white text-[11px] uppercase tracking-widest">Filters</span>
           </div>
