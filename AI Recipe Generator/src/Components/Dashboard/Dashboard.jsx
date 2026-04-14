@@ -158,14 +158,12 @@ export function DashBoard() {
       
       <MobileSearchBar onSearch={handleSearch} />
       <hr className="my-4 border-white/20" />
-      
-      <Status 
-        total={recipes.length} 
-        favCuisine={currentCuisine} 
-        saved={savedCount} 
-        onFilterClick={() => setShowFilter(!showFilter)} 
-      />
-
+     <Status 
+  total={recipes.length} 
+  favCuisine={currentCuisine.replace("Search: ", "")} 
+  saved={savedCount} 
+  onFilterClick={() => setShowFilter(!showFilter)} 
+/>
       {/* 🛠️ FILTER PANEL */}
       {showFilter && (
         <div className="absolute right-4 md:right-10 top-40 z-[100] animate-in slide-in-from-right duration-300">
