@@ -1,7 +1,11 @@
 import React from 'react';
 import { Droplets, Heart, X } from 'lucide-react';
 
-const DRegister = ({ onClose,mode,setMode }) => {
+const DRegister = ({ onClose,mode,setMode,onLoginSuccess }) => {
+  const handleLoginSubmit=(e)=>{
+    e.preventDefault();
+    onLoginSuccess();
+  }
   return (
     <div className="w-full flex items-center justify-center font-sans"> 
       {/* MODAL CARD */}
@@ -238,6 +242,7 @@ const DRegister = ({ onClose,mode,setMode }) => {
     <div className="p-4 md:p-4 bg-white border-t border-gray-100 space-y-2">
 
       <button
+      onClick={onLoginSuccess}
         className="w-full bg-[#880808] hover:bg-[#6d0606] active:scale-[0.98] text-white font-bold py-3 md:py-3.5 rounded-[14px] transition-all duration-200"
       >
         {mode === "login" ? "LOGIN" : "REGISTER AS DONOR"}
