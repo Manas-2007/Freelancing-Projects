@@ -1,33 +1,43 @@
 import React, { useState } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
-import PatientSidebar from './Sidebar';
-import Navbar from './Navbar'; // Changed back to local folder based on your structure
-import Hero from './Hero'; // Changed back to local folder based on your structure
-
-// Add these back so the Routes don't break
+import PatientSidebar from './Sidebar'; // Ensure this is your Sidebar with the Logout button
+import Navbar from './Navbar'; 
+import Hero from './Hero'; 
 import BloodReq from './BloodReq';
 import DonorPool from './DonorPool';
 import History from './History';
 import Notifications from './Notifications';
 import Profile from './Profile';
 
-const PatientDashboard = () => {
+// Added onLogout and user as props to keep it dynamic
+const PatientDashboard = ({ onLogout, user }) => {
   const [isOpen, setIsOpen] = useState(false);
+  
+  // Use the name from props, or default to Manas if not available
+  const userName = user?.name || "Manas";
 
   return (
     <div className="flex min-h-screen bg-[#f8f9fa]">
-      {/* This is the sidebar code I just gave you */}
-      <PatientSidebar isOpen={isOpen} setIsOpen={setIsOpen} />
+      {/* 1. Pass onLogout to the Sidebar so the button works */}
+      <PatientSidebar 
+        isOpen={isOpen} 
+        setIsOpen={setIsOpen} 
+        onLogout={onLogout} 
+      />
 
       <main className="flex-1 md:ml-[280px] flex flex-col h-screen overflow-y-auto no-scrollbar">
-        <Navbar setIsOpen={setIsOpen} />
+        {/* 2. Pass userName to the Navbar for the "Welcome" greeting and Profile Initial */}
+        <Navbar setIsOpen={setIsOpen} userName={userName} />
         
-        <div className="px-[20px] md:px-[35px] pb-[35px]">
+        {/* 3. Main Content Wrapper */}
+        <div className="px-[20px] md:px-[35px] md:py-[20px]">
           <Routes>
-            {/* Fixes the white screen issue by defaulting to the hero section */}
+            {/* Automatic redirect to dashboard tab */}
             <Route path="/" element={<Navigate to="/dashboard" replace />} />
 
+            {/* dashboard renders the Hero (Banner + Counters) */}
             <Route path="/dashboard" element={<Hero />} />
+            
             <Route path="/requests" element={<BloodReq />} />
             <Route path="/donors" element={<DonorPool />} />
             <Route path="/history" element={<History />} />
