@@ -1,5 +1,5 @@
 import React from "react";
-const PRegister = ({ onClose,mode,setMode }) => {
+const PRegister = ({ onClose,mode,setMode,onLoginSuccess }) => {
   return (
     <div className="w-full max-w-3xl h-[90vh] md:h-[600px] bg-white rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.1)] overflow-hidden flex flex-col md:flex-row relative animate-[fadeIn_.2s_ease]">
          {/* CLOSE BUTTON */}
@@ -276,10 +276,22 @@ const PRegister = ({ onClose,mode,setMode }) => {
 
         {/* FOOTER (FIXED BUTTON) */}
         <div className="p-4 md:p-5 bg-white border-t border-gray-100">
-          <button className="w-full bg-[#880808] hover:bg-green-700 text-white font-bold py-3 rounded-[14px] transition">
-            {mode === "login" ? "LOGIN" : "REGISTER PATIENT"}
-          </button>
-        </div>
+  <button 
+    onClick={() => {
+      if (mode === "login") {
+        // This triggers handlePatientLogin in App.jsx
+        onLoginSuccess(); 
+      } else {
+        // Logic for registration can go here later
+        console.log("Registering Patient...");
+        setMode("login"); // Optionally switch to login after registration
+      }
+    }}
+    className="w-full bg-[#880808] hover:bg-red-700 text-white font-bold py-3 rounded-[14px] transition active:scale-[0.98]"
+  >
+    {mode === "login" ? "LOGIN" : "REGISTER PATIENT"}
+  </button>
+</div>
 
       </div>
 

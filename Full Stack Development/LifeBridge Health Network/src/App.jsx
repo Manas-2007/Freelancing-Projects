@@ -7,33 +7,38 @@ import Testimonials from "./components/homepage/Testimonials";
 import Footer from "./components/homepage/Footer";
 import DRegister from "./components/auth/DRegister";
 import PRegister from "./components/auth/PRegister";
-import Dashboard from './components/DonorDash/Dashboard';
+import DonorDashboard from './components/DonorDash/Dashboard';
+import PatientDashboard from './components/PatientDash/Dashboard';
 
 function App() {
   // Logic States
-  const [isLoggedIn, setIsLoggedIn] = useState(false); // Controls Home vs Dashboard
-  const [donorMode, setDonorMode] = useState(null);    // Controls Donor Modal
-  const [patientMode, setPatientMode] = useState(null); // Controls Patient Modal
+  const [isLoggedIn, setIsLoggedIn] = useState(false); 
+  const [userType, setUserType] = useState(null); // Tracks 'donor' or 'patient'
+  const [donorMode, setDonorMode] = useState(null);    
+  const [patientMode, setPatientMode] = useState(null); 
 
-  // Function to trigger the move to Dashboard
+  // --- LOGIN HANDLERS ---
+
   const handleDonorLogin = () => {
-    setDonorMode(null); // Close the modal first
-    setIsLoggedIn(true); // Switch view to Dashboard
+    setDonorMode(null);
+    setUserType('donor'); // Set type before logging in
+    setIsLoggedIn(true);
   };
 
-  // Function to return to Home (for Logout later)
+  const handlePatientLogin = () => {
+    setPatientMode(null);
+    setUserType('patient'); // Set type before logging in
+    setIsLoggedIn(true);
+  };
+
   const handleLogout = () => {
     setIsLoggedIn(false);
+    setUserType(null);
   };
 
   return (
     <div className="relative min-h-screen bg-gray-50 font-sans">
       
-      {/* 
-          CONDITIONAL RENDERING: 
-          If NOT logged in, show Homepage. 
-          If logged in, show Dashboard.
-      */}
       {!isLoggedIn ? (
         <>
           {/* --- LANDING PAGE SECTION --- */}
@@ -58,7 +63,7 @@ function App() {
                 mode={donorMode}
                 setMode={setDonorMode}
                 onClose={() => setDonorMode(null)}
-                onLoginSuccess={handleDonorLogin} // Pass the login trigger here
+                onLoginSuccess={handleDonorLogin} 
               />
             </div>
           )}
@@ -70,13 +75,18 @@ function App() {
                 mode={patientMode}
                 setMode={setPatientMode}
                 onClose={() => setPatientMode(null)}
+                onLoginSuccess={handlePatientLogin} // Pass the new patient trigger here
               />
             </div>
           )}
         </>
       ) : (
-        /* --- DONOR DASHBOARD SECTION --- */
-        <Dashboard onLogout={handleLogout} />
+        /* --- DASHBOARD SELECTION --- */
+        userType === 'donor' ? (
+          <DonorDashboard onLogout={handleLogout} />
+        ) : (
+          <PatientDashboard onLogout={handleLogout} />
+        )
       )}
 
     </div>
