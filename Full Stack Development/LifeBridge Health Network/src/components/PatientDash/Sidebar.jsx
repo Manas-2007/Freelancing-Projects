@@ -11,9 +11,9 @@ const Sidebar = ({ isOpen, setIsOpen, onLogout }) => {
   // Removed Logout from here to handle it separately
   const menuItems = [
     { name: 'Dashboard', path: '/dashboard', icon: <LuLayoutDashboard /> },
+    { name: 'Donation Pool', path: '/pool', icon: <RiCalendarScheduleLine /> },
     { name: 'Nearby Requests', path: '/requests', icon: <MdOutlineGpsOff /> },
-    { name: 'Donation History', path: '/history', icon: <LuHistory /> },
-    { name: 'Schedule', path: '/schedule', icon: <RiCalendarScheduleLine /> },
+    { name: 'History', path: '/history', icon: <LuHistory /> },
     { name: 'Notifications', path: '/notifications', icon: <MdOutlineNotificationsActive /> },
   ];
 

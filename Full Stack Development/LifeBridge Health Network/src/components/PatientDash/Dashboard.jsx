@@ -30,7 +30,7 @@ const PatientDashboard = ({ onLogout, user }) => {
         <Navbar setIsOpen={setIsOpen} userName={userName} />
         
         {/* 3. Main Content Wrapper */}
-        <div className="px-[20px] md:px-[35px] md:py-[20px]">
+        <div className="w-full px-[10px] md:px-[2.5%] md:py-[20px]">
           <Routes>
             {/* Automatic redirect to dashboard tab */}
             <Route path="/" element={<Navigate to="/dashboard" replace />} />
@@ -39,7 +39,7 @@ const PatientDashboard = ({ onLogout, user }) => {
             <Route path="/dashboard" element={<Hero />} />
             
             <Route path="/requests" element={<BloodReq />} />
-            <Route path="/donors" element={<DonorPool />} />
+            <Route path="/pool" element={<DonorPool />} />
             <Route path="/history" element={<History />} />
             <Route path="/notifications" element={<Notifications />} />
             <Route path="/profile" element={<Profile />} />
