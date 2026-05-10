@@ -17,19 +17,19 @@ const Notifications = () => {
 
   // 🔄 1. FETCH REAL REQUESTS
   useEffect(() => {
-  const fetchNotifications = async () => {
-  try {
-    // 1. Clear cache by adding a timestamp (Optional but helps in testing)
-    const res = await API.get(`/requests/patient/663a7d4e3f1a2c001f8e4b5b?t=${Date.now()}`);
-    
-    // 2. LOG THE RAW DATA: Dekho ki kya server se 'donorName' aa raha hai?
-    console.log("🔥 Raw Data from Server:", res.data);
-    
-    setNotifications(res.data);
-  } catch (err) {
-    console.error("Fetch Error:", err);
-  }
-};
+    const fetchNotifications = async () => {
+      try {
+        const user = JSON.parse(localStorage.getItem('user'));
+        const patientId = user?._id || "663a7d4e3f1a2c001f8e4b5b"; // Temporary ID for testing
+        
+        const res = await axios.get(`http://localhost:5000/api/requests/patient/${patientId}`);
+        setNotifications(res.data);
+      } catch (err) {
+        console.error("Notification load error:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
 
     fetchNotifications();
     const interval = setInterval(fetchNotifications, 3000);
@@ -76,90 +76,91 @@ const Notifications = () => {
 
       {/* 2. NOTIFICATION LIST */}
       <div className="w-full space-y-4">
-        {notifications.length === 0 ? (
-          <div className="bg-white p-16 rounded-[32px] border-2 border-dashed border-gray-100 text-center">
-            <p className="text-gray-300 font-bold italic text-lg tracking-tight">Your notification vault is currently empty.</p>
-          </div>
-        ) : (
-          notifications.map((notif) => {
-
-            const style = getStatusStyles(notif.status);
-            const donorName = notif.donorId?.name || "Verified Donor";
-            const isAccepted = notif.status === 'Accepted' && notif.donorId !== null;
-            console.log("Checking Notif Donor:", notif.donorId);
-
-            return (
-              <div 
-                key={notif._id} 
-                className={`group relative flex flex-col md:flex-row items-start md:items-center gap-5 p-6 rounded-[28px] border transition-all duration-300 ${
-                  isAccepted ? 'bg-white border-emerald-200 shadow-lg' : 'bg-white border-gray-100 opacity-80'
-                }`}
-              >
-                {/* Status Indicator */}
-                <div className={`absolute left-0 top-1/4 bottom-1/4 w-1.5 rounded-r-full ${isAccepted ? 'bg-emerald-500' : 'bg-amber-400'}`}></div>
-
-                {/* Icon Circle */}
-                <div className={`shrink-0 w-14 h-14 rounded-2xl ${style.bg} ${style.color} flex items-center justify-center shadow-inner`}>
-                  {React.cloneElement(style.icon, { size: 26 })}
-                </div>
-
-                {/* Content */}
-                <div className="flex-1 min-w-0 text-left">
-                  <div className="flex items-center gap-2 mb-1">
-                    <span className={`text-[9px] font-black uppercase tracking-widest ${style.color}`}>
-                      {style.label}
-                    </span>
-                    <span className="w-1 h-1 rounded-full bg-gray-300"></span>
-                    <span className="text-[9px] font-bold text-gray-400 uppercase">{notif.bloodGroup} Requirement</span>
-                  </div>
-                  
-                  <h3 className="font-black text-gray-800 text-base md:text-lg tracking-tight mb-1 leading-tight">
-                    {isAccepted ? `Good News! Your match has been found.` : `Awaiting clinical match...`}
-                  </h3>
-
-                  <p className="text-gray-500 font-bold text-[12px] md:text-sm leading-relaxed">
-                    {isAccepted 
-                      ? <><span className="text-[#880808]">{donorName}</span> has accepted the request for <span className="text-gray-800 font-black">{notif.hospital}</span>. You can now coordinate the blood transfer.</>
-                      : <>Your <span className="font-black">{notif.bloodGroup}</span> request is currently being broadcasted to all nearby donors in <span className="text-gray-800 font-black">{notif.hospital}</span>.</>
-                    }
-                  </p>
-                </div>
-
-                {/* ✅ ACTION BUTTONS ROW */}
-<div className="w-full md:w-auto flex flex-col sm:flex-row gap-3 mt-4 md:mt-0">
-  {notif.status === 'Accepted' && notif.donorId ? (
-    /* 1. JAB DATA MIL JAYE (Success) */
-    <button 
-      onClick={() => {
-        const donorName = notif.donorId?.name;
-        if (donorName) {
-          navigate(`/pool?search=${encodeURIComponent(donorName)}`);
-        }
-      }}
-      className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-8 py-3.5 bg-gray-900 text-white rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-emerald-600 transition-all shadow-md active:scale-95"
-    >
-      <MdOutlinePersonSearch size={18} /> View Donor
-    </button>
-  ) : notif.status === 'Accepted' && !notif.donorId ? (
-    /* 2. JAB STATUS ACCEPTED HAI PAR ID NULL HAI (Syncing Case) */
-    <button className="w-full md:w-auto px-6 py-3.5 bg-emerald-50 text-emerald-600 border border-emerald-100 rounded-xl text-[10px] font-black uppercase tracking-widest cursor-wait flex items-center justify-center gap-2">
-      <div className="w-2 h-2 bg-emerald-400 rounded-full animate-ping"></div>
-      Finalizing Clinical Link...
-    </button>
+  {notifications.length === 0 ? (
+    <div className="bg-white p-16 rounded-[32px] border-2 border-dashed border-gray-100 text-center">
+      <p className="text-gray-300 font-bold italic text-lg tracking-tight">Your notification vault is currently empty.</p>
+    </div>
   ) : (
-    /* 3. JAB STATUS ACTUAL MEIN PENDING HAI */
-    <button className="w-full md:w-auto px-6 py-3.5 bg-gray-50 text-gray-400 border border-gray-100 rounded-xl text-[10px] font-black uppercase tracking-widest cursor-default flex items-center justify-center gap-2">
-      <div className="w-2 h-2 bg-amber-400 rounded-full animate-pulse"></div>
-      Awaiting Clinical Match...
-    </button>
+    notifications.map((notif) => {
+      const style = getStatusStyles(notif.status);
+      
+      // ✅ FIX 1: donorName seedha use karo (Optional chaining ? hatao variable se)
+      const donorName = notif.donorName || "Verified Donor";
+      
+      // ✅ FIX 2: Check logic donorName par rakho kyunki populate null aa raha hai
+      const isAccepted = notif.status === 'Accepted' && notif.donorName !== null;
+      
+      console.log("Checking Notif Donor Name:", notif.donorName);
+
+      return (
+        <div 
+          key={notif._id} 
+          className={`group relative flex flex-col md:flex-row items-start md:items-center gap-5 p-6 rounded-[28px] border transition-all duration-300 ${
+            isAccepted ? 'bg-white border-emerald-200 shadow-lg' : 'bg-white border-gray-100 opacity-80'
+          }`}
+        >
+          {/* Status Indicator */}
+          <div className={`absolute left-0 top-1/4 bottom-1/4 w-1.5 rounded-r-full ${isAccepted ? 'bg-emerald-500' : 'bg-amber-400'}`}></div>
+
+          {/* Icon Circle */}
+          <div className={`shrink-0 w-14 h-14 rounded-2xl ${style.bg} ${style.color} flex items-center justify-center shadow-inner`}>
+            {React.cloneElement(style.icon, { size: 26 })}
+          </div>
+
+          {/* Content */}
+          <div className="flex-1 min-w-0 text-left">
+            <div className="flex items-center gap-2 mb-1">
+              <span className={`text-[9px] font-black uppercase tracking-widest ${style.color}`}>
+                {style.label}
+              </span>
+              <span className="w-1 h-1 rounded-full bg-gray-300"></span>
+              <span className="text-[9px] font-bold text-gray-400 uppercase">{notif.bloodGroup} Requirement</span>
+            </div>
+            
+            <h3 className="font-black text-gray-800 text-base md:text-lg tracking-tight mb-1 leading-tight">
+              {isAccepted ? `Good News! Your match has been found.` : `Awaiting clinical match...`}
+            </h3>
+
+            <p className="text-gray-500 font-bold text-[12px] md:text-sm leading-relaxed">
+              {isAccepted 
+                ? <><span className="text-[#880808] font-black">{donorName}</span> has accepted the request for <span className="text-gray-800 font-black">{notif.hospital}</span>. You can now coordinate the blood transfer.</>
+                : <>Your <span className="font-black">{notif.bloodGroup}</span> request is currently being broadcasted to all nearby donors in <span className="text-gray-800 font-black">{notif.hospital}</span>.</>
+              }
+            </p>
+          </div>
+
+          {/* ✅ ACTION BUTTONS ROW: Fixed Logic */}
+          <div className="w-full md:w-auto flex flex-col sm:flex-row gap-3 mt-4 md:mt-0">
+            {notif.status === 'Accepted' && notif.donorName ? (
+              /* 1. SUCCESS: donorName database mein mil gaya */
+              <button 
+                onClick={() => {
+                  // Direct donorName se search karo
+                  navigate(`/pool?search=${encodeURIComponent(notif.donorName)}`);
+                }}
+                className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-8 py-3.5 bg-gray-900 text-white rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-emerald-600 transition-all shadow-md active:scale-95"
+              >
+                <MdOutlinePersonSearch size={18} /> View Donor
+              </button>
+            ) : notif.status === 'Accepted' ? (
+              /* 2. SYNCING: Status accepted hai par naam abhi sync ho raha hai */
+              <button className="w-full md:w-auto px-6 py-3.5 bg-emerald-50 text-emerald-600 border border-emerald-100 rounded-xl text-[10px] font-black uppercase tracking-widest cursor-wait flex items-center justify-center gap-2">
+                <div className="w-2 h-2 bg-emerald-400 rounded-full animate-ping"></div>
+                Finalizing Clinical Link...
+              </button>
+            ) : (
+              /* 3. PENDING */
+              <button className="w-full md:w-auto px-6 py-3.5 bg-gray-50 text-gray-400 border border-gray-100 rounded-xl text-[10px] font-black uppercase tracking-widest cursor-default flex items-center justify-center gap-2">
+                <div className="w-2 h-2 bg-amber-400 rounded-full animate-pulse"></div>
+                Awaiting Clinical Match...
+              </button>
+            )}
+          </div>
+        </div>
+      );
+    })
   )}
 </div>
-
-              </div>
-            );
-          })
-        )}
-      </div>
     </div>
   );
 };

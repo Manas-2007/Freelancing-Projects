@@ -8,7 +8,7 @@ import DonorPool from './DonorPool';
 import History from './History';
 import Notifications from './Notifications';
 import Profile from './Profile';
-
+import { useParams } from 'react-router-dom';
 // Added onLogout and user as props to keep it dynamic
 const PatientDashboard = ({ onLogout, user }) => {
   const [isOpen, setIsOpen] = useState(false);

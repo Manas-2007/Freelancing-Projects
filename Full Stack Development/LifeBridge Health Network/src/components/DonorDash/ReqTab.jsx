@@ -24,29 +24,31 @@ const ReqTab = () => {
 
   // 2. Accept Request Logic
 const handleAcceptRequest = async (requestId) => {
-    // 1. INSTANT UI UPDATE
+    // 1. Logged in Donor ki info nikaalo (Agar localStorage mein save ki hai toh)
+    const loggedInUser = JSON.parse(localStorage.getItem('user')); 
+    
+    // Agar user nahi mil raha toh default fallback (Sirf testing ke liye)
+    const currentDonorName = loggedInUser?.name || "Verified Donor";
+    const currentDonorId = loggedInUser?._id || "663a7d4e3f1a2c001f8e4b5a";
+
+    // UI Update
     setRequests(prev => prev.map(r => 
-      r._id === requestId ? { ...r, status: 'Accepted' } : r
+      r._id === requestId ? { ...r, status: 'Accepted', donorName: currentDonorName } : r
     ));
 
     try {
-      const tempDonorId = "663a7d4e3f1a2c001f8e4b5a"; 
-      const tempDonorName = "Manas Patidar"; // 👈 YE ADDIITON HAI: Abhi hardcoded, baad mein user.name se replace hoga
-
-      // 2. BACKEND UPDATE: Ab hum donorId aur donorName dono bhej rahe hain
+      // 2. BACKEND UPDATE: Ab asali naam jayega Atlas mein
       await API.put(`/requests/accept/${requestId}`, {
-        donorId: tempDonorId,
-        donorName: tempDonorName // 👈 Database mein direct save karne ke liye
+        donorId: currentDonorId,
+        donorName: currentDonorName // 👈 Ab yahan "Pari" ya "Manas" dynamic jayega
       });
 
-      console.log("✅ Match Found & Database Updated!");
-      
+      console.log(`✅ Accepted by: ${currentDonorName}`);
     } catch (error) {
       console.error("❌ Acceptance Failed:", error);
-      alert("Locha ho gaya! Request send nahi ho payi.");
       fetchRequests(); 
     }
-  };
+};
 
   useEffect(() => {
     fetchRequests();
