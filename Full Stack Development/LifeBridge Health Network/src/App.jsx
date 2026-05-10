@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Navbar from "./components/homepage/Navbar";
 import Hero from "./components/homepage/Hero";
 import InfoSection from "./components/homepage/InfoSection";
@@ -13,26 +13,45 @@ import PatientDashboard from './components/PatientDash/Dashboard';
 function App() {
   // Logic States
   const [isLoggedIn, setIsLoggedIn] = useState(false); 
-  const [userType, setUserType] = useState(null); // Tracks 'donor' or 'patient'
+  const [user, setUser] = useState(null); // User ka saara data yahan rahega
+  const [userType, setUserType] = useState(null); 
   const [donorMode, setDonorMode] = useState(null);    
   const [patientMode, setPatientMode] = useState(null); 
+
+  // --- 🔄 REFRESH HANDLER (Master Fix) ---
+  useEffect(() => {
+    const savedUser = localStorage.getItem('user');
+    const token = localStorage.getItem('token');
+    // Maan lete hain storage mein userType bhi save hai, ya user object ke andar hai
+    if (savedUser && token) {
+      const parsedUser = JSON.parse(savedUser);
+      setUser(parsedUser);
+      setIsLoggedIn(true);
+      // Agar aapne registration ke waqt userType save kiya hai toh wo yahan se uthao
+      setUserType(parsedUser.role || 'donor'); 
+    }
+  }, []);
 
   // --- LOGIN HANDLERS ---
 
   const handleDonorLogin = () => {
     setDonorMode(null);
-    setUserType('donor'); // Set type before logging in
+    setUserType('donor');
     setIsLoggedIn(true);
+    // User data useEffect se ya login response se set ho jayega
   };
 
   const handlePatientLogin = () => {
     setPatientMode(null);
-    setUserType('patient'); // Set type before logging in
+    setUserType('patient');
     setIsLoggedIn(true);
   };
 
   const handleLogout = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
     setIsLoggedIn(false);
+    setUser(null);
     setUserType(null);
   };
 
@@ -41,7 +60,6 @@ function App() {
       
       {!isLoggedIn ? (
         <>
-          {/* --- LANDING PAGE SECTION --- */}
           <Navbar onRegisterClick={() => setDonorMode("register")} />
 
           <main>
@@ -75,17 +93,25 @@ function App() {
                 mode={patientMode}
                 setMode={setPatientMode}
                 onClose={() => setPatientMode(null)}
-                onLoginSuccess={handlePatientLogin} // Pass the new patient trigger here
+                onLoginSuccess={handlePatientLogin}
               />
             </div>
           )}
         </>
       ) : (
-        /* --- DASHBOARD SELECTION --- */
+        /* --- DASHBOARD SELECTION (Updated Props) --- */
         userType === 'donor' ? (
-          <DonorDashboard onLogout={handleLogout} />
+          <DonorDashboard 
+            setIsLoggedIn={setIsLoggedIn} 
+            setUser={setUser} 
+            onLogout={handleLogout} 
+          />
         ) : (
-          <PatientDashboard onLogout={handleLogout} />
+          <PatientDashboard 
+            setIsLoggedIn={setIsLoggedIn} 
+            setUser={setUser} 
+            onLogout={handleLogout} 
+          />
         )
       )}
 

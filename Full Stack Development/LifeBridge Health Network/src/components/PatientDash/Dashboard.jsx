@@ -40,6 +40,7 @@ const PatientDashboard = ({ onLogout, user }) => {
             
             <Route path="/requests" element={<BloodReq />} />
             <Route path="/pool" element={<DonorPool />} />
+            <Route path="/pool/:donorId" element={<DonorPool />} />
             <Route path="/history" element={<History />} />
             <Route path="/notifications" element={<Notifications />} />
             <Route path="/profile" element={<Profile />} />

@@ -1,8 +1,28 @@
 import React, { useState } from 'react';
 import { FiUser, FiMail, FiPhone, FiMapPin, FiEdit2, FiShield, FiCheckCircle, FiDroplet } from "react-icons/fi";
 
-const Profile = () => {
+// ✅ user prop receive ho raha hai Dashboard.jsx se
+const Profile = ({ user }) => {
   const [isEditing, setIsEditing] = useState(false);
+
+  // Fallback data agar prop miss ho jaye (taaki app crash na ho)
+  const userData = user || {
+    name: "Donor Hero",
+    email: "notavailable@example.com",
+    bloodGroup: "--",
+    location: "Unknown Location",
+    phone: "----------"
+  };
+
+  // 🧠 Logic: Name se Initials nikalna (e.g., "Manas Patidar" -> "MP")
+  const getInitials = (name) => {
+    if (!name) return "??";
+    const parts = name.split(" ");
+    if (parts.length > 1) {
+      return (parts[0][0] + parts[1][0]).toUpperCase();
+    }
+    return name[0].toUpperCase();
+  };
 
   return (
     <div className="space-y-6 md:space-y-8 mt-5">
@@ -15,14 +35,15 @@ const Profile = () => {
 
         <div className="relative z-10 flex flex-col sm:flex-row items-center sm:items-start gap-6 md:gap-8">
 
-          {/* avatar */}
+          {/* avatar - DYNAMIC INITIALS */}
           <div className="relative shrink-0">
             <div className="w-20 h-20 sm:w-24 sm:h-24 md:w-32 md:h-32 bg-gray-900 rounded-[28px] md:rounded-[40px] flex items-center justify-center text-white text-2xl md:text-4xl font-black shadow-lg">
-              MP
+              {getInitials(userData.name)}
             </div>
 
+            {/* DYNAMIC BLOOD GROUP */}
             <div className="absolute -bottom-2 -right-2 bg-red-600 text-white w-8 h-8 md:w-11 md:h-11 rounded-xl md:rounded-2xl border-4 border-white flex items-center justify-center font-black text-[10px] md:text-sm shadow-md">
-              B+
+              {userData.bloodGroup}
             </div>
           </div>
 
@@ -31,7 +52,7 @@ const Profile = () => {
 
             <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3 justify-center sm:justify-start">
               <h1 className="text-xl sm:text-2xl md:text-3xl font-black text-gray-900 tracking-tight">
-                Manas Patidar
+                {userData.name} {/* 👈 DYNAMIC NAME */}
               </h1>
 
               <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-green-50 text-green-600 text-[10px] font-black border border-green-100 uppercase tracking-wide w-fit mx-auto sm:mx-0">
@@ -40,7 +61,7 @@ const Profile = () => {
             </div>
 
             <p className="text-gray-500 font-medium mt-2 flex items-center justify-center sm:justify-start gap-2 text-sm">
-              <FiMapPin className="text-red-500" /> Bhopal, Madhya Pradesh
+              <FiMapPin className="text-red-500" /> {userData.location} {/* 👈 DYNAMIC LOCATION */}
             </p>
 
             {/* buttons */}
@@ -78,10 +99,10 @@ const Profile = () => {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
 
               {[
-                { icon: FiUser, label: "Full Name", value: "Manas Patidar" },
-                { icon: FiMail, label: "Email", value: "manas@example.com" },
-                { icon: FiPhone, label: "Phone", value: "+91 98765 43210" },
-                { icon: FiDroplet, label: "Blood Group", value: "B+ (Positive)" }
+                { icon: FiUser, label: "Full Name", value: userData.name },
+                { icon: FiMail, label: "Email", value: userData.email },
+                { icon: FiPhone, label: "Phone", value: userData.phone },
+                { icon: FiDroplet, label: "Blood Group", value: userData.bloodGroup }
               ].map((item, i) => (
                 <div key={i} className="space-y-1">
                   <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest flex items-center gap-2">
@@ -98,19 +119,16 @@ const Profile = () => {
             </div>
           </div>
 
-          {/* MEDICAL */}
+          {/* MEDICAL SUMMARY */}
           <div className="bg-white rounded-[24px] md:rounded-[28px] p-5 md:p-8 border border-gray-100 shadow-sm">
-
             <h3 className="text-lg md:text-xl font-black text-gray-900 mb-5">
               Medical Summary
             </h3>
-
             <div className="grid grid-cols-3 gap-3 md:gap-4">
-
               {[
                 { label: "Weight", value: "72 kg" },
                 { label: "Height", value: "178 cm" },
-                { label: "Age", value: "18 yrs" }
+                { label: "Age", value: userData.age || "18 yrs" }
               ].map((m, i) => (
                 <div key={i} className="text-center p-3 md:p-4 bg-red-50/40 rounded-2xl border border-red-100">
                   <p className="text-[9px] md:text-[10px] font-black text-red-400 uppercase tracking-widest mb-1">
@@ -121,7 +139,6 @@ const Profile = () => {
                   </p>
                 </div>
               ))}
-
             </div>
           </div>
         </div>
@@ -131,7 +148,6 @@ const Profile = () => {
 
           {/* IMPACT */}
           <div className="bg-gray-900 rounded-[28px] md:rounded-[32px] p-6 md:p-8 text-white relative overflow-hidden">
-
             <div className="absolute -right-6 -bottom-6 opacity-10">
               <FiDroplet size={140} />
             </div>
@@ -141,7 +157,6 @@ const Profile = () => {
             </h3>
 
             <div className="space-y-5 relative z-10 text-sm">
-
               {[
                 { k: "Donor Since", v: "2023" },
                 { k: "Total Impact", v: "36 Lives" },
@@ -156,24 +171,18 @@ const Profile = () => {
                   </span>
                 </div>
               ))}
-
             </div>
           </div>
 
           {/* TIP */}
           <div className="p-5 md:p-6 bg-red-50 rounded-[24px] border border-red-100">
-            <h4 className="font-black text-red-600 text-sm mb-2">
-              Did you know?
-            </h4>
-
+            <h4 className="font-black text-red-600 text-sm mb-2">Did you know?</h4>
             <p className="text-[11px] text-red-800 font-medium leading-relaxed">
               Regular donation improves circulation and helps maintain healthy iron levels.
             </p>
           </div>
-
         </div>
       </div>
-
     </div>
   );
 };

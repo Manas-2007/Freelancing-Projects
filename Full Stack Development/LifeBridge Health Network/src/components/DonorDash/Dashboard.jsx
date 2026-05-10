@@ -1,47 +1,83 @@
-import React, { useState } from 'react';
-import { Routes, Route,Navigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Routes, Route, Navigate, useNavigate } from 'react-router-dom';
 import Sidebar from './Sidebar';
 import StatusNavbar from './StatusNavbar'; 
+import FooterSection from './Footer'; 
 import HeroSection from './HeroSection';
 import RequestsAndActivity from './Notifications'; 
-import FooterSection from './Footer'; 
 import DonationHistory from './BloodHistory'; 
 import Notifications from './NotifyTab';
 import ReqTab from './ReqTab'; 
 import Schedule from './Schedule';
-import Profile from './profile';
+import Profile from './Profile';
 
-const Dashboard = () => {
+const Dashboard = ({ setIsLoggedIn, setUser: setGlobalUser }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const navigate = useNavigate();
 
-  const [donorData, setDonorData] = useState({
-    name: "Manas Patidar",
-    bloodGroup: "B+",
-    location: "Bhopal",
-    age: 18,
-    donations: 12,
-    daysLeft: 10,
-    totalDays: 90,
-    nextDate: "18 June 2026",
-    isAvailable: true,
-    livesSaved: 36, 
-    streak: "5 yrs"
-  });
+  // 1. Initial State ko Null rakha hai taaki Persistence check ho sake
+  const [donorData, setDonorData] = useState(null);
+
+  // 2. 🔄 AUTH PERSISTENCE & DATA FETCHING FLOW
+  useEffect(() => {
+    const savedUser = localStorage.getItem('user');
+    const token = localStorage.getItem('token');
+
+    if (savedUser && token) {
+      const parsedUser = JSON.parse(savedUser);
+      
+      
+      // ✅ Saari fields ko explicitly map karo
+      setDonorData({
+        name: parsedUser.name || "Donor Hero",
+        email: parsedUser.email || "N/A",
+        phone: parsedUser.phone || "Not Provided",
+        location: parsedUser.location || "Not Set",
+        bloodGroup: parsedUser.bloodGroup || "N/A",
+        age: parsedUser.age || "18",
+        donations: parsedUser.donations || 0,
+        livesSaved: (parsedUser.donations || 0) * 3,
+        streak: parsedUser.donations > 0 ? "Active" : "New",
+        daysLeft: 90,
+        isAvailable: true
+      });
+    } else {
+      setIsLoggedIn(false);
+      navigate('/');
+    }
+  }, [navigate, setIsLoggedIn]);
 
   const toggleAvailability = () => {
     setDonorData(prev => ({ ...prev, isAvailable: !prev.isAvailable }));
   };
 
+  // 3. ⏳ LOADING SHIMMER (Jab tak state populate ho rahi ho)
+  if (!donorData) return (
+    <div className="h-screen w-full flex items-center justify-center bg-white">
+       <div className="flex flex-col items-center gap-4">
+          <div className="w-12 h-12 border-4 border-red-600 border-t-transparent rounded-full animate-spin"></div>
+          <p className="text-red-600 font-bold tracking-widest animate-pulse uppercase text-sm">Initializing LifeDrop...</p>
+       </div>
+    </div>
+  );
+
   return (
     <div className="flex min-h-screen bg-[#f8f9fa]">
-      <Sidebar isOpen={isOpen} setIsOpen={setIsOpen} />
+      {/* ✅ Sidebar logic: props pass kiye for Logout */}
+      <Sidebar 
+        isOpen={isOpen} 
+        setIsOpen={setIsOpen} 
+        setIsLoggedIn={setIsLoggedIn} 
+        setUser={setGlobalUser} 
+      />
 
       <main className="flex-1 md:ml-[280px] flex flex-col h-screen overflow-y-auto no-scrollbar">
-        <StatusNavbar setIsOpen={setIsOpen} />
+        {/* ✅ Navbar logic: Pass user info for profile display */}
+        <StatusNavbar setIsOpen={setIsOpen} user={donorData} />
         
         <div className="px-[20px] md:px-[35px] pb-[35px]">
           <Routes>
-        <Route path="/" element={<Navigate to="/dashboard" replace />} />
+            <Route path="/" element={<Navigate to="/dashboard" replace />} />
 
             <Route path="/dashboard" element={
               <div className="space-y-8 mt-2">
@@ -76,9 +112,9 @@ const Dashboard = () => {
             
             <Route path="/history" element={<DonationHistory />} />
             <Route path="/notifications" element={<Notifications />} />
-           <Route path="/requests" element={<ReqTab />} />
+            <Route path="/requests" element={<ReqTab />} />
             <Route path="/schedule" element={<Schedule />} />
-            <Route path="/profile" element={<Profile />} />
+            <Route path="/profile" element={<Profile user={donorData} />} />
           </Routes>
         </div>
       </main>

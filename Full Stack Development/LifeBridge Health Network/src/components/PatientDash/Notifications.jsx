@@ -1,137 +1,164 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import { 
-  MdOutlineNotificationsActive, MdOutlineDoneAll, MdOutlineCall, 
-  MdOutlineMessage, MdOutlineVerified, MdOutlineBloodtype,
-  MdOutlineAccessTime, MdOutlineDeleteOutline, MdChevronRight
+  MdOutlineNotificationsActive, MdOutlineDoneAll, MdOutlineVerified, 
+  MdOutlineBloodtype, MdOutlineAccessTime, MdOutlineEventAvailable,
+  MdOutlinePersonSearch, MdOutlineArrowForward
 } from "react-icons/md";
 import { IoHeartSharp } from "react-icons/io5";
+import { useNavigate } from 'react-router-dom';
 
 const Notifications = () => {
-  const notificationFeed = [
-    {
-      id: 1,
-      type: 'Match',
-      title: "Potential Match Found",
-      desc: "3 verified donors found within 5km for patient Aarav Sharma (O+).",
-      time: "2 mins ago",
-      icon: <MdOutlineBloodtype />,
-      color: "text-blue-500",
-      bg: "bg-blue-50/50"
-    },
-    {
-      id: 2,
-      type: 'Accepted',
-      title: "Request Accepted",
-      desc: "Vikram Suri has confirmed the request and is moving toward City Hospital.",
-      time: "15 mins ago",
-      icon: <MdOutlineVerified />,
-      color: "text-emerald-500",
-      bg: "bg-emerald-50/50"
-    },
-    {
-      id: 3,
-      type: 'Call',
-      title: "Missed Coordination Call",
-      desc: "Donor Meera Joshi tried to reach the registered clinical contact number.",
-      time: "1 hr ago",
-      icon: <MdOutlineCall />,
-      color: "text-amber-500",
-      bg: "bg-amber-50/50"
-    },
-    {
-      id: 4,
-      type: 'Success',
-      title: "Donation Fulfilled",
-      desc: "The emergency blood requirement for Sneha Iyer has been successfully closed.",
-      time: "5 hrs ago",
-      icon: <IoHeartSharp />,
-      color: "text-red-500",
-      bg: "bg-red-50/50"
-    },
-    {
-      id: 5,
-      type: 'Message',
-      title: "Clinical Note Received",
-      desc: "New update from donor: 'Arriving at the North Wing entrance in 10 mins.'",
-      time: "Yesterday",
-      icon: <MdOutlineMessage />,
-      color: "text-indigo-500",
-      bg: "bg-indigo-50/50"
+  const [notifications, setNotifications] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
+  
+  
+
+  // 🔄 1. FETCH REAL REQUESTS
+  useEffect(() => {
+  const fetchNotifications = async () => {
+  try {
+    // 1. Clear cache by adding a timestamp (Optional but helps in testing)
+    const res = await API.get(`/requests/patient/663a7d4e3f1a2c001f8e4b5b?t=${Date.now()}`);
+    
+    // 2. LOG THE RAW DATA: Dekho ki kya server se 'donorName' aa raha hai?
+    console.log("🔥 Raw Data from Server:", res.data);
+    
+    setNotifications(res.data);
+  } catch (err) {
+    console.error("Fetch Error:", err);
+  }
+};
+
+    fetchNotifications();
+    const interval = setInterval(fetchNotifications, 3000);
+    return () => clearInterval(interval);
+  }, []);
+
+  const getStatusStyles = (status) => {
+    switch (status) {
+      case 'Accepted': return { color: "text-emerald-500", bg: "bg-emerald-50/50", icon: <MdOutlineVerified />, label: "Request Accepted" };
+      case 'Pending': return { color: "text-amber-500", bg: "bg-amber-50/50", icon: <MdOutlineAccessTime />, label: "Broadcast Live" };
+      default: return { color: "text-blue-500", bg: "bg-blue-50/50", icon: <MdOutlineBloodtype />, label: "Searching..." };
     }
-  ];
+  };
+
+  if (loading) return (
+    <div className="flex flex-col items-center justify-center min-h-[400px] gap-4">
+      <div className="w-10 h-10 border-4 border-[#880808] border-t-transparent rounded-full animate-spin"></div>
+      <p className="text-[#880808] font-bold animate-pulse text-sm">Syncing Clinical Alerts...</p>
+    </div>
+  );
 
   return (
-    // Changed to w-[95%] and removed large horizontal padding
-    <div className="min-h-screen bg-gray-50/30 pb-14  w-[99%] mx-auto animate-[fadeIn_0.5s_ease-out]">
+    <div className="min-h-screen bg-transparent pb-14 w-full max-w-[1200px] mx-auto animate-[fadeIn_0.5s_ease-out] px-2">
       
-     <section className="w-full flex flex-col md:flex-row items-center justify-between gap-4 mb-6 bg-white p-4 md:px-8 md:py-6 rounded-[20px] border border-gray-300 shadow-lg">
-  {/* Left Side: Icon & Titles */}
-  <div className="flex items-center gap-3 w-full md:w-auto">
-    <div className="p-2.5 bg-red-50 rounded-lg text-[#880808] border border-red-200 shrink-0">
-      <MdOutlineNotificationsActive size={20} />
-    </div>
-    <div className="flex flex-col text-left">
-      <h1 className="text-lg md:text-[23px] font-bold text-gray-900 tracking-tight leading-none">
-        Notification <span className="text-[#880808]">Center</span>
-      </h1>
-      <p className="text-[9px] font-bold text-gray-500 uppercase tracking-wider mt-1">
-        Real-time clinical alerts
-      </p>
-    </div>
-  </div>
-
-  {/* Right Side: Action Buttons - Responsive & Premium */}
-  <div className="flex items-center gap-2 w-full md:w-auto justify-start sm:justify-center">
-    <button className="flex items-center justify-center gap-2 px-5 py-2.5 bg-gray-50 border border-gray-300 rounded-xl text-[10px] font-bold text-black uppercase tracking-widest hover:bg-white hover:border-[#880808] hover:text-[#880808] transition-all shadow-sm whitespace-nowrap">
-      <MdOutlineDoneAll size={16} /> Mark all read
-    </button>
-    <button className="p-2.5 text-gray-600 bg-white border border-gray-300 hover:border-red-400 hover:text-[#880808] hover:bg-red-50 rounded-xl transition-all shadow-sm">
-      <MdOutlineDeleteOutline size={20} />
-    </button>
-  </div>
-</section>
-
-      {/* 2. REFINED NOTIFICATION LIST - Utilizing Full 95% Width */}
-      <div className="w-full space-y-3">
-        {notificationFeed.map((notif) => (
-          <div 
-            key={notif.id} 
-            className="group relative flex items-center gap-4 md:gap-6 bg-white p-4 md:p-5 rounded-2xl border border-gray-100 hover:border-gray-200 hover:shadow-md transition-all duration-300 cursor-pointer"
-          >
-            {/* Status Accent Pillar */}
-            <div className={`absolute left-0 top-1/4 bottom-1/4 w-1 rounded-r-full ${notif.color.replace('text', 'bg')}`}></div>
-
-            {/* Icon Circle */}
-            <div className={`shrink-0 w-11 h-11 md:w-12 md:h-12 rounded-xl ${notif.bg} ${notif.color} flex items-center justify-center transition-transform group-hover:scale-105`}>
-              {React.cloneElement(notif.icon, { size: 20 })}
-            </div>
-
-            {/* Content Area */}
-            <div className="flex-1 min-w-0 pr-2">
-              <div className="flex flex-col md:flex-row md:items-center justify-between gap-1 mb-1">
-                <h3 className="font-semibold text-gray-800 text-sm md:text-base tracking-tight text-left">{notif.title}</h3>
-                <span className="flex items-center gap-1 text-[10px] font-bold text-gray-400 uppercase">
-                  <MdOutlineAccessTime size={12} /> {notif.time}
-                </span>
-              </div>
-              <p className="text-gray-500 font-medium text-xs md:text-sm leading-relaxed text-left truncate md:whitespace-normal">
-                {notif.desc}
-              </p>
-            </div>
-
-            {/* Interaction Arrow */}
-            <div className="shrink-0 text-gray-300 group-hover:text-gray-500 group-hover:translate-x-1 transition-all">
-               <MdChevronRight size={22} />
-            </div>
+      {/* 1. HEADER */}
+      <section className="w-full flex flex-col md:flex-row items-center justify-between gap-4 mb-8 bg-white p-6 rounded-[24px] border border-gray-200 shadow-sm">
+        <div className="flex items-center gap-4">
+          <div className="p-3 bg-red-50 rounded-xl text-[#880808] border border-red-100 shadow-sm">
+            <MdOutlineNotificationsActive size={24} />
           </div>
-        ))}
-      </div>
-
-      {/* 3. FOOTER */}
-      <div className="mt-10 text-center">
-        <button className="text-[10px] font-bold text-gray-400 uppercase tracking-widest hover:text-[#880808] transition-colors">
-          Load older notifications
+          <div className="flex flex-col text-left">
+            <h1 className="text-xl md:text-2xl font-black text-gray-900 tracking-tight leading-none">
+              Alert <span className="text-[#880808]">Center</span>
+            </h1>
+            <p className="text-[10px] font-bold text-gray-400 uppercase tracking-[2px] mt-2">
+              {notifications.length} System Logs Found
+            </p>
+          </div>
+        </div>
+        <button className="flex items-center gap-2 px-6 py-3 bg-gray-50 border border-gray-200 rounded-2xl text-[10px] font-black text-gray-600 uppercase tracking-widest hover:bg-[#880808] hover:text-white transition-all shadow-sm">
+          <MdOutlineDoneAll size={18} /> Clear Dashboard
         </button>
+      </section>
+
+      {/* 2. NOTIFICATION LIST */}
+      <div className="w-full space-y-4">
+        {notifications.length === 0 ? (
+          <div className="bg-white p-16 rounded-[32px] border-2 border-dashed border-gray-100 text-center">
+            <p className="text-gray-300 font-bold italic text-lg tracking-tight">Your notification vault is currently empty.</p>
+          </div>
+        ) : (
+          notifications.map((notif) => {
+
+            const style = getStatusStyles(notif.status);
+            const donorName = notif.donorId?.name || "Verified Donor";
+            const isAccepted = notif.status === 'Accepted' && notif.donorId !== null;
+            console.log("Checking Notif Donor:", notif.donorId);
+
+            return (
+              <div 
+                key={notif._id} 
+                className={`group relative flex flex-col md:flex-row items-start md:items-center gap-5 p-6 rounded-[28px] border transition-all duration-300 ${
+                  isAccepted ? 'bg-white border-emerald-200 shadow-lg' : 'bg-white border-gray-100 opacity-80'
+                }`}
+              >
+                {/* Status Indicator */}
+                <div className={`absolute left-0 top-1/4 bottom-1/4 w-1.5 rounded-r-full ${isAccepted ? 'bg-emerald-500' : 'bg-amber-400'}`}></div>
+
+                {/* Icon Circle */}
+                <div className={`shrink-0 w-14 h-14 rounded-2xl ${style.bg} ${style.color} flex items-center justify-center shadow-inner`}>
+                  {React.cloneElement(style.icon, { size: 26 })}
+                </div>
+
+                {/* Content */}
+                <div className="flex-1 min-w-0 text-left">
+                  <div className="flex items-center gap-2 mb-1">
+                    <span className={`text-[9px] font-black uppercase tracking-widest ${style.color}`}>
+                      {style.label}
+                    </span>
+                    <span className="w-1 h-1 rounded-full bg-gray-300"></span>
+                    <span className="text-[9px] font-bold text-gray-400 uppercase">{notif.bloodGroup} Requirement</span>
+                  </div>
+                  
+                  <h3 className="font-black text-gray-800 text-base md:text-lg tracking-tight mb-1 leading-tight">
+                    {isAccepted ? `Good News! Your match has been found.` : `Awaiting clinical match...`}
+                  </h3>
+
+                  <p className="text-gray-500 font-bold text-[12px] md:text-sm leading-relaxed">
+                    {isAccepted 
+                      ? <><span className="text-[#880808]">{donorName}</span> has accepted the request for <span className="text-gray-800 font-black">{notif.hospital}</span>. You can now coordinate the blood transfer.</>
+                      : <>Your <span className="font-black">{notif.bloodGroup}</span> request is currently being broadcasted to all nearby donors in <span className="text-gray-800 font-black">{notif.hospital}</span>.</>
+                    }
+                  </p>
+                </div>
+
+                {/* ✅ ACTION BUTTONS ROW */}
+<div className="w-full md:w-auto flex flex-col sm:flex-row gap-3 mt-4 md:mt-0">
+  {notif.status === 'Accepted' && notif.donorId ? (
+    /* 1. JAB DATA MIL JAYE (Success) */
+    <button 
+      onClick={() => {
+        const donorName = notif.donorId?.name;
+        if (donorName) {
+          navigate(`/pool?search=${encodeURIComponent(donorName)}`);
+        }
+      }}
+      className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-8 py-3.5 bg-gray-900 text-white rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-emerald-600 transition-all shadow-md active:scale-95"
+    >
+      <MdOutlinePersonSearch size={18} /> View Donor
+    </button>
+  ) : notif.status === 'Accepted' && !notif.donorId ? (
+    /* 2. JAB STATUS ACCEPTED HAI PAR ID NULL HAI (Syncing Case) */
+    <button className="w-full md:w-auto px-6 py-3.5 bg-emerald-50 text-emerald-600 border border-emerald-100 rounded-xl text-[10px] font-black uppercase tracking-widest cursor-wait flex items-center justify-center gap-2">
+      <div className="w-2 h-2 bg-emerald-400 rounded-full animate-ping"></div>
+      Finalizing Clinical Link...
+    </button>
+  ) : (
+    /* 3. JAB STATUS ACTUAL MEIN PENDING HAI */
+    <button className="w-full md:w-auto px-6 py-3.5 bg-gray-50 text-gray-400 border border-gray-100 rounded-xl text-[10px] font-black uppercase tracking-widest cursor-default flex items-center justify-center gap-2">
+      <div className="w-2 h-2 bg-amber-400 rounded-full animate-pulse"></div>
+      Awaiting Clinical Match...
+    </button>
+  )}
+</div>
+
+              </div>
+            );
+          })
+        )}
       </div>
     </div>
   );

@@ -1,11 +1,70 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Droplets, Heart, X } from 'lucide-react';
+import API from '../../api/axios';
 
-const DRegister = ({ onClose,mode,setMode,onLoginSuccess }) => {
-  const handleLoginSubmit=(e)=>{
+const DRegister = ({ onClose, mode, setMode, onLoginSuccess }) => {
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    password: '',
+    confirmPassword: '',
+    bloodGroup: '',
+    phone: '',
+    lastDonation: '',
+    location: '' 
+  });
+
+  const [loading, setLoading] = useState(false);
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    onLoginSuccess();
-  }
+    setLoading(false); // Reset loading manually logic fix
+
+    try {
+      if (mode === "register") {
+        if (formData.password !== formData.confirmPassword) {
+          alert("Bhai, dono password match nahi kar rahe!");
+          return;
+        }
+
+        setLoading(true);
+        await API.post('/auth/register', formData);
+        alert("Registration Successful! Ab Login karo.");
+        setMode("login"); 
+      } else {
+        setLoading(true);
+        const res = await API.post('/auth/login', {
+          email: formData.email,
+          password: formData.password
+        });
+        
+        // 🔑 TOKEN & DATA PERSISTENCE (Sahi wala code)
+localStorage.setItem('token', res.data.token);
+
+// ✅ Ensure karo ki res.data.user hi aa raha hai backend se
+if(res.data.user) {
+    localStorage.setItem('user', JSON.stringify(res.data.user)); 
+} else {
+    // Agar backend direct res.data mein user bhej raha hai
+    localStorage.setItem('user', JSON.stringify(res.data));
+}
+
+localStorage.setItem('userType', 'donor'); // 👈 Donor side hai toh 'donor' likho bhai!
+
+        // App.js ko signal bhejo dashboard open karne ke liye
+        onLoginSuccess(); 
+        onClose(); // Modal band kar do
+      }
+    } catch (err) {
+      alert(err.response?.data?.msg || "Kuch locha ho gaya!");
+    } finally {
+      setLoading(false);
+    }
+  };
   return (
     <div className="w-full flex items-center justify-center font-sans"> 
       {/* MODAL CARD */}
@@ -117,151 +176,159 @@ const DRegister = ({ onClose,mode,setMode,onLoginSuccess }) => {
 
         {/* FORM */}
 <div className="flex-1 flex flex-col overflow-hidden">
-  <form className="flex flex-col h-full md:overflow-hidden">
+      <form onSubmit={handleSubmit} className="flex flex-col h-full md:overflow-hidden">
+        
+        <div className="flex-1 min-h-0 overflow-y-auto custom-red-scrollbar px-4 md:px-6 pt-2 md:pt-1 pb-4 space-y-3 md:space-y-2">
+          {mode === "register" ? (
+            <>
+              {/* NAME + EMAIL */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
+                <div>
+                  <label className="block text-[11px] md:text-xs font-bold text-gray-700 uppercase tracking-widest mb-1.5">Full Name</label>
+                  <input 
+                    name="name" 
+                    value={formData.name} 
+                    onChange={handleChange} 
+                    type="text" placeholder="Vinay Joshi"
+                    className="w-full px-4 py-2.5 md:py-2 rounded-[12px] border-2 border-[#880808]/20 focus:border-[#880808] outline-none font-semibold text-sm"
+                  />
+                </div>
+                <div>
+                  <label className="block text-[11px] md:text-xs font-bold text-gray-700 uppercase tracking-widest mb-1.5">Email Address</label>
+                  <input 
+                    name="email" 
+                    value={formData.email} 
+                    onChange={handleChange} 
+                    type="email" placeholder="john@example.com"
+                    className="w-full px-4 py-3 md:py-2.5 rounded-[12px] border-2 border-[#880808]/20 focus:border-[#880808] outline-none font-semibold text-sm"
+                  />
+                </div>
+              </div>
 
-    {/* 🔴 SCROLLABLE INPUT AREA */}
-    <div className="flex-1 min-h-0 overflow-y-auto custom-red-scrollbar px-4 md:px-6 pt-2 md:pt-1 pb-4 space-y-3 md:space-y-2">
+              {/* PASSWORD */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5">
+                <div>
+                  <label className="block text-[11px] md:text-xs font-bold text-gray-700 uppercase tracking-widest mb-1.5">Password</label>
+                  <input 
+                    name="password" 
+                    value={formData.password} 
+                    onChange={handleChange} 
+                    type="password" placeholder="••••••••"
+                    className="w-full px-4 py-2.5 md:py-2 rounded-[12px] border-2 border-[#880808]/20 focus:border-[#880808] outline-none font-semibold text-sm"
+                  />
+                </div>
+                <div>
+                  <label className="block text-[11px] md:text-xs font-bold text-gray-700 uppercase tracking-widest mb-1.5">Confirm Password</label>
+                  <input 
+                    name="confirmPassword" 
+                    value={formData.confirmPassword} 
+                    onChange={handleChange} 
+                    type="password" placeholder="••••••••"
+                    className="w-full px-4 py-2.5 md:py-2 rounded-[12px] border-2 border-[#880808]/20 focus:border-[#880808] outline-none font-semibold text-sm"
+                  />
+                </div>
+              </div>
 
-      {mode === "register" ? (
-        <>
-          {/* NAME + EMAIL (UNCHANGED) */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
-            <div>
-              <label className="block text-[11px] md:text-xs font-bold text-gray-700 uppercase tracking-widest mb-1.5">
-                Full Name
-              </label>
-              <input type="text" placeholder="Vinay Joshi"
-                className="w-full px-4 py-2.5 md:py-2 rounded-[12px] border-2 border-[#880808]/20 focus:border-[#880808] outline-none font-semibold text-sm"
-              />
+              {/* BLOOD + PHONE */}
+              <div className="grid grid-cols-2 md:grid-cols-2 gap-4 md:gap-5">
+                <div>
+                  <label className="block text-[11px] md:text-xs font-bold text-gray-700 uppercase tracking-widest mb-1.5">Blood Group</label>
+                  <select 
+                    name="bloodGroup" 
+                    value={formData.bloodGroup} 
+                    onChange={handleChange} 
+                    className="w-full px-4 py-3 md:py-2.5 rounded-[12px] border-2 border-[#880808]/20 bg-white focus:border-[#880808] outline-none text-sm"
+                  >
+                    <option value="">Select</option>
+                    {['A+', 'A-', 'B+', 'B-', 'O+', 'O-', 'AB+', 'AB-'].map(t => (
+                      <option key={t} value={t}>{t}</option>
+                    ))}
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-[11px] md:text-xs font-bold text-gray-700 uppercase tracking-widest mb-1.5">Contact Number</label>
+                  <input 
+                    name="phone" 
+                    value={formData.phone} 
+                    onChange={handleChange} 
+                    type="tel" placeholder="+91 98765 43210"
+                    className="w-full px-4 py-2.5 md:py-2 rounded-[12px] border-2 border-[#880808]/20 focus:border-[#880808] outline-none font-semibold text-sm"
+                  />
+                </div>
+              </div>
+
+              {/* DATE + CITY */}
+              <div className="grid grid-cols-2 md:grid-cols-2 gap-4 md:gap-5">
+                <div>
+                  <label className="block text-[11px] md:text-xs font-bold text-gray-700 uppercase tracking-widest mb-1.5">Last Donation</label>
+                  <input 
+                    name="lastDonation" 
+                    value={formData.lastDonation} 
+                    onChange={handleChange} 
+                    type="date"
+                    className="w-full px-4 py-2.5 md:py-2 rounded-[12px] border-2 border-[#880808]/20 focus:border-[#880808] outline-none text-sm"
+                  />
+                </div>
+                <div>
+                  <label className="block text-[11px] md:text-xs font-bold text-gray-700 uppercase tracking-widest mb-1.5">City</label>
+                  <input 
+                    name="location" 
+                    value={formData.location} 
+                    onChange={handleChange} 
+                    type="text" placeholder="Gwalior, India"
+                    className="w-full px-4 py-2.5 md:py-2 rounded-[12px] border-2 border-[#880808]/20 focus:border-[#880808] outline-none font-semibold text-sm"
+                  />
+                </div>
+              </div>
+            </>
+          ) : (
+            /* LOGIN MODE */
+            <div className="space-y-4 pt-4">
+              <div>
+                <label className="block text-[11px] md:text-xs font-bold text-gray-700 uppercase tracking-widest mb-1.5">Email Address</label>
+                <input 
+                  name="email" 
+                  value={formData.email} 
+                  onChange={handleChange} 
+                  type="email" placeholder="john@example.com"
+                  className="w-full px-4 py-2.5 md:py-2 rounded-[12px] border-2 border-[#880808]/20 focus:border-[#880808] outline-none font-semibold text-sm"
+                />
+              </div>
+              <div>
+                <label className="block text-[11px] md:text-xs font-bold text-gray-700 uppercase tracking-widest mb-1.5">Password</label>
+                <input 
+                  name="password" 
+                  value={formData.password} 
+                  onChange={handleChange} 
+                  type="password" placeholder="••••••••"
+                  className="w-full px-4 py-2.5 md:py-2 rounded-[12px] border-2 border-[#880808]/20 focus:border-[#880808] outline-none font-semibold text-sm"
+                />
+              </div>
             </div>
+          )}
+        </div>
 
-            <div>
-              <label className="block text-[11px] md:text-xs font-bold text-gray-700 uppercase tracking-widest mb-1.5">
-                Email Address
-              </label>
-              <input type="email" placeholder="john@example.com"
-                className="w-full px-4 py-3 md:py-2.5 rounded-[12px] border-2 border-[#880808]/20 focus:border-[#880808] outline-none font-semibold text-sm"
-              />
-            </div>
-          </div>
+        {/* FOOTER */}
+        <div className="p-4 bg-white border-t border-gray-100 space-y-2">
+          <button
+            type="submit"
+            className="w-full bg-[#880808] hover:bg-[#6d0606] active:scale-[0.98] text-white font-bold py-3 md:py-3.5 rounded-[14px] transition-all duration-200"
+          >
+            {mode === "login" ? "LOGIN" : "REGISTER AS DONOR"}
+          </button>
 
-          {/* PASSWORD (UNCHANGED) */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5">
-            <div>
-              <label className="block text-[11px] md:text-xs font-bold text-gray-700 uppercase tracking-widest mb-1.5">
-                Password
-              </label>
-              <input type="password" placeholder="••••••••"
-                className="w-full px-4 py-2.5 md:py-2 rounded-[12px] border-2 border-[#880808]/20 focus:border-[#880808] outline-none font-semibold text-sm"
-              />
-            </div>
-
-            <div>
-              <label className="block text-[11px] md:text-xs font-bold text-gray-700 uppercase tracking-widest mb-1.5">
-                Confirm Password
-              </label>
-              <input type="password" placeholder="••••••••"
-                className="w-full px-4 py-2.5 md:py-2 rounded-[12px] border-2 border-[#880808]/20 focus:border-[#880808] outline-none font-semibold text-sm"
-              />
-            </div>
-          </div>
-
-          {/* BLOOD + PHONE (UPDATED ✅ mobile = 2 cols) */}
-          <div className="grid grid-cols-2 md:grid-cols-2 gap-4 md:gap-5">
-            <div>
-              <label className="block text-[11px] md:text-xs font-bold text-gray-700 uppercase tracking-widest mb-1.5">
-                Blood Group
-              </label>
-              <select className="w-full px-4 py-3 md:py-2.5 rounded-[12px] border-2 border-[#880808]/20 bg-white focus:border-[#880808] outline-none text-sm">
-                <option>Select Type</option>
-                {['A+', 'A-', 'B+', 'B-', 'O+', 'O-', 'AB+', 'AB-'].map(t => (
-                  <option key={t}>{t}</option>
-                ))}
-              </select>
-            </div>
-
-            <div>
-              <label className="block text-[11px] md:text-xs font-bold text-gray-700 uppercase tracking-widest mb-1.5">
-                Contact Number
-              </label>
-              <input type="tel" placeholder="+91 98765 43210"
-                className="w-full px-4 py-2.5 md:py-2 rounded-[12px] border-2 border-[#880808]/20 focus:border-[#880808] outline-none font-semibold text-sm"
-              />
-            </div>
-          </div>
-
-          {/* DATE + CITY (UPDATED ✅ mobile = 2 cols) */}
-          <div className="grid grid-cols-2 md:grid-cols-2 gap-4 md:gap-5">
-            <div>
-              <label className="block text-[11px] md:text-xs font-bold text-gray-700 uppercase tracking-widest mb-1.5">
-                Last Donation
-              </label>
-              <input type="date"
-                className="w-full px-4 py-2.5 md:py-2 rounded-[12px] border-2 border-[#880808]/20 focus:border-[#880808] outline-none text-sm"
-              />
-            </div>
-
-            <div>
-              <label className="block text-[11px] md:text-xs font-bold text-gray-700 uppercase tracking-widest mb-1.5">
-                City
-              </label>
-              <input type="text" placeholder="Gwalior, India"
-                className="w-full px-4 py-2.5 md:py-2 rounded-[12px] border-2 border-[#880808]/20 focus:border-[#880808] outline-none font-semibold text-sm"
-              />
-            </div>
-          </div>
-        </>
-      ) : (
-        <>
-          {/* LOGIN MODE (UNCHANGED) */}
-          <div className="space-y-4">
-            <div>
-              <label className="block text-[11px] md:text-xs font-bold text-gray-700 uppercase tracking-widest mb-1.5">
-                Email Address
-              </label>
-              <input type="email" placeholder="john@example.com"
-                className="w-full px-4 py-2.5 md:py-2 rounded-[12px] border-2 border-[#880808]/20 focus:border-[#880808] outline-none font-semibold text-sm"
-              />
-            </div>
-
-            <div>
-              <label className="block text-[11px] md:text-xs font-bold text-gray-700 uppercase tracking-widest mb-1.5">
-                Password
-              </label>
-              <input type="password" placeholder="••••••••"
-                className="w-full px-4 py-2.5 md:py-2 rounded-[12px] border-2 border-[#880808]/20 focus:border-[#880808] outline-none font-semibold text-sm"
-              />
-            </div>
-          </div>
-        </>
-      )}
-
+          <p className="text-center text-[11px] md:text-xs font-semibold text-gray-700">
+            {mode === "login" ? "Don't have an account?" : "Already have an account?"}{" "}
+            <span
+              className="text-[#880808] font-bold cursor-pointer hover:underline"
+              onClick={() => setMode(mode === "login" ? "register" : "login")}
+            >
+              {mode === "login" ? "Register" : "Login"}
+            </span>
+          </p>
+        </div>
+      </form>
     </div>
-
-    {/* 🔵 FOOTER */}
-    <div className="p-4 md:p-4 bg-white border-t border-gray-100 space-y-2">
-
-      <button
-      onClick={onLoginSuccess}
-        className="w-full bg-[#880808] hover:bg-[#6d0606] active:scale-[0.98] text-white font-bold py-3 md:py-3.5 rounded-[14px] transition-all duration-200"
-      >
-        {mode === "login" ? "LOGIN" : "REGISTER AS DONOR"}
-      </button>
-
-      <p className="text-center text-[11px] md:text-xs font-semibold text-gray-700">
-        {mode === "login" ? "Don't have an account?" : "Already have an account?"}{" "}
-        <span
-          className="text-[#880808] font-bold cursor-pointer hover:underline transition"
-          onClick={() => setMode(mode === "login" ? "register" : "login")}
-        >
-          {mode === "login" ? "Register" : "Login"}
-        </span>
-      </p>
-
-    </div>
-
-  </form>
-</div>
 
 <style>{`
   .custom-red-scrollbar::-webkit-scrollbar {

@@ -1,12 +1,14 @@
 import React from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink,useNavigate } from 'react-router-dom';
 import { RiCalendarScheduleLine } from "react-icons/ri";
 import { MdOutlineNotificationsActive, MdOutlineGpsOff } from "react-icons/md";
 import { LuHistory, LuLayoutDashboard } from "react-icons/lu";
 import { BiLogOut } from "react-icons/bi";
 import { IoClose } from "react-icons/io5";
 
-const Sidebar = ({ isOpen, setIsOpen }) => {
+
+
+const Sidebar = ({ isOpen, setIsOpen, setIsLoggedIn, setUser }) => {
 
   const menuItems = [
     { name: 'Dashboard', path: '/dashboard', icon: <LuLayoutDashboard /> },
@@ -15,6 +17,22 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
     { name: 'Schedule', path: '/schedule', icon: <RiCalendarScheduleLine /> },
     { name: 'Notifications', path: '/notifications', icon: <MdOutlineNotificationsActive /> },
   ];
+// ✅ Logout Function
+  const handleLogout = () => {
+    // 1. Storage saaf karo
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+
+    // 2. Global State reset karo
+    if (setIsLoggedIn) setIsLoggedIn(false);
+    if (setUser) setUser(null);
+
+    // 3. User ko Home page par bhej do
+    navigate('/');
+    
+    // Sidebar band kar do (Mobile ke liye)
+    setIsOpen(false);
+  };
 
   return (
     <aside
@@ -152,8 +170,11 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
         ))}
 
         {/* LOGOUT */}
-        <button className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-black font-semibold mt-auto transition-colors duration-200 hover:text-[#880808] hover:bg-white/60">
+        <button
+        onClick={handleLogout}
+        className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-black font-semibold mt-auto transition-colors duration-200 hover:text-[#880808] hover:bg-white/60">
           <BiLogOut className="text-[18px]" />
+          
           <span>Logout</span>
         </button>
 

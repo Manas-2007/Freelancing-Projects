@@ -1,136 +1,193 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import { 
   MdSearch, MdOutlineFilterList, MdOutlineLocationOn, 
   MdOutlineVerified, MdCall, MdChatBubbleOutline, 
-  MdOutlineHistory, MdStar,MdOutlinePersonOutline
+  MdOutlineHistory, MdStar, MdOutlinePersonOutline
 } from "react-icons/md";
+import { useParams, useNavigate,useLocation } from 'react-router-dom';
 
 const DonorPool = () => {
+  const { donorId } = useParams();
   const [searchQuery, setSearchQuery] = useState("");
+  const [donors, setDonors] = useState([]); 
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const navigate = useNavigate();
+  const location = useLocation();
 
-  const donors = [
-    { id: 1, name: "Rohan Kapoor", group: "O+", age: 32, donations: 12, rating: 4.9, distance: "2.4 km", location: "Bhopal", lastDonated: "11 Apr", img: "https://i.pravatar.cc/150?u=1" },
-    { id: 2, name: "Priya Sharma", group: "B+", age: 28, donations: 5, rating: 4.7, distance: "3.1 km", location: "Arera", lastDonated: "02 Feb", img: "https://i.pravatar.cc/150?u=2" },
-    { id: 3, name: "Anuj Verma", group: "A-", age: 35, donations: 8, rating: 5.0, distance: "1.2 km", location: "Indore", lastDonated: "20 Jan", img: "https://i.pravatar.cc/150?u=3" },
-    { id: 4, name: "Meera Nair", group: "O-", age: 30, donations: 15, rating: 4.8, distance: "4.5 km", location: "Bhopal", lastDonated: "15 Mar", img: "https://i.pravatar.cc/150?u=4" },
-     { id: 1, name: "Rohan Kapoor", group: "O+", age: 32, donations: 12, rating: 4.9, distance: "2.4 km", location: "Bhopal", lastDonated: "11 Apr", img: "https://i.pravatar.cc/150?u=1" },
-    { id: 2, name: "Priya Sharma", group: "B+", age: 28, donations: 5, rating: 4.7, distance: "3.1 km", location: "Arera", lastDonated: "02 Feb", img: "https://i.pravatar.cc/150?u=2" },
-    { id: 3, name: "Anuj Verma", group: "A-", age: 35, donations: 8, rating: 5.0, distance: "1.2 km", location: "Indore", lastDonated: "20 Jan", img: "https://i.pravatar.cc/150?u=3" },
-    { id: 4, name: "Meera Nair", group: "O-", age: 30, donations: 15, rating: 4.8, distance: "4.5 km", location: "Bhopal", lastDonated: "15 Mar", img: "https://i.pravatar.cc/150?u=4" },
-  ];
+  // 🔄 FETCH DONORS + URL SEARCH SYNC
+  useEffect(() => {
+    // 1. URL se search query nikalo
+    const params = new URLSearchParams(location.search);
+    const searchFromUrl = params.get('search');
+
+    // 2. Agar URL mein search hai, toh use state mein set karo
+    if (searchFromUrl) {
+      setSearchQuery(searchFromUrl);
+    }
+
+    const fetchDonors = async () => {
+      try {
+        setLoading(true);
+        const res = await axios.get('http://localhost:5000/api/donors/all-donors');
+        setDonors(res.data);
+        setError(null);
+      } catch (err) {
+        console.error("Fetch Error:", err);
+        setError("Donors load nahi ho pa rahe.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchDonors();
+  }, [location.search]); // 👈 Location track karna zaroori hai
+
+  // 🔍 UPDATED FILTER LOGIC
+  const filteredDonors = donors.filter((donor) => {
+    if (donorId) {
+      const dId = donor._id?.toString().trim();
+      const uId = donorId?.toString().trim();
+
+      // console.log(`Comparing ${donor.name}: DB_ID(${dId}) === URL_ID(${uId})`);
+
+      return dId === uId;
+    }
+
+    // 2. Normal Search Logic (Jab ID nahi hai)
+    const searchLower = searchQuery.toLowerCase().trim();
+    return (
+      donor.name.toLowerCase().includes(searchLower) ||
+      donor.bloodGroup.toLowerCase().includes(searchLower) ||
+      donor.location.toLowerCase().includes(searchLower)
+    );
+    return true;
+  });
 
   return (
-    <div className="min-h-screen bg-transparent  pb-10 w-full animate-[fadeIn_0.5s_ease-out]">
+    <div className="min-h-screen bg-transparent pb-10 w-full animate-[fadeIn_0.5s_ease-out]">
       
       {/* 1. COMPACT HEADER */}
-    <section className="w-full flex flex-col md:flex-row items-center justify-between gap-4 mb-6 bg-white p-4 md:px-8 md:py-6 rounded-[20px] border border-gray-300 shadow-lg">
-  {/* Left Side: Icon & Titles */}
-  <div className="flex items-center gap-3">
-    {/* High-visibility Icon Container */}
-    <div className="p-2.5 bg-red-50 rounded-lg text-[#880808] border border-red-200">
-      <MdOutlinePersonOutline size={20} />
-    </div>
-    <div className="flex flex-col text-left">
-      <h1 className="text-lg md:text-[23px] font-bold text-gray-900 tracking-tight leading-none">
-        Donor <span className="text-[#880808]">Pool</span>
-      </h1>
-      <p className="text-[9px] font-bold text-gray-500 uppercase tracking-wider mt-1">
-        Verified Clinical Directory
-      </p>
-    </div>
-  </div>
+      <section className="w-full flex flex-col md:flex-row items-center justify-between gap-4 mb-6 bg-white p-4 md:px-8 md:py-6 rounded-[20px] border border-gray-300 shadow-lg">
+        <div className="flex items-center gap-3">
+          <div className="p-2.5 bg-red-50 rounded-lg text-[#880808] border border-red-200">
+            <MdOutlinePersonOutline size={20} />
+          </div>
+          <div className="flex flex-col text-left">
+            <h1 className="text-lg md:text-[23px] font-bold text-gray-900 tracking-tight leading-none">
+              Donor <span className="text-[#880808]">Pool</span>
+            </h1>
+            <p className="text-[9px] font-bold text-gray-500 uppercase tracking-wider mt-1">
+              Verified Clinical Directory ({filteredDonors.length} Donors)
+            </p>
+          </div>
+        </div>
 
-  {/* Right Side: Search & Filter */}
-  <div className="flex items-center gap-2 w-full md:w-auto">
-    <div className="relative flex-1 md:w-80 group">
-      <MdSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-[#880808] transition-colors" size={18} />
-      <input 
-        type="text" 
-        placeholder="Search by group or name..."
-        className="w-full pl-10 pr-4 py-2.5 bg-gray-50 border border-gray-300 rounded-xl outline-none focus:bg-white focus:border-[#880808] text-[13px] font-semibold transition-all shadow-sm"
-        value={searchQuery}
-        onChange={(e) => setSearchQuery(e.target.value)}
-      />
-    </div>
-    
-    <button className="p-2.5 bg-white border border-gray-300 text-gray-700 rounded-xl hover:bg-red-50 hover:text-[#880808] hover:border-red-200 transition-all shadow-sm">
-      <MdOutlineFilterList size={20} />
-    </button>
-  </div>
-</section>
+        <div className="flex items-center gap-2 w-full md:w-auto">
+          <div className="relative flex-1 md:w-80 group">
+            <MdSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-[#880808] transition-colors" size={18} />
+            <input 
+              type="text" 
+              placeholder="Search by blood group, name, or city..."
+              className="w-full pl-10 pr-4 py-2.5 bg-gray-50 border border-gray-300 rounded-xl outline-none focus:bg-white focus:border-[#880808] text-[13px] font-semibold transition-all shadow-sm"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+          </div>
+          <button className="p-2.5 bg-white border border-gray-300 text-gray-700 rounded-xl hover:bg-red-50 hover:text-[#880808] hover:border-red-200 transition-all shadow-sm">
+            <MdOutlineFilterList size={20} />
+          </button>
+        </div>
+      </section>
 
       {/* 2. COMPACT GRID */}
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 w-full">
-        {donors.map((donor) => (
-          <div key={donor.id} className="group bg-white rounded-[28px] border border-gray-100 p-4 hover:shadow-xl hover:border-[#880808]/20 transition-all duration-300 relative">
-            
-            {/* Minimal Blood Group Badge */}
-            <div className="absolute top-3 right-3 px-2 py-1 rounded-lg bg-[#880808] text-white flex items-center justify-center font-black text-[10px] shadow-md">
-              {donor.group}
-            </div>
+      {filteredDonors.length === 0 ? (
+        <div className="text-center p-20 bg-white rounded-3xl border border-dashed border-gray-300">
+          <p className="text-gray-400 font-bold">Bhai, is criteria ka koi donor nahi mila!</p>
+        </div>
+      ) : (
+       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 w-full max-w-[1400px] mx-auto px-2">
+  {filteredDonors.map((donor) => (
+    <div key={donor._id} className="bg-white rounded-[22px] border border-gray-600 p-5 shadow-sm hover:shadow-md transition-all duration-300 relative border-l-[4px] border-l-[#880808] flex flex-col justify-between">
+      
 
-            {/* Profile Section - Reduced Size */}
-            <div className="flex items-center gap-3 mb-3">
-              <div className="relative">
-                <img src={donor.img} alt={donor.name} className="w-11 h-11 rounded-xl object-cover border border-gray-100" />
-                <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-emerald-500 border-2 border-white rounded-full flex items-center justify-center">
-                   <MdOutlineVerified className="text-white text-[8px]" />
-                </div>
-              </div>
-              <div className="min-w-0">
-                <h3 className="font-bold text-gray-800 text-sm truncate tracking-tight">{donor.name}</h3>
-                <div className="flex items-center text-amber-500 gap-0.5 font-bold text-[9px]">
-                    <MdStar size={10} /> {donor.rating} <span className="text-gray-300 ml-1">| {donor.age} Yrs</span>
-                </div>
-              </div>
-            </div>
+      {/* 1. TOP SECTION: COMPACT BLOOD GROUP & NAME */}
+      <div className="flex items-center gap-4 mb-4">
+        <div className="flex flex-col items-center justify-center min-w-[55px] h-[55px] rounded-xl border border-red-400 bg-red-800 text-white shadow-sm">
+          <span className="text-lg font-bold  text-[white] leading-none">{donor.bloodGroup}</span>
+          <span className="text-[8px] font-bold text-gray-400 uppercase mt-0.5 tracking-tighter">Type</span>
+        </div>
 
-            {/* Mini Stats Bar */}
-            <div className="flex items-center justify-between bg-gray-50 rounded-xl px-3 py-2 mb-3 border border-gray-100/50">
-               <div className="text-left">
-                  <p className="text-[8px] font-bold text-gray-400 uppercase leading-none">Donations</p>
-                  <p className="text-xs font-bold text-gray-800 mt-0.5">{donor.donations}</p>
-               </div>
-               <div className="text-right">
-                  <p className="text-[8px] font-bold text-gray-400 uppercase leading-none">Radius</p>
-                  <p className="text-xs font-bold text-[#880808] mt-0.5">{donor.distance}</p>
-               </div>
-            </div>
-
-            {/* Location & Last Donation - Compact */}
-            <div className="space-y-1.5 mb-4">
-              <div className="flex items-center gap-2 text-[10px] font-semibold text-gray-500">
-                <MdOutlineLocationOn className="text-[#880808]" size={14} /> 
-                <span className="truncate">{donor.location}</span>
-              </div>
-              <div className="flex items-center gap-2 text-[10px] font-semibold text-gray-400">
-                <MdOutlineHistory size={14} /> 
-                <span>Last: {donor.lastDonated}</span>
-              </div>
-            </div>
-
-            {/* Action Buttons - Optimized Height */}
-            <div className="grid grid-cols-2 gap-2">
-              <button className="flex items-center justify-center gap-1.5 py-2 bg-gray-50 border border-gray-200 rounded-lg text-[10px] font-bold text-black hover:bg-[#880808] hover:text-white transition-all">
-                <MdCall size={14} /> Call
-              </button>
-              <button className="flex items-center justify-center gap-1.5 py-2 bg-gray-50 border border-gray-200 rounded-lg text-[10px] font-bold text-black hover:bg-[#880808] hover:text-white transition-all">
-                <MdChatBubbleOutline size={14} /> Ping
-              </button>
-              <button className="col-span-2 py-2.5 bg-black text-white rounded-lg text-[10px] font-bold uppercase tracking-wider hover:bg-[#880808] transition-all shadow-md active:scale-95">
-                Request Donation
-              </button>
-            </div>
+        {/* Donor Name & ID */}
+        <div className="flex flex-col text-left">
+          <h3 className="text-[15px] font-bold text-gray-800 leading-tight truncate max-w-[160px]">
+            {donor.name}
+          </h3>
+          <div className="flex items-center gap-1.5 mt-1">
+             <div className="w-1.5 h-1.5 bg-red-500 rounded-full animate-pulse"></div>
+             <p className="text-[9px] font-bold text-gray-500 uppercase tracking-tight">
+               Donor ID: <span className="text-gray-700">{donor._id.slice(-5).toUpperCase()}</span>
+             </p>
           </div>
-        ))}
+        </div>
       </div>
 
-      {/* FOOTER */}
-      <div className="mt-8 text-center">
-        <button className="text-[10px] font-bold text-gray-400 uppercase tracking-widest hover:text-[#880808]">
-          View More Donors
-        </button>
+      {/* 2. TAG LINE */}
+      <div className="flex mb-4">
+        <span className="px-2.5 py-0.5 bg-red-50 text-[#880808] text-[9px] font-bold rounded-md border border-red-400 uppercase">
+           Verified Blood Donor
+        </span>
       </div>
+
+      <hr className="border-gray-50 mb-4" />
+
+      {/* 3. INFO GRID (Donations & Location) */}
+      <div className="grid grid-cols-2 gap-2 mb-5">
+        <div className="text-left">
+          <p className="text-[8px] font-black text-gray-700 uppercase mb-0.5">Total Donations</p>
+          <div className="flex items-baseline gap-1">
+             <span className="text-sm font-bold text-gray-800">{donor.donations || 0}</span>
+             <span className="text-[9px] font-bold text-gray-700">Units</span>
+          </div>
+        </div>
+        <div className="text-left border-l border-gray-100 pl-3">
+          <p className="text-[8px] font-black text-gray-700 uppercase mb-0.5">Location</p>
+          <div className="flex items-center gap-1 text-gray-600">
+             <MdOutlineLocationOn className="text-[#880808]" size={12} />
+             <span className="text-[10px] font-bold truncate">{donor.location}</span>
+          </div>
+        </div>
+      </div>
+
+      {/* 4. DYNAMIC ACTION BUTTONS */}
+      <div className="flex gap-2"> 
+        {donorId ? (
+          <>
+            <button 
+        onClick={() => alert(`Coordination started with ${donor.name}!`)}
+        className="flex-1 py-2.5 bg-emerald-600 text-white rounded-xl text-[9px] font-black uppercase tracking-widest shadow-lg hover:bg-emerald-700 transition-all active:scale-95 flex items-center justify-center gap-1"
+      >
+        Final Accept ✓
+      </button>
+           <button 
+        onClick={() => navigate('/notifications')}
+        className="flex-1 py-2.5 bg-gray-50 text-gray-400 border border-gray-200 rounded-xl text-[9px] font-black uppercase tracking-widest hover:bg-red-50 hover:text-red-600 transition-all"
+      >
+        Go Back
+      </button>
+    </>
+  ) : (
+    <button className="flex-1 py-2.5 px-3 bg-[#880808] text-white rounded-xl text-[9px] font-bold uppercase tracking-[1.5px] shadow-lg hover:bg-red-700 transition-all flex items-center justify-center gap-1">
+      Request Donation <span className="text-xs">›</span>
+    </button>
+        )}
+      </div>
+
+    </div>
+  ))}
+</div>
+      )}
     </div>
   );
 };
