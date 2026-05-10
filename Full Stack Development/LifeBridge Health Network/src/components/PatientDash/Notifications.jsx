@@ -17,19 +17,25 @@ const Notifications = () => {
 
   // 🔄 1. FETCH REAL REQUESTS
   useEffect(() => {
-    const fetchNotifications = async () => {
-      try {
-        const user = JSON.parse(localStorage.getItem('user'));
-        const patientId = user?._id || "663a7d4e3f1a2c001f8e4b5b"; // Temporary ID for testing
-        
-        const res = await axios.get(`http://localhost:5000/api/requests/patient/${patientId}`);
-        setNotifications(res.data);
-      } catch (err) {
-        console.error("Notification load error:", err);
-      } finally {
-        setLoading(false);
-      }
-    };
+   const fetchNotifications = async () => {
+    try {
+      setLoading(true);
+      const user = JSON.parse(localStorage.getItem('user'));
+      const patientId = user?._id || "663a7d4e3f1a2c001f8e4b5b"; 
+      
+      const res = await axios.get(`http://localhost:5000/api/requests/patient/${patientId}`);
+      
+      // ✅ FILTER: Sirf 'Accepted' status waali notifications dikhao
+      // Jaise hi status 'Completed' hoga, ye automatically list se hat jayengi
+      const activeNotifications = res.data.filter(notif => notif.status === 'Accepted');
+      
+      setNotifications(activeNotifications);
+    } catch (err) {
+      console.error("Notification load error:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
     fetchNotifications();
     const interval = setInterval(fetchNotifications, 3000);

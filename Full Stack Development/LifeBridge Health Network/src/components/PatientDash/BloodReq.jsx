@@ -26,11 +26,12 @@ const BloodReq = () => {
   // 1. Fetch logic with real-time detection
   const fetchRequests = async () => {
     try {
-      // ✅ Sahi endpoint: sirf is patient ki requests fetch ho rahi hain
       const res = await API.get('/requests/patient/663a7d4e3f1a2c001f8e4b5b');
       setRequests(res.data);
+      const activeRequests = res.data.filter(req => req.status !== 'Completed');
+      
+      setRequests(activeRequests);
 
-      // ✅ Check if any request is newly 'Accepted'
       const acceptedReq = res.data.find(req => req.status === 'Accepted');
       if (acceptedReq && !notification) {
         setNotification({

@@ -46,23 +46,24 @@ const DonorPool = () => {
   // ✅ HANDLER: Donation Success (Closing the Loop)
   const handleDonationSuccess = async (donorName) => {
     if (!requestId) {
-        alert("Bhai, Request ID missing hai! Notification se aao.");
-        return;
+      alert("Bhai, Request ID missing hai! Notification tab se 'View Donor' karke aao.");
+      return;
     }
 
     const confirmSuccess = window.confirm(`Hero! Kya aapne ${donorName} se blood receive kar liya hai? Isse request history mein move ho jayegi.`);
     
     if (confirmSuccess) {
       try {
-        // Backend update call (Status: Completed)
+        // 🔥 Atlas status update logic
         await axios.put(`http://localhost:5000/api/requests/status/${requestId}`, {
             status: 'Completed'
         });
-        alert("Mubarak ho! Life Successfully Saved. Checking History...");
+
+        alert("Mubarak ho! Life Successfully Saved. Moving to History...");
         navigate('/history');
       } catch (err) {
         console.error("Finalize Error:", err);
-        alert("Error: Request complete nahi ho pa rahi.");
+        alert("Error: Status update nahi ho paya.");
       }
     }
   };

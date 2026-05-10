@@ -24,26 +24,27 @@ const ReqTab = () => {
 
   // 2. Accept Request Logic
 const handleAcceptRequest = async (requestId) => {
-    // 1. Logged in Donor ki info nikaalo (Agar localStorage mein save ki hai toh)
     const loggedInUser = JSON.parse(localStorage.getItem('user')); 
-    
-    // Agar user nahi mil raha toh default fallback (Sirf testing ke liye)
     const currentDonorName = loggedInUser?.name || "Verified Donor";
     const currentDonorId = loggedInUser?._id || "663a7d4e3f1a2c001f8e4b5a";
 
-    // UI Update
+    // ✅ UI UPDATE: Keep it simple string to match filter logic immediately
     setRequests(prev => prev.map(r => 
-      r._id === requestId ? { ...r, status: 'Accepted', donorName: currentDonorName } : r
+      r._id === requestId 
+        ? { 
+            ...r, 
+            status: 'Accepted', 
+            donorId: currentDonorId, // Pass as string
+            donorName: currentDonorName 
+          } 
+        : r
     ));
 
     try {
-      // 2. BACKEND UPDATE: Ab asali naam jayega Atlas mein
       await API.put(`/requests/accept/${requestId}`, {
         donorId: currentDonorId,
-        donorName: currentDonorName // 👈 Ab yahan "Pari" ya "Manas" dynamic jayega
+        donorName: currentDonorName 
       });
-
-      console.log(`✅ Accepted by: ${currentDonorName}`);
     } catch (error) {
       console.error("❌ Acceptance Failed:", error);
       fetchRequests(); 
@@ -54,16 +55,43 @@ const handleAcceptRequest = async (requestId) => {
     fetchRequests();
   }, []);
 
-  // 3. Search & Filter Logic (Synced with Schema)
-  const filteredRequests = requests.filter(req => {
-    // Check for both 'hospital' (Model) and 'location' (Frontend logic)
+  
+  
+  // 3. FINAL BULLETPROOF FILTER LOGIC (Fixes Refresh Disappearance)
+
+   const filteredRequests = requests.filter(req => {
+    const user = JSON.parse(localStorage.getItem('user'));
+    
+    // 1. Current Donor ID extraction with absolute safety
+    const myId = user?._id ? user._id.toString() : "";
+
+    // 2. Request ki Donor ID extraction (Handles both String & Populated Object)
+    let reqDonorId = "";
+    if (req.donorId) {
+      reqDonorId = req.donorId._id ? req.donorId._id.toString() : req.donorId.toString();
+    }
+
+    // DEBUGGING LOGS (F12 kholo aur dekho kya match ho raha hai)
+    // console.log(`Checking Card: ${req.hospital}, Status: ${req.status}, isMine: ${reqDonorId === myId}`);
+
+    const isMine = reqDonorId === myId;
+    const isPending = req.status === 'Pending';
+    
+    // ✅ NEW LOGIC: 
+    // Card tabhi dikhega jab (Status Pending ho aur koi donor na ho) YA (Donor main khud hoon)
+    const shouldShow = (isPending && !req.donorId) || isMine;
+
+    // Completed ko bilkul hata do
+    if (req.status === 'Completed') return false;
+
+    if (!shouldShow) return false;
+
+    // --- Search & Group Filters ---
     const hospitalStr = (req.hospital || req.location || "").toLowerCase();
     const nameStr = (req.name || "Patient").toLowerCase();
     const searchStr = searchTerm.toLowerCase();
-
     const matchesSearch = hospitalStr.includes(searchStr) || nameStr.includes(searchStr);
     
-    // Check for both 'bloodGroup' and 'bloodGroupNeeded'
     const bgValue = req.bloodGroup || req.bloodGroupNeeded || "";
     const matchesGroup = selectedGroup === "All" || bgValue === selectedGroup;
     
