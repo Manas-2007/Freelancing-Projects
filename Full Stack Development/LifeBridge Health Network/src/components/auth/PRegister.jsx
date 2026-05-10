@@ -1,5 +1,49 @@
-import React from "react";
+import React, { useState } from "react";
+import axios from "axios";
+
 const PRegister = ({ onClose,mode,setMode,onLoginSuccess }) => {
+
+  const [formData, setFormData] = useState({
+    patientId: "",
+    name: "",
+    sex: "",
+    age: "",
+    bloodGroup: "",
+    hospital: "",
+    password: "",
+    confirmPassword: ""
+  });
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async () => {
+    try {
+      if (mode === "register") {
+        if (formData.password !== formData.confirmPassword) {
+          return alert("Passwords do not match!");
+        }
+        await axios.post("http://localhost:5000/api/auth/patient/register", formData);
+        alert("Registration Successful! Please Login.");
+        setMode("login");
+      } else {
+        const res = await axios.post("http://localhost:5000/api/auth/patient/login", {
+          patientId: formData.patientId,
+          password: formData.password
+        });
+        
+        // Save to local storage
+        localStorage.setItem("token", res.data.token);
+        localStorage.setItem("user", JSON.stringify(res.data.user));
+        
+        onLoginSuccess(); // Dashboard par bhej dega
+      }
+    } catch (err) {
+      alert(err.response?.data?.msg || "Something went wrong");
+    }
+  };
+
   return (
     <div className="w-full max-w-3xl h-[90vh] md:h-[600px] bg-white rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.1)] overflow-hidden flex flex-col md:flex-row relative animate-[fadeIn_.2s_ease]">
          {/* CLOSE BUTTON */}
@@ -91,209 +135,222 @@ const PRegister = ({ onClose,mode,setMode,onLoginSuccess }) => {
 </div></div>
 
       {/* 🔵 RIGHT SIDE */}
-      <div className="w-full md:w-[60%] flex flex-col bg-[#fafafa] h-full min-h-0">
-        {/* HEADER (FIXED + PREMIUM) */}
-<div className="pt-12 pb-4 px-4 md:p-6 bg-[#880808] md:bg-transparent text-white md:text-black">
+<div className="w-full md:w-[60%] flex flex-col bg-[#fafafa] h-full min-h-0">
+  {/* HEADER (FIXED + PREMIUM) */}
+  <div className="pt-12 pb-4 px-4 md:p-6 bg-[#880808] md:bg-transparent text-white md:text-black">
 
-  {/* 🔥 TOGGLE (PILL STYLE) */}
-  <div className="mb-4">
-    <div className="flex bg-gray-100 rounded-full p-1 shadow-inner">
+    {/* 🔥 TOGGLE (PILL STYLE) */}
+    <div className="mb-4">
+      <div className="flex bg-gray-100 rounded-full p-1 shadow-inner">
+        <button
+          onClick={() => setMode("register")}
+          className={`w-1/2 py-2 text-sm font-semibold rounded-full transition-all duration-200
+          ${mode === "register"
+              ? "bg-[#880808] text-white shadow-md"
+              : "text-gray-600 hover:text-black"
+            }`}
+        > Register</button>
 
-      <button
-        onClick={() => setMode("register")}
-        className={`w-1/2 py-2 text-sm font-semibold rounded-full transition-all duration-200
-        ${
-          mode === "register"
-            ? "bg-[#880808] text-white shadow-md"
-            : "text-gray-600 hover:text-black"
-        }`}
-      > Register</button>
-
-      <button onClick={() => setMode("login")}
-        className={`w-1/2 py-2 text-sm font-semibold rounded-full transition-all duration-200
-        ${
-          mode === "login"
-            ? "bg-[#880808] text-white shadow-md"
-            : "text-gray-600 hover:text-black"
-        }`}
-      > Login </button>
+        <button onClick={() => setMode("login")}
+          className={`w-1/2 py-2 text-sm font-semibold rounded-full transition-all duration-200
+          ${mode === "login"
+              ? "bg-[#880808] text-white shadow-md"
+              : "text-gray-600 hover:text-black"
+            }`}
+        > Login </button>
+      </div>
     </div>
+
+    {/* TITLE */}
+    <h2 className="text-xl md:text-2xl font-semibold tracking-tight text-white md:text-red-800">
+      {mode === "login" ? "Patient Login" : "Patient Registration"}
+    </h2>
+
+    {/* SUBTEXT */}
+    <p className="text-xs md:text-sm mt-1 text-red-100 md:text-gray-500">
+      {mode === "login"
+        ? "Access patient records securely"
+        : "Hospital Patient Entry System"}
+    </p>
   </div>
 
-        {/* TITLE */}
-        <h2 className="text-xl md:text-2xl font-semibold tracking-tight 
-        text-white md:text-red-800">
-        {mode === "login" ? "Patient Login" : "Patient Registration"}
-        </h2>
-
-        {/* SUBTEXT */}
-        <p className="text-xs md:text-sm mt-1 
-        text-red-100 md:text-gray-500">
-        {mode === "login"
-            ? "Access patient records securely"
-            : "Hospital Patient Entry System"}
-        </p>
-</div>
-
-    {/* FORM CONTAINER */}
-    <div className="flex-1 min-h-0 overflow-y-auto custom-red-scrollbar pt-2 md:pt-3 pb-5 px-5 md:px-6">
+  {/* FORM CONTAINER */}
+  <div className="flex-1 min-h-0 overflow-y-auto custom-red-scrollbar pt-2 md:pt-3 pb-5 px-5 md:px-6">
 
     {mode === "register" ? (
-  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-left">
 
-    {/* Patient ID */}
-    <div>
-      <label className="block text-xs font-bold text-gray-700 mb-1">
-        Patient ID
-      </label>
-      <input
-        placeholder="Enter ID"
-        className="w-full px-4 py-2.5 rounded-[12px] border border-red-200 focus:border-[#880808] focus:ring-2 focus:ring-[#880808]/20 outline-none text-sm font-semibold transition"
-      />
-    </div>
-
-    {/* Full Name */}
-    <div>
-      <label className="block text-xs font-bold text-gray-700 mb-1">
-        Patient Name
-      </label>
-      <input
-        placeholder="John Doe"
-        className="w-full px-4 py-2.5 rounded-[12px] border border-red-200 focus:border-[#880808] focus:ring-2 focus:ring-[#880808]/20 outline-none text-sm font-semibold transition"
-      />
-    </div>
-
-    {/* 🔥 SEX + AGE (2 column on mobile) */}
-    <div className="grid grid-cols-2 gap-3 md:contents">
-      
-      <div>
-        <label className="block text-xs font-bold text-gray-700 mb-1">
-          Sex
-        </label>
-        <select className="w-full px-3 py-2.5 rounded-[12px] border border-red-200 bg-white focus:border-[#880808] focus:ring-2 focus:ring-[#880808]/20 outline-none text-sm font-semibold">
-          <option>Select</option>
-          <option>Male</option>
-          <option>Female</option>
-        </select>
-      </div>
-
-      <div>
-        <label className="block text-xs font-bold text-gray-700 mb-1">
-          Age
-        </label>
-        <input
-          placeholder="25"
-          className="w-full px-3 py-2.5 rounded-[12px] border border-red-200 focus:border-[#880808] focus:ring-2 focus:ring-[#880808]/20 outline-none text-sm font-semibold"
-        />
-      </div>
-
-    </div>
-
-    {/* 🔥 BLOOD + HOSPITAL (2 column mobile) */}
-    <div className="grid grid-cols-2 gap-3 md:contents">
-      
-      <div>
-        <label className="block text-xs font-bold text-gray-700 mb-1">
-          Blood Group
-        </label>
-        <select className="w-full px-3 py-2.5 rounded-[12px] border border-red-200 bg-white focus:border-[#880808] focus:ring-2 focus:ring-[#880808]/20 outline-none text-sm font-semibold">
-          <option>Select</option>
-          <option>A+</option>
-          <option>A-</option>
-          <option>B+</option>
-          <option>B-</option>
-          <option>O+</option>
-          <option>O-</option>
-          <option>AB+</option>
-          <option>AB-</option>
-        </select>
-      </div>
-
-      <div>
-        <label className="block text-xs font-bold text-gray-700 mb-1">
-          Hospital
-        </label>
-        <input
-          placeholder="City Hospital"
-          className="w-full px-3 py-2.5 rounded-[12px] border border-red-200 focus:border-[#880808] focus:ring-2 focus:ring-[#880808]/20 outline-none text-sm font-semibold"
-        />
-      </div>
-
-    </div>
-
-    {/* Password */}
-    <div className="md:col-span-2">
-      <label className="block text-xs font-bold text-gray-700 mb-1">
-        Password
-      </label>
-      <input
-        type="password"
-        placeholder="••••••••"
-        className="w-full px-4 py-2.5 rounded-[12px] border border-red-200 focus:border-[#880808] focus:ring-2 focus:ring-[#880808]/20 outline-none text-sm font-semibold"
-      />
-    </div>
-
-    {/* Confirm Password */}
-    <div className="md:col-span-2">
-      <label className="block text-xs font-bold text-gray-700 mb-1">
-        Confirm Password
-      </label>
-      <input
-        type="password"
-        placeholder="Re-enter password"
-        className="w-full px-4 py-2.5 rounded-[12px] border border-red-200 focus:border-[#880808] focus:ring-2 focus:ring-[#880808]/20 outline-none text-sm font-semibold"
-      />
-    </div>
-  </div>
-) : (
-        <div className="space-y-4">
-
+        {/* Patient ID */}
         <div>
-            <label className="block text-xs font-bold text-gray-700 mb-1">
-            Patient ID 
-            </label>
-            <input
-            placeholder="Enter ID or Email"
-            className="w-full px-4 py-2.5 rounded-[12px] border border-red-200 focus:border-[#880808] focus:ring-2 focus:ring-[#880808]/20 outline-none text-sm font-semibold"
-            />
+          <label className="block text-xs font-bold text-gray-700 mb-1">
+            Patient ID
+          </label>
+          <input
+            name="patientId"
+            value={formData.patientId}
+            onChange={handleChange}
+            placeholder="Enter ID"
+            className="w-full px-4 py-2.5 rounded-[12px] border border-red-200 focus:border-[#880808] focus:ring-2 focus:ring-[#880808]/20 outline-none text-sm font-semibold transition"
+          />
         </div>
 
+        {/* Full Name */}
         <div>
+          <label className="block text-xs font-bold text-gray-700 mb-1">
+            Patient Name
+          </label>
+          <input
+            name="name"
+            value={formData.name}
+            onChange={handleChange}
+            placeholder="John Doe"
+            className="w-full px-4 py-2.5 rounded-[12px] border border-red-200 focus:border-[#880808] focus:ring-2 focus:ring-[#880808]/20 outline-none text-sm font-semibold transition"
+          />
+        </div>
+
+        {/* 🔥 SEX + AGE (2 column on mobile) */}
+        <div className="grid grid-cols-2 gap-3 md:contents">
+          <div>
             <label className="block text-xs font-bold text-gray-700 mb-1">
-            Password
+              Sex
+            </label>
+            <select 
+              name="sex" 
+              value={formData.sex}
+              onChange={handleChange}
+              className="w-full px-3 py-2.5 rounded-[12px] border border-red-200 bg-white focus:border-[#880808] focus:ring-2 focus:ring-[#880808]/20 outline-none text-sm font-semibold"
+            >
+              <option value="">Select</option>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+
+          <div>
+            <label className="block text-xs font-bold text-gray-700 mb-1">
+              Age
             </label>
             <input
+              name="age"
+              value={formData.age}
+              onChange={handleChange}
+              placeholder="25"
+              className="w-full px-3 py-2.5 rounded-[12px] border border-red-200 focus:border-[#880808] focus:ring-2 focus:ring-[#880808]/20 outline-none text-sm font-semibold"
+            />
+          </div>
+        </div>
+
+        {/* 🔥 BLOOD + HOSPITAL (2 column mobile) */}
+        <div className="grid grid-cols-2 gap-3 md:contents">
+          <div>
+            <label className="block text-xs font-bold text-gray-700 mb-1">
+              Blood Group
+            </label>
+            <select 
+              name="bloodGroup"
+              value={formData.bloodGroup}
+              onChange={handleChange}
+              className="w-full px-3 py-2.5 rounded-[12px] border border-red-200 bg-white focus:border-[#880808] focus:ring-2 focus:ring-[#880808]/20 outline-none text-sm font-semibold"
+            >
+              <option value="">Select</option>
+              <option value="A+">A+</option>
+              <option value="A-">A-</option>
+              <option value="B+">B+</option>
+              <option value="B-">B-</option>
+              <option value="O+">O+</option>
+              <option value="O-">O-</option>
+              <option value="AB+">AB+</option>
+              <option value="AB-">AB-</option>
+            </select>
+          </div>
+
+          <div>
+            <label className="block text-xs font-bold text-gray-700 mb-1">
+              Hospital
+            </label>
+            <input
+              name="hospital"
+              value={formData.hospital}
+              onChange={handleChange}
+              placeholder="City Hospital"
+              className="w-full px-3 py-2.5 rounded-[12px] border border-red-200 focus:border-[#880808] focus:ring-2 focus:ring-[#880808]/20 outline-none text-sm font-semibold"
+            />
+          </div>
+        </div>
+
+        {/* Password */}
+        <div className="md:col-span-2">
+          <label className="block text-xs font-bold text-gray-700 mb-1">
+            Password
+          </label>
+          <input
+            name="password"
             type="password"
+            value={formData.password}
+            onChange={handleChange}
             placeholder="••••••••"
             className="w-full px-4 py-2.5 rounded-[12px] border border-red-200 focus:border-[#880808] focus:ring-2 focus:ring-[#880808]/20 outline-none text-sm font-semibold"
-            />
+          />
         </div>
 
+        {/* Confirm Password */}
+        <div className="md:col-span-2">
+          <label className="block text-xs font-bold text-gray-700 mb-1">
+            Confirm Password
+          </label>
+          <input
+            name="confirmPassword"
+            type="password"
+            value={formData.confirmPassword}
+            onChange={handleChange}
+            placeholder="Re-enter password"
+            className="w-full px-4 py-2.5 rounded-[12px] border border-red-200 focus:border-[#880808] focus:ring-2 focus:ring-[#880808]/20 outline-none text-sm font-semibold"
+          />
         </div>
-    )}
-
-    </div>
-
-        {/* FOOTER (FIXED BUTTON) */}
-        <div className="p-4 md:p-5 bg-white border-t border-gray-100">
-  <button 
-    onClick={() => {
-      if (mode === "login") {
-        // This triggers handlePatientLogin in App.jsx
-        onLoginSuccess(); 
-      } else {
-        // Logic for registration can go here later
-        console.log("Registering Patient...");
-        setMode("login"); // Optionally switch to login after registration
-      }
-    }}
-    className="w-full bg-[#880808] hover:bg-red-700 text-white font-bold py-3 rounded-[14px] transition active:scale-[0.98]"
-  >
-    {mode === "login" ? "LOGIN" : "REGISTER PATIENT"}
-  </button>
-</div>
-
       </div>
+    ) : (
+      <div className="space-y-4 text-left">
+        <div>
+          <label className="block text-xs font-bold text-gray-700 mb-1">
+            Patient ID 
+          </label>
+          <input
+            name="patientId"
+            value={formData.patientId}
+            onChange={handleChange}
+            placeholder="Enter ID"
+            className="w-full px-4 py-2.5 rounded-[12px] border border-red-200 focus:border-[#880808] focus:ring-2 focus:ring-[#880808]/20 outline-none text-sm font-semibold"
+          />
+        </div>
+
+        <div>
+          <label className="block text-xs font-bold text-gray-700 mb-1">
+            Password
+          </label>
+          <input
+            name="password"
+            type="password"
+            value={formData.password}
+            onChange={handleChange}
+            placeholder="••••••••"
+            className="w-full px-4 py-2.5 rounded-[12px] border border-red-200 focus:border-[#880808] focus:ring-2 focus:ring-[#880808]/20 outline-none text-sm font-semibold"
+          />
+        </div>
+      </div>
+    )}
+  </div>
+
+  {/* FOOTER (FIXED BUTTON) */}
+  <div className="p-4 md:p-5 bg-white border-t border-gray-100">
+    <button 
+      onClick={handleSubmit} // <--- handleSubmit ko call kiya
+      className="w-full bg-[#880808] hover:bg-red-700 text-white font-bold py-3 rounded-[14px] transition active:scale-[0.98] shadow-md"
+    >
+      {mode === "login" ? "LOGIN" : "REGISTER PATIENT"}
+    </button>
+  </div>
+</div>
 
       {/* SCROLLBAR STYLE */}
       <style>{`

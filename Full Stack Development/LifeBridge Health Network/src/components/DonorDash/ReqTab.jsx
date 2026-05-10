@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import API from '../../api/axios'; 
-import { FiSearch, FiFilter, FiChevronRight, FiClock } from "react-icons/fi";
+import { FiSearch, FiFilter, FiChevronRight, FiClock, FiCalendar } from "react-icons/fi"; // ✅ Calendar icon added
 import { formatDistanceToNow } from 'date-fns';
+import { useNavigate } from 'react-router-dom'; // ✅ Navigation ke liye
 
 const ReqTab = () => {
+  const navigate = useNavigate(); // ✅ Hook initialized
   const [searchTerm, setSearchTerm] = useState("");
   const [requests, setRequests] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -11,32 +13,25 @@ const ReqTab = () => {
 
   // 1. Fetch Real Requests from Database
   const fetchRequests = async () => {
-  try {
-    const res = await API.get('/requests/list'); 
-    console.log("🔥 Raw Data from Server:", res.data); // 👈 Iska output dekho Console mein
-    setRequests(res.data);
-    setLoading(false);
-  } catch (err) {
-    console.error("❌ API Error:", err);
-    setLoading(false);
-  }
-};
+    try {
+      const res = await API.get('/requests/list'); 
+      setRequests(res.data);
+      setLoading(false);
+    } catch (err) {
+      console.error("❌ API Error:", err);
+      setLoading(false);
+    }
+  };
 
   // 2. Accept Request Logic
-const handleAcceptRequest = async (requestId) => {
+  const handleAcceptRequest = async (requestId) => {
     const loggedInUser = JSON.parse(localStorage.getItem('user')); 
     const currentDonorName = loggedInUser?.name || "Verified Donor";
     const currentDonorId = loggedInUser?._id || "663a7d4e3f1a2c001f8e4b5a";
 
-    // ✅ UI UPDATE: Keep it simple string to match filter logic immediately
     setRequests(prev => prev.map(r => 
       r._id === requestId 
-        ? { 
-            ...r, 
-            status: 'Accepted', 
-            donorId: currentDonorId, // Pass as string
-            donorName: currentDonorName 
-          } 
+        ? { ...r, status: 'Accepted', donorId: currentDonorId, donorName: currentDonorName } 
         : r
     ));
 
@@ -49,54 +44,39 @@ const handleAcceptRequest = async (requestId) => {
       console.error("❌ Acceptance Failed:", error);
       fetchRequests(); 
     }
-};
+  };
 
   useEffect(() => {
     fetchRequests();
   }, []);
 
-  
-  
-  // 3. FINAL BULLETPROOF FILTER LOGIC (Fixes Refresh Disappearance)
-
-   const filteredRequests = requests.filter(req => {
+  // 3. Filter Logic
+  const filteredRequests = requests.filter(req => {
     const user = JSON.parse(localStorage.getItem('user'));
-    
-    // 1. Current Donor ID extraction with absolute safety
-    const myId = user?._id ? user._id.toString() : "";
+    const myId = user?._id?.toString() || "";
 
-    // 2. Request ki Donor ID extraction (Handles both String & Populated Object)
-    let reqDonorId = "";
-    if (req.donorId) {
-      reqDonorId = req.donorId._id ? req.donorId._id.toString() : req.donorId.toString();
-    }
-
-    // DEBUGGING LOGS (F12 kholo aur dekho kya match ho raha hai)
-    // console.log(`Checking Card: ${req.hospital}, Status: ${req.status}, isMine: ${reqDonorId === myId}`);
+    // Extract Donor ID properly
+    const reqDonorId = req.donorId?._id ? req.donorId._id.toString() : (req.donorId?.toString() || "");
 
     const isMine = reqDonorId === myId;
     const isPending = req.status === 'Pending';
-    
-    // ✅ NEW LOGIC: 
-    // Card tabhi dikhega jab (Status Pending ho aur koi donor na ho) YA (Donor main khud hoon)
-    const shouldShow = (isPending && !req.donorId) || isMine;
 
-    // Completed ko bilkul hata do
+    // 1. Agar Completed hai toh kabhi mat dikhao
     if (req.status === 'Completed') return false;
 
+    // 2. Sirf Pending dikhao YA wo jo Maine accept kiye hain
+    const shouldShow = isPending || isMine;
     if (!shouldShow) return false;
 
-    // --- Search & Group Filters ---
+    // --- Search & Blood Group filters (same as before) ---
     const hospitalStr = (req.hospital || req.location || "").toLowerCase();
-    const nameStr = (req.name || "Patient").toLowerCase();
     const searchStr = searchTerm.toLowerCase();
-    const matchesSearch = hospitalStr.includes(searchStr) || nameStr.includes(searchStr);
-    
-    const bgValue = req.bloodGroup || req.bloodGroupNeeded || "";
-    const matchesGroup = selectedGroup === "All" || bgValue === selectedGroup;
-    
+    const matchesSearch = hospitalStr.includes(searchStr);
+    const matchesGroup = selectedGroup === "All" || (req.bloodGroup || req.bloodGroupNeeded) === selectedGroup;
+
     return matchesSearch && matchesGroup;
-  });
+});
+
 
   if (loading) return (
     <div className="flex items-center justify-center min-h-[400px]">
@@ -108,16 +88,11 @@ const handleAcceptRequest = async (requestId) => {
 
   return (
     <div className="space-y-6 md:space-y-8 mt-5 animate-[fadeIn_0.5s_ease-out]">
-
-      {/* HEADER & SEARCH */}
+      {/* HEADER & SEARCH SECTION */}
       <div className="flex flex-col gap-5 text-left">
         <div>
-          <h1 className="text-2xl md:text-3xl font-[700] text-gray-900 tracking-tight">
-            Nearby Requests
-          </h1>
-          <p className="text-gray-500 font-medium text-sm mt-1">
-            Find urgent blood requirements in your vicinity.
-          </p>
+          <h1 className="text-2xl md:text-3xl font-[700] text-gray-900 tracking-tight">Nearby Requests</h1>
+          <p className="text-gray-500 font-medium text-sm mt-1">Find urgent blood requirements in your vicinity.</p>
         </div>
 
         <div className="flex flex-col md:flex-row gap-3">
@@ -158,7 +133,6 @@ const handleAcceptRequest = async (requestId) => {
         {filteredRequests.length > 0 ? (
           filteredRequests.map((req) => (
             <div key={req._id} className="group relative bg-white rounded-[24px] p-4 border-[1.5px] border-gray-400 shadow-sm hover:shadow-2xl hover:border-red-400 transition-all duration-500 hover:-translate-y-2 overflow-hidden flex flex-col justify-between text-left">
-              
               <div className={`absolute top-0 right-0 w-24 h-24 blur-3xl opacity-10 -mr-10 -mt-10 transition-colors duration-500 ${
                 req.urgency === 'Critical' ? 'bg-red-600' : req.urgency === 'Urgent' ? 'bg-amber-500' : 'bg-emerald-500'
               }`} />
@@ -167,9 +141,7 @@ const handleAcceptRequest = async (requestId) => {
                 <div className="flex justify-between items-start mb-4 relative z-10">
                   <div className="flex gap-3 w-full">
                     <div className="w-11 h-11 md:w-14 md:h-14 bg-red-50 rounded-2xl flex flex-col items-center justify-center text-[#880808] border border-red-300 shadow-sm group-hover:bg-[#880808] group-hover:text-white transition-all duration-500 shrink-0">
-                      <span className="font-black text-lg md:text-xl leading-none">
-                        {req.bloodGroup || req.bloodGroupNeeded}
-                      </span>
+                      <span className="font-black text-lg md:text-xl leading-none">{req.bloodGroup || req.bloodGroupNeeded}</span>
                       <span className="text-[7px] md:text-[8px] font-bold uppercase mt-0.5 opacity-60">Type</span>
                     </div>
 
@@ -211,19 +183,29 @@ const handleAcceptRequest = async (requestId) => {
                 </div>
               </div>
 
+              {/* ✅ UPDATED BUTTON SECTION */}
               <div className="flex gap-2 relative z-10 mt-auto">
-  
-               <button 
-  onClick={() => handleAcceptRequest(req._id)}
-  disabled={req.status === 'Accepted'}
-  className={`flex-[1.8] py-2.5 rounded-xl font-black text-[9px] uppercase transition-all flex items-center justify-center gap-1 active:scale-95 shadow-lg ${
-    req.status === 'Accepted' 
-      ? 'bg-emerald-600 text-white shadow-none cursor-default' // Instant Green
-      : 'bg-[#880808] text-white hover:bg-black' // Default Red
-  }`}
->
-  {req.status === 'Accepted' ? 'Accepted ✓' : 'Accept Req'}
-</button>
+                <button 
+                  onClick={() => handleAcceptRequest(req._id)}
+                  disabled={req.status === 'Accepted'}
+                  className={`flex-1 py-2.5 rounded-xl font-black text-[9px] uppercase transition-all flex items-center justify-center gap-1 active:scale-95 shadow-lg ${
+                    req.status === 'Accepted' 
+                      ? 'bg-emerald-600 text-white shadow-none cursor-default' 
+                      : 'bg-[#880808] text-white hover:bg-black' 
+                  }`}
+                >
+                  {req.status === 'Accepted' ? 'Accepted ✓' : 'Accept Req'}
+                </button>
+
+                {/* ✅ New Schedule Button: Only visible if status is Accepted */}
+                {req.status === 'Accepted' && (
+                  <button 
+                    onClick={() => navigate('/schedule', { state: { requestData: req } })}
+                    className="flex-1 py-2.5 rounded-xl font-black text-[9px] uppercase bg-blue-600 text-white hover:bg-blue-700 transition-all flex items-center justify-center gap-1 active:scale-95 shadow-lg animate-[fadeIn_0.3s_ease-out]"
+                  >
+                    <FiCalendar size={12} /> Book Slot
+                  </button>
+                )}
               </div>
             </div>
           ))
