@@ -134,14 +134,28 @@ const Notifications = () => {
             {notif.status === 'Accepted' && notif.donorName ? (
               /* 1. SUCCESS: donorName database mein mil gaya */
               <button 
-                onClick={() => {
-                  // Direct donorName se search karo
-                  navigate(`/pool?search=${encodeURIComponent(notif.donorName)}`);
-                }}
-                className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-8 py-3.5 bg-gray-900 text-white rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-emerald-600 transition-all shadow-md active:scale-95"
-              >
-                <MdOutlinePersonSearch size={18} /> View Donor
-              </button>
+  onClick={() => {
+    // 🔍 Sabse pehle ID nikaalne ka sabse safe tarika
+    const dId = notif.donorId?._id || notif.donorId;
+    const rId = notif._id;
+
+    console.log("Debug - Raw DonorId:", notif.donorId);
+    console.log("Debug - Extracted dId:", dId);
+
+    if (dId && dId !== null) {
+      // ✅ Agar ID mil gayi toh ID path par bhejo
+      navigate(`/pool/${dId}?requestId=${rId}`);
+    } else if (notif.donorName) {
+      // ⚠️ Agar ID fir bhi nahi mili (null aayi), toh Name Search fallback use karo
+      navigate(`/pool?search=${encodeURIComponent(notif.donorName)}&requestId=${rId}`);
+    } else {
+      alert("Bhai, donor details abhi sync nahi hui hain!");
+    }
+  }}
+   className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-8 py-3.5 bg-gray-900 text-white rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-emerald-600 transition-all shadow-md active:scale-95"
+>
+  View Donor
+</button>
             ) : notif.status === 'Accepted' ? (
               /* 2. SYNCING: Status accepted hai par naam abhi sync ho raha hai */
               <button className="w-full md:w-auto px-6 py-3.5 bg-emerald-50 text-emerald-600 border border-emerald-100 rounded-xl text-[10px] font-black uppercase tracking-widest cursor-wait flex items-center justify-center gap-2">
